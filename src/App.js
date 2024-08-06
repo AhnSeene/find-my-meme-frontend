@@ -3,6 +3,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Header from './components/Header';
+import Navbar from './components/Navbar';
 import './App.css';
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
       <BrowserRouter>
         <div className="App">
           <Header/>
+          <Navbar/>
           <Routes>
             <Route path="/" element={<Home/>}/>
             <Route path="/login" element={<Login/>}/>
