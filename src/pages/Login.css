@@ -1,4 +1,26 @@
+.Login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 .LoginForm{
     display: flex;
     flex-direction: column;
+    gap: 10px;
+    width: 400px;
+    align-items: center; 
+}
+.LoginForm label{
+    display: inline-block; /* 너비와 높이를 설정할 수 있게 */
+    width: 70px; /* 레이블의 너비를 고정 */
+    margin-right: 10px;
+}
+.LoginForm input{
+    width: 300px;
+    height: 30px;
+}
+.LoginForm button{
+    width: 100px;
+    height: 30px;
 }
