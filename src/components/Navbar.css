@@ -1,0 +1,17 @@
+.navbar{
+    margin-top: 70px;
+}
+.navbar ul{
+    display: flex;
+    align-items: center;
+    height: 50px;
+    background-color: azure;
+    padding: 0px;
+    margin: 0;
+    padding-left: 80px;
+    list-style-type: none; /* 기본 점 제거 */
+    gap: 60px;
+}
+.navbar ul li a{
+    text-decoration: none;
+}
