@@ -11,6 +11,10 @@ function Header (){
         navigate('/login',{ replace:true });
     };
 
+    const handleUpload = () => {
+        navigate('/uploadmeme',{ replace:true });
+    }
+
     return(
         <div className="Header">
             <Link to="/" className="logo-link">
@@ -19,7 +23,7 @@ function Header (){
             <div className="nav-buttons">
                 {isLoggedIn? (
                     <>
-                        <button>짤등록</button>
+                        <button onClick={handleUpload}>짤등록</button>
                         <button>마이페이지</button>
                     </>
                 ):(
