@@ -1,0 +1,13 @@
+.show-tags{
+    display: flex;
+    justify-content: center;
+}
+
+.selected-tags{
+    display: flex;
+    gap: 10px;
+}
+.images img{
+    width: 200px;
+    height: 200px;
+}
