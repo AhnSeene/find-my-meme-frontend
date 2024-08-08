@@ -1,6 +1,7 @@
 import {Routes, Route, BrowserRouter} from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import Login from './pages/Login';
+import SignUp from './pages/SignUp';
 import Home from './pages/Home';
 import UploadMeme from './pages/UploadMeme';
 import Header from './components/Header';
@@ -18,8 +19,8 @@ function App() {
             <Route path="/" element={<Home/>}/>
             <Route path="/login" element={<Login/>}/>
             <Route path='/uploadmeme' element={<UploadMeme/>}/>
-        {/* <Route path="/signup" element={<SignUp/>}/>
-        <Route path="/findmeme" element={<FindMeme/>}/>
+            <Route path="/signup" element={<SignUp/>}/>
+        {/* <Route path="/findmeme" element={<FindMeme/>}/>
         <Route path="/mypage/:id" element={<MyPage/>}/> */}
           </Routes>
         </div>
