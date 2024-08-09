@@ -7,6 +7,10 @@ function Header (){
     const { isLoggedIn } = useAuth(); 
     console.log('isLoggedIn :',isLoggedIn);
     
+    const handleSignUp = () => {
+        navigate('/signup',{replace:true});
+    };
+
     const handleLogin = () => {
         navigate('/login',{ replace:true });
     };
@@ -28,7 +32,7 @@ function Header (){
                     </>
                 ):(
                     <>
-                        <button>회원가입</button>
+                        <button onClick={handleSignUp}>회원가입</button>
                         <button onClick={handleLogin}>로그인</button>
                     </>
                 )}
