@@ -5,6 +5,7 @@ import SignUp from './pages/SignUp';
 import Home from './pages/Home';
 import FindMeme from './pages/FindMeme';
 import UploadMeme from './pages/UploadMeme';
+import FindMemePost from './pages/FindMemePost';
 import Header from './components/Header';
 import Navbar from './components/Navbar';
 import './App.css';
@@ -22,6 +23,7 @@ function App() {
             <Route path='/uploadmeme' element={<UploadMeme/>}/>
             <Route path="/signup" element={<SignUp/>}/>
             <Route path="/findmeme" element={<FindMeme/>}/>
+            <Route path="/findmemepost" element={<FindMemePost/>}/>
             {/* <Route path="/mypage/:id" element={<MyPage/>}/> */}
           </Routes>
         </div>

@@ -1,0 +1,43 @@
+.findMemePost {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* 전체 너비를 가득 채우기 */
+    max-width: 800px; /* 원하는 최대 너비 설정 */
+    margin: 0 auto; /* 가운데 정렬 */
+    padding: 20px; /* 패딩 추가로 여백 생성 */
+    box-sizing: border-box; /* 패딩이 전체 크기에 포함되도록 설정 */
+}
+
+.findMemePost h2 {
+    margin-bottom: 20px; /* 제목과 폼 사이의 여백 설정 */
+}
+
+.findMemePost form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* 폼이 findMemePost의 너비에 맞춰짐 */
+}
+
+.findMemePost input[type="text"] {
+    width: 100%; /* 텍스트 입력이 폼의 너비를 가득 채움 */
+    padding: 10px; /* 여백 추가 */
+    margin-bottom: 20px; /* 입력과 에디터 사이의 여백 */
+    box-sizing: border-box; /* 패딩이 전체 크기에 포함되도록 설정 */
+}
+
+.findMemePost button {
+    padding: 10px 20px;
+    margin-top: 20px; /* 버튼과 에디터 사이의 여백 */
+    cursor: pointer;
+    align-self: flex-end; /* 버튼을 오른쪽에 배치 */
+}
+.custom-editor {
+    height: 400px; /* 원하는 높이 */
+    width: 100%; /* 폼에 맞춘 너비 */
+}
+
+.custom-editor .ql-container {
+    height: 100%; /* 에디터 내부 컨테이너의 높이를 전체 크기로 설정 */
+}
