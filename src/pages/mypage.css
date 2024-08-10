@@ -1,0 +1,12 @@
+.nav-tabs{
+    background-color: antiquewhite;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.nav-tabs button{
+    background: none;
+    border: none;
+
+}
