@@ -1,0 +1,126 @@
+import { useState, useRef, useMemo } from "react";
+import ReactQuill from "react-quill";
+import 'react-quill/dist/quill.snow.css';
+import axios from "axios";
+import './findmemepost.css'
+
+function FindMemePost() {
+    const [editorValue, setEditorValue] = useState('');
+    const [title, setTitle] = useState('');
+    const quillRef = useRef(null);
+
+    const handleEditorChange = (value) => {
+        setEditorValue(value);
+    };
+
+    const handleTitleChange = (e) => {
+        setTitle(e.target.value);
+    };
+
+    const handleImageUpload = () => {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.click();
+
+        input.onchange = async () => {
+            const file = input.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await axios.post('/api/upload', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+
+                const imageUrl = response.data.url;
+                const quill = quillRef.current.getEditor();
+                const range = quill.getSelection();
+                quill.insertEmbed(range.index, 'image', imageUrl);
+            } catch (error) {
+                console.error('Failed to upload image:', error);
+            }
+        };
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('content', editorValue);
+
+            const response = await axios.post('/api/posts', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            console.log(response.data);
+
+        } catch (error) {
+            console.error('Error submitting post:', error);
+        }
+    };
+
+    const modules = useMemo(() => ({
+        toolbar: {
+            container: [
+                [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+                [{ size: [] }],
+                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' },
+                { 'indent': '-1' }, { 'indent': '+1' }],
+                ['link', 'image'],
+                ['clean']
+            ],
+            handlers: {
+                image: handleImageUpload,
+            },
+        },
+        clipboard: {
+            matchVisual: false,
+        },
+    }), []);
+
+    const formats = [
+        'header', 'font', 'size',
+        'bold', 'italic', 'underline', 'strike', 'blockquote',
+        'list', 'bullet', 'indent',
+        'link', 'image'
+    ];
+
+    return (
+        <div className="findMemePost">
+            <h2>새 글 작성</h2>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <input
+                        type="text"
+                        placeholder="제목을 입력하세요"
+                        value={title}
+                        onChange={handleTitleChange}
+                        required
+                    />
+                </div>
+                <div>
+                    <ReactQuill
+                        ref={quillRef}
+                        value={editorValue}
+                        onChange={handleEditorChange}
+                        modules={modules}
+                        formats={formats}
+                        placeholder="내용을 입력하세요"
+                        className="custom-editor"
+                    />
+                </div>
+                <button type="submit">등록</button>
+            </form>
+        </div>
+    );
+}
+
+export default FindMemePost;
