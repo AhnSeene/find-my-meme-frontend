@@ -80,7 +80,7 @@ function FindMeme(){
     }
 
     const handlePost = () => {
-        navigate('/',{replace:true})
+        navigate('/findmemepost',{replace:true})
     }
 
     const truncateContent = (content,maxLength) => {
