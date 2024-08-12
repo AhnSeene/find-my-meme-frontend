@@ -29,13 +29,16 @@ function FindMemePost() {
             formData.append('file', file);
 
             try {
-                const response = await axios.post('/api/upload', formData, {
+                const response = await axios.post('http://localhost:8080/api/v1/files/upload', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
                 });
 
-                const imageUrl = response.data.url;
+            
+                // const imageUrl = response.data.data.fileUrl; // 상대 URL 사용
+
+                const imageUrl = `http://localhost:8080${response.data.data.fileUrl}`;
                 const quill = quillRef.current.getEditor();
                 const range = quill.getSelection();
                 quill.insertEmbed(range.index, 'image', imageUrl);
@@ -49,13 +52,12 @@ function FindMemePost() {
         e.preventDefault();
 
         try {
-            const formData = new FormData();
-            formData.append('title', title);
-            formData.append('content', editorValue);
-
-            const response = await axios.post('/api/posts', formData, {
+            const response = await axios.post('http://localhost:8080/api/v1/find-posts', {
+                title: title,
+                content: editorValue
+            }, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
+                    'Content-Type': 'application/json',
                 },
             });
 

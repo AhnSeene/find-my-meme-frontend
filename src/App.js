@@ -26,6 +26,7 @@ function App() {
             <Route path="/findmeme" element={<FindMeme/>}/>
             <Route path="/findmemepost" element={<FindMemePost/>}/>
             <Route path="/mypage" element={<MyPage/>}/>
+            <Route path="/findmeme/:id" element={<FindMemeDetail />} />
           </Routes>
         </div>
       </BrowserRouter>
