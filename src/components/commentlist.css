@@ -1,0 +1,11 @@
+.comments-section{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.commentsCount{
+    display: flex;
+    justify-content: flex-start;
+}
