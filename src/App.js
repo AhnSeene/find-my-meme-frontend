@@ -7,6 +7,8 @@ import MyPage from './pages/MyPage';
 import FindMeme from './pages/FindMeme';
 import UploadMeme from './pages/UploadMeme';
 import FindMemePost from './pages/FindMemePost';
+import FindMemeDetail from './pages/FindMemeDetail';
+import FindMemeEdit from './pages/FindMemeEdit';
 import Header from './components/Header';
 import Navbar from './components/Navbar';
 import './App.css';
@@ -26,7 +28,8 @@ function App() {
             <Route path="/findmeme" element={<FindMeme/>}/>
             <Route path="/findmemepost" element={<FindMemePost/>}/>
             <Route path="/mypage" element={<MyPage/>}/>
-            <Route path="/findmeme/:id" element={<FindMemeDetail />} />
+            <Route path="/findmeme/:id" element={<FindMemeDetail/>} />
+            <Route path="/findmeme/edit/:id" element={<FindMemeEdit/>}/>
           </Routes>
         </div>
       </BrowserRouter>
