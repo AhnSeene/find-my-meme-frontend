@@ -1,5 +1,15 @@
 .navbar{
-    margin-top: 70px;
+    position: fixed; /* 헤더 아래에 고정 */
+    top: 70px; /* 헤더 높이 바로 아래에 위치하도록 설정 */
+    left: 0;
+    width: 100%;
+    height: 50px; /* 네비게이션 바의 높이 */
+    background-color: azure;
+    display: flex;
+    align-items: center;
+    padding-left: 80px;
+    box-sizing: border-box; /* 패딩을 포함하여 너비 계산 */
+    z-index: 999; /* 헤더 아래지만 다른 콘텐츠 위에 표시되도록 설정 */
 }
 .navbar ul{
     display: flex;
