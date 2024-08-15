@@ -1,13 +1,16 @@
 import { useState, useRef, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import axios from "axios";
-import './findmemepost.css'
+import '../styles/common.css'
+
 
 function FindMemePost() {
     const [editorValue, setEditorValue] = useState('');
     const [title, setTitle] = useState('');
     const quillRef = useRef(null);
+    const navigate = useNavigate();
 
     const handleEditorChange = (value) => {
         setEditorValue(value);
@@ -51,10 +54,14 @@ function FindMemePost() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Plain text (content) 추출
+        const plainText = quillRef.current.getEditor().getText();
+
         try {
             const response = await axios.post('http://localhost:8080/api/v1/find-posts', {
                 title: title,
-                content: editorValue
+                htmlContent: editorValue,
+                content: plainText
             }, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -62,6 +69,9 @@ function FindMemePost() {
             });
 
             console.log(response.data);
+            if(response.data.success) {
+                navigate(`/findmeme/${response.data.data.id}`);
+            }
 
         } catch (error) {
             console.error('Error submitting post:', error);
@@ -99,27 +109,23 @@ function FindMemePost() {
         <div className="findMemePost">
             <h2>새 글 작성</h2>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <input
-                        type="text"
-                        placeholder="제목을 입력하세요"
-                        value={title}
-                        onChange={handleTitleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <ReactQuill
-                        ref={quillRef}
-                        value={editorValue}
-                        onChange={handleEditorChange}
-                        modules={modules}
-                        formats={formats}
-                        placeholder="내용을 입력하세요"
-                        className="custom-editor"
-                    />
-                </div>
-                <button type="submit">등록</button>
+                <input
+                    type="text"
+                    placeholder="제목을 입력하세요"
+                    value={title}
+                    onChange={handleTitleChange}
+                    required
+                />
+                <ReactQuill
+                    ref={quillRef}
+                    value={editorValue}
+                    onChange={handleEditorChange}
+                    modules={modules}
+                    formats={formats}
+                    placeholder="내용을 입력하세요"
+                    className="custom-editor"
+                />
+                <button className="findMemePost-btn" type="submit">등록</button>
             </form>
         </div>
     );
