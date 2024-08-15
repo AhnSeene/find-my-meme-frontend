@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  padding-top: 120px; /* 헤더와 네비게이션 바 높이의 총합 */
+  box-sizing: border-box;
 }
 
 .App-logo {
