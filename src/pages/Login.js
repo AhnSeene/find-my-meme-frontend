@@ -1,24 +1,43 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import './Login.css';
 
-function Login (){
+function Login () {
     const [id, setId] = useState('');
-    const [password,setPassword] = useState('');
-    const {login} = useAuth();
+    const [password, setPassword] = useState('');
+    const { login } = useAuth();  // login 함수 가져오기
     const navigate = useNavigate();
 
-    const handleSubmit=(e)=>{
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        login(); //로그인상태로 변경
-        
-        console.log('아이디 :',id);
-        console.log('비밀번호 :',password);
-        navigate('/',{ replace:true });
-    }
-    return(
+        try {
+            const response = await axios.post('http://localhost:8080/api/v1/login', {
+                username: id,
+                password: password,
+            });
+
+            console.log(response.data.data); 
+
+            if (response.status === 200) {
+                const token = response.data.data.accessToken;
+                const username = response.data.data.username;  // 서버 응답에서 username 가져오기
+
+                // login 함수를 사용해 AuthContext에 token과 username을 저장
+                login(token, username);
+
+                navigate('/', { replace: true });
+            } else {
+                console.error('로그인 실패:', response.status);
+            }
+        } catch (error) {
+            console.error('로그인 오류:', error);
+        }
+    };
+
+    return (
         <div className="Login">
             <form className="LoginForm" onSubmit={handleSubmit}>
                 <div>
@@ -27,7 +46,7 @@ function Login (){
                         id="id"
                         type="text"
                         value={id}
-                        onChange={(e)=>setId(e.target.value)}
+                        onChange={(e) => setId(e.target.value)}
                     />
                 </div>
                 <div>
@@ -36,12 +55,13 @@ function Login (){
                         id="password"
                         type="password"
                         value={password}
-                        onChange={(e)=>setPassword(e.target.value)}
+                        onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
                 <button type="submit">로그인</button>
             </form>
         </div>
-    )
+    );
 }
+
 export default Login;
