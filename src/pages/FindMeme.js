@@ -47,14 +47,14 @@ function FindMeme(){
     }, [currentPage]);
 
     const handleFind = () => {
-        fetchData('/api/find', setFindPost);
-        // setFindPost(mockFindPost);
+        fetchData(`http://localhost:8080/api/v1/find-posts?page=${currentPage}&size=3&status=FIND`, setFindPost);
+       
         setIsFindActive(true);
     }
 
     const handleFound = () => {
-        fetchData('/api/found', setFoundPost);
-        // setFoundPost(mockFoundPost);
+        fetchData(`http://localhost:8080/api/v1/find-posts?page=${currentPage}&size=3&status=FOUND`, setFoundPost);
+        
         setIsFindActive(false);
     }
 
@@ -68,11 +68,22 @@ function FindMeme(){
         }
     };
 
-    return(
+
+    return (
         <div className="findmeme">
             <div className="findmeme-btn">
-                <button onClick={handleFind}><CgSearch size={32}  /> 찾아줘</button>
-                <button onClick={handleFound}> <CgSearchFound size={32} /> 찾았다</button>
+                <button
+                    onClick={handleFind}
+                    className={isFindActive ? 'active' : ''}
+                >
+                    <CgSearch className="icon" size={32} /> 찾아줘
+                </button>
+                <button
+                    onClick={handleFound}
+                    className={!isFindActive ? 'active' : ''}
+                >
+                    <CgSearchFound className="icon" size={32} /> 찾았다
+                </button>
             </div>
             <button className="findmeme-post-btn" onClick={handlePost}>글 등록</button>
             {loading && <p>Loading...</p>}
@@ -115,7 +126,6 @@ function FindMeme(){
                     )}
                 </div>
             )}
-            {/* 페이지네이션 버튼 추가 */}
             {totalPages > 1 && !loading && (
                 <div className="pagination">
                     {Array.from({ length: totalPages }, (_, index) => (
