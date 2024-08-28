@@ -1,11 +1,68 @@
-.comments-section{
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
+.comments-section {
+    margin-top: 20px;
+  }
+  
+  .comment-container {
     width: 100%;
-}
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #f7f7f7;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  
+  .comment-username {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .reply-list {
+    padding-left: 20px;
+  }
+  
+  .reply {
+    margin-top: 10px;
+    padding: 5px;
+    background-color: #e8e8e8;
+    border-radius: 5px;
+  }
+  
+  .reply-to {
+    font-style: italic;
+    margin-bottom: 5px;
+  }
+  
+  .username {
+    font-weight: bold;
+  }
+  
+  .comment-form-container {
+    margin-top: 10px;
+  }
+  
+  .submit-button {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .submit-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .commentsCount {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
 
-.commentsCount{
-    display: flex;
-    justify-content: flex-start;
+  /* 채택된 댓글 스타일 */
+.comment.selected,
+.reply.selected {
+  border: 2px solid #007bff; /* 채택된 댓글의 테두리 색상 */
+  background-color: #f0f8ff; /* 채택된 댓글의 배경 색상 */
+  font-weight: bold; /* 채택된 댓글의 글씨를 두껍게 */
 }
+  
