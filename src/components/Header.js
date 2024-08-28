@@ -4,8 +4,7 @@ import './Header.css';
 
 function Header (){
     const navigate = useNavigate();
-    const { isLoggedIn } = useAuth(); 
-    console.log('isLoggedIn :',isLoggedIn);
+    const { authState, logout } = useAuth();
     
     const handleSignUp = () => {
         navigate('/signup',{replace:true});
@@ -20,8 +19,16 @@ function Header (){
     }
 
     const handleMyPage = () => {
-        navigate('/mypage',{ replace:true });
+        if (authState.username) {
+            navigate(`/users/${authState.username}`, { replace: true });
+        }
     }
+
+
+    const handleLogout = () => {
+        logout();
+        navigate('/', { replace: true });
+    };
 
     return(
         <div className="Header">
@@ -29,10 +36,18 @@ function Header (){
                 <h1>로고</h1>
             </Link>
             <div className="nav-buttons">
-                {isLoggedIn? (
+                {authState.isLoggedIn? (
                     <>
                         <button onClick={handleUpload}>짤등록</button>
-                        <button onClick={handleMyPage}>마이페이지</button>
+                        <div className="nav-dropdown">
+                            <button onClick={handleMyPage}>마이페이지</button>
+                            <div className="dropdown-menu">
+                                <button onClick={handleMyPage}>프로필</button>
+                                <button onClick={handleMyPage}>내 정보</button>
+                                <button onClick={handleMyPage}>게시글 관리</button>
+                                <button onClick={handleLogout}>로그아웃</button>
+                            </div>
+                        </div>
                     </>
                 ):(
                     <>
