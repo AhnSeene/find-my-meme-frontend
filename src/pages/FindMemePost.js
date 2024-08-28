@@ -1,12 +1,14 @@
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
-import axios from "axios";
-import '../styles/common.css'
-
+import TagSelector from "../components/TagSelector";
+import api from "../contexts/api";
+import '../styles/common.css';
 
 function FindMemePost() {
+    const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
+    const [selectedSubTags, setSelectedSubTags] = useState([]);
     const [editorValue, setEditorValue] = useState('');
     const [title, setTitle] = useState('');
     const quillRef = useRef(null);
@@ -32,16 +34,13 @@ function FindMemePost() {
             formData.append('file', file);
 
             try {
-                const response = await axios.post('http://localhost:8080/api/v1/files/upload', formData, {
+                const response = await api.post('/files/upload', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
                 });
 
-            
-                // const imageUrl = response.data.data.fileUrl; // 상대 URL 사용
-
-                const imageUrl = `http://localhost:8080${response.data.data.fileUrl}`;
+                const imageUrl = `${fileBaseUrl}${response.data.data.fileUrl}`;
                 const quill = quillRef.current.getEditor();
                 const range = quill.getSelection();
                 quill.insertEmbed(range.index, 'image', imageUrl);
@@ -54,22 +53,21 @@ function FindMemePost() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Plain text (content) 추출
         const plainText = quillRef.current.getEditor().getText();
 
         try {
-            const response = await axios.post('http://localhost:8080/api/v1/find-posts', {
+            const response = await api.post('/find-posts', {
                 title: title,
                 htmlContent: editorValue,
-                content: plainText
+                content: plainText,
+                tags: selectedSubTags
             }, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
 
-            console.log(response.data);
-            if(response.data.success) {
+            if (response.data.success) {
                 navigate(`/findmeme/${response.data.data.id}`);
             }
 
@@ -125,6 +123,10 @@ function FindMemePost() {
                     placeholder="내용을 입력하세요"
                     className="custom-editor"
                 />
+                <TagSelector 
+                    selectedSubTags={selectedSubTags} 
+                    setSelectedSubTags={setSelectedSubTags} 
+                /> 
                 <button className="findMemePost-btn" type="submit">등록</button>
             </form>
         </div>
