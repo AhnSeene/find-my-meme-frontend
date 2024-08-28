@@ -1,73 +1,121 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from 'axios';
+import api from "../contexts/api";
 import './UploadMeme.css';
+import { replace, useNavigate } from "react-router-dom";
 
-const categories = {
-    감정: ['귀여운', '화난', '웃긴', '슬픈', '놀란'],
-    인사: ['안녕하세요', '감사합니다', '미안합니다', '새해인사', '생일 축하'],
-    TV: ['무한도전', '기타']
-};
+
 
 function UploadMeme() {
-    const [selectedCategory, setSelectedCategory] = useState(''); // 카테고리
-    const [Subcategories, setSubcategories] = useState([]); // 카테고리 밑 서브 태그들
-    const [selectedTags, setSelectedTags] = useState([]); // 선택된 태그들
-    const [files, setFiles] = useState([]); // 서버로 전송할 파일 목록
-    const [fileTags, setFileTags] = useState({}); // 파일별 태그 저장
-    const [previewUrls, setPreviewUrls] = useState([]); // 미리보기 사진
-    const [isModalOpen, setIsModalOpen] = useState(false); // 크게 사진 확인
+    const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
+    const [tags, setTags] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [Subcategories, setSubcategories] = useState([]);
+    const [files, setFiles] = useState([]);
+    const [fileTags, setFileTags] = useState({});
+    const [previewUrls, setPreviewUrls] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentImage, setCurrentImage] = useState(null);
-    const [selectedFileIndices, setSelectedFileIndices] = useState([]); // 체크된 파일의 인덱스 목록
+    const [selectedFileIndices, setSelectedFileIndices] = useState([]);
+    const [tagIdToNameMap, setTagIdToNameMap] = useState({}); // 태그 ID와 이름 간의 매핑
+    
+    const navigate = useNavigate();
+    useEffect(()=>{
+        const fetchTags = async () => {
+            try {
+                const response = await api.get('/tags');
+                const tagsData = response.data.data;
 
-    const handleFileChange = (e) => {
-        const selectedFiles = Array.from(e.target.files); // FileList를 배열로 변환
+                // 태그 ID와 이름 매핑 생성
+                const idToNameMap = tagsData.reduce((acc, tag) => {
+                    tag.subTags.forEach(subTag => {
+                        acc[subTag.id] = subTag.name;
+                    });
+                    return acc;
+                }, {});
+
+                setTags(tagsData);
+                setTagIdToNameMap(idToNameMap);
+            } catch (error) {
+                console.error('Failed to fetch tags:', error);
+            }
+        };
+        fetchTags();
+    }, []);
+
+    // 파일 선택 시 처리
+    const handleFileChange = async (e) => {
+        const selectedFiles = Array.from(e.target.files);
         setFiles(selectedFiles);
-
-        // 미리보기 URL 생성
-        const previewUrls = selectedFiles.map(file => URL.createObjectURL(file));
-        setPreviewUrls(previewUrls);
-
-        // 초기 태그 설정
-        const initialTags = {};
-        selectedFiles.forEach((_, index) => {
-            initialTags[index] = [];
-        });
-        setFileTags(initialTags);
-    }
+    
+        const updatedPreviewUrls = [];
+        const updatedTags = {};
+    
+        // 파일을 서버에 업로드하고 URL을 수신
+        for (const [index, file] of selectedFiles.entries()) {
+            const formData = new FormData();
+            formData.append('file', file);
+    
+            try {
+                const response = await api.post('/files/upload', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+    
+                const fileUrl = `${fileBaseUrl}${response.data.data.fileUrl}`;
+                updatedPreviewUrls.push(fileUrl);
+    
+                // 초기 태그 설정
+                updatedTags[index] = [];
+            } catch (error) {
+                console.error('Failed to upload file:', error);
+            }
+        }
+    
+        setPreviewUrls(updatedPreviewUrls);
+        setFileTags(updatedTags);
+    };
+    
 
     const handleCategoryChange = (e) => {
         const category = e.target.value;
         setSelectedCategory(category);
-        setSubcategories(categories[category] || []);
+
+        //선택한 카테고리의 서브태그를 설정
+        const selectedTag = tags.find(tag=>tag.parentTag ===category)
+        setSubcategories(selectedTag ? selectedTag.subTags : []);
     }
 
     const handleSubcategoryChange = (subcategory) => {
-        const newTags = { ...fileTags }; // 기존 태그들 복사
+        const newTags = { ...fileTags };
         selectedFileIndices.forEach(index => {
+            if (!newTags[index]) {
+                newTags[index] = [];
+            }
+
+            // 서브카테고리 태그 ID 추가 (최대 3개)
             if (!newTags[index].includes(subcategory) && newTags[index].length < 3) {
-                newTags[index].push(subcategory);
-            } else if (newTags[index].includes(subcategory)) {
-                newTags[index] = newTags[index].filter(tag => tag !== subcategory);
+                newTags[index].push(subcategory.id);
             }
         });
         setFileTags(newTags);
     }
 
     const selectAll = () => {
-        setSelectedFileIndices(files.map((_,index)=> index));
+        setSelectedFileIndices(files.map((_, index) => index));
     }
-    
+
     const deselectAll = () => {
+        setFileTags({});
         setSelectedFileIndices([]);
     }
 
     const handleCheckboxChange = (index) => {
         setSelectedFileIndices(prevIndices => {
             if (prevIndices.includes(index)) {
-                // 체크 해제
                 return prevIndices.filter(i => i !== index);
             } else {
-                // 체크 추가
                 return [...prevIndices, index];
             }
         });
@@ -75,25 +123,44 @@ function UploadMeme() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const formData = new FormData();
-
-        files.forEach((file, index) => {
-            formData.append('files', file);
-            formData.append(`tags[${index}]`, JSON.stringify(fileTags[index]));
-        });
-
+    
+        // 상대 경로를 추출하는 함수
+        const getRelativeUrl = (url) => {
+            try {
+                const parsedUrl = new URL(url);
+                return parsedUrl.pathname; // pathname은 상대 경로를 포함
+            } catch (error) {
+                console.error('Invalid URL:', url);
+                return url; // 기본적으로 원래 URL 반환
+            }
+        };        
         try {
-            const response = await axios.post('/api/upload', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
+            // 모든 파일을 비동기로 업로드
+            const uploadPromises = files.map(async (file, index) => {
+                // 파일을 서버에 업로드하고 URL을 얻기
+                const relativeUrl = getRelativeUrl(previewUrls[index]).slice(1);
+                console.log('relate', relativeUrl)
+    
+                // URL과 태그를 서버에 전송
+                await api.post('/meme-posts', {
+                    imageUrl: relativeUrl,
+                    tags: fileTags[index] || []
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
             });
-            console.log('Upload Success:', response.data);
+    
+            // 모든 업로드가 완료될 때까지 기다리기
+            await Promise.all(uploadPromises);
+            navigate('/',{replace:true})
+            console.log('Upload Success');
         } catch (error) {
             console.error('Upload Error:', error);
         }
     };
-
+    
     const openModal = (url) => {
         setCurrentImage(url);
         setIsModalOpen(true);
@@ -107,30 +174,25 @@ function UploadMeme() {
     const removeImage = (removeIndex) => {
         const updatedFiles = files.filter((_, index) => index !== removeIndex);
         const updatedPreviewUrls = previewUrls.filter((_, index) => index !== removeIndex);
-
-        // URL을 해제하여 메모리 누수 방지
+    
+        // Blob URL 해제
         previewUrls[removeIndex] && URL.revokeObjectURL(previewUrls[removeIndex]);
-
+    
         setFiles(updatedFiles);
         setPreviewUrls(updatedPreviewUrls);
-
-        // 기존 태그 상태를 복사하여 업데이트합니다.
+    
         const updatedTags = { ...fileTags };
-        
-        // 제거된 파일의 태그를 삭제합니다.
         delete updatedTags[removeIndex];
-        
-        // 업데이트된 태그 상태를 설정합니다.
         setFileTags(updatedTags);
-
-        // 선택된 파일 인덱스 업데이트
+    
         setSelectedFileIndices(prevIndices => prevIndices.filter(i => i !== removeIndex));
-    }
+    };
+    
 
     const removeTagFromFile = (fileIndex, tag) => {
-        const updatedTags = { ...fileTags};
+        const updatedTags = { ...fileTags };
         if (updatedTags[fileIndex]) {
-            updatedTags[fileIndex] = updatedTags[fileIndex].filter(t => t!==tag);
+            updatedTags[fileIndex] = updatedTags[fileIndex].filter(t => t !== tag);
             setFileTags(updatedTags);
         }
     }
@@ -138,12 +200,12 @@ function UploadMeme() {
     const triggerFileInput = () => {
         document.getElementById('fileInput').click();
     }
-    
+
     return (
         <div className="uploadmeme">
             <h1>짤 등록</h1>
             <form onSubmit={handleSubmit}>
-                <input type="file" multiple onChange={handleFileChange} style={{display: 'none'}} id="fileInput" required />
+                <input type="file" multiple onChange={handleFileChange} style={{ display: 'none' }} id="fileInput" required />
                 <label htmlFor="fileInput">
                     <button type="button" onClick={triggerFileInput}>파일 선택</button>
                 </label>
@@ -151,7 +213,7 @@ function UploadMeme() {
                     {files.length === 0 ? '선택된 파일 없음' : `파일 ${files.length}개`}
                 </span>
                 <button onClick={selectAll}>전체 선택</button>
-                <button onClick={deselectAll}>선택 취소</button>
+                <button onClick={deselectAll}>전체 취소</button>
                 <div className="previews">
                     {previewUrls.map((url, index) => (
                         <div key={index} className="preview-item">
@@ -169,10 +231,10 @@ function UploadMeme() {
                                 &times;
                             </button>
                             <div className="tags">
-                                {fileTags[index] && fileTags[index].map((tag, tagIndex) => (
+                                {fileTags[index] && fileTags[index].map((tagId, tagIndex) => (
                                     <span key={tagIndex} className="tag">
-                                        {tag}
-                                        <button onClick={() => removeTagFromFile(index, tag)}> &times;</button>
+                                        {tagIdToNameMap[tagId] || `Unknown Tag (${tagId})`}
+                                        <button onClick={() => removeTagFromFile(index, tagId)}> &times;</button>
                                     </span>
                                 ))}
                             </div>
@@ -190,21 +252,21 @@ function UploadMeme() {
                 <div className="show-tags">
                     <select onChange={handleCategoryChange} value={selectedCategory} required>
                         <option value="">대분류 선택</option>
-                        {Object.keys(categories).map((category) => (
-                            <option key={category} value={category}>{category}</option>
+                        {tags.map((tag) => (
+                            <option key={tag.id} value={tag.parentTag}>{tag.parentTag}</option>
                         ))}
                     </select>
                 </div>
 
                 {selectedCategory && (
                     <div className="subcategories">
-                        {categories[selectedCategory].map((subcategory) => (
+                        {Subcategories.map((subcategory) => (
                             <div 
-                                key={subcategory}
+                                key={subcategory.id}
                                 className={`subcategory ${Subcategories.includes(subcategory) ? 'selected' : ''}`}
                                 onClick={() => handleSubcategoryChange(subcategory)}
                             >
-                                {subcategory}
+                                {subcategory.name}
                             </div>
                         ))}
                     </div>
@@ -214,4 +276,5 @@ function UploadMeme() {
         </div>
     );
 }
+
 export default UploadMeme;
