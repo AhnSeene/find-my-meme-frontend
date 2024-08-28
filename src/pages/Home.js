@@ -1,86 +1,118 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
-import './home.css'
-
-const categories = {
-    감정: ['귀여운', '화난', '웃긴', '슬픈', '놀란'],
-    인사: ['안녕하세요', '감사합니다', '미안합니다', '새해인사', '생일 축하'],
-    TV: ['무한도전', '기타']
-};
+import { AiFillLike } from "react-icons/ai";
+import { GrFormView } from "react-icons/gr";
+import { GoHeart, GoHeartFill } from "react-icons/go";
+import { useAuth } from '../contexts/AuthContext';
+import api from '../contexts/api';
+import './home.css';
 
 function Home() {
-    const [selectedCategory, setSelectedCategory] = useState(''); // 선택된 카테고리
-    const [selectedTags, setSelectedTags] = useState([]); // 선택된 태그들(최대 3개)
-    const [images, setImages] = useState([]); // 이미지 데이터
-    
+    const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
+    const { authState } = useAuth();
+    const [memes, setMemes] = useState([]);
+    const [page, setPage] = useState(0);
+    const [loading, setLoading] = useState(false);
+    const [hasNext, setHasNext] = useState(true);
+
     useEffect(() => {
-        // 태그가 변경될 때마다 서버에 필터링된 이미지 요청
-        const fetchImages = async () => {
-            try {
-                const params = selectedTags.length > 0 ? {tags: selectedTags.join(',')} : {}
-                const response = await axios.get('/api/images',{ params });
-                setImages(response.data.images);
-            }catch (error) {
-                console.error('이미지를 불러오는데 실패하였습니다',error);
-            }
-        };
-        fetchImages();
-    },[selectedTags]);
+        loadMemes();
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [page]);
 
-    const handleCategoryChange = (e) => {
-        const category = e.target.value;
-        setSelectedCategory(category);
-    }
+    const loadMemes = async () => {
+        if (loading || !hasNext) return;
+    
+        setLoading(true);
+        try {
+            console.log('ggg')
+            const response = await api.get(`/meme-posts?page=${page}&size=5`);
+            const newMemes = response.data.data.content;
+            setMemes(prevMemes => [...prevMemes, ...newMemes]);
+            setHasNext(response.data.data.hasNext);
+        } catch (error) {
+            console.error('Failed to load memes:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+    
+    
+    const handleScroll = () => {
+        if (window.innerHeight + document.documentElement.scrollTop + 50 >= document.documentElement.offsetHeight && hasNext) {
+            setPage(prevPage => prevPage + 1);
+        }
+    };
 
-    const handleTagChange = (tag) => {
-        setSelectedTags(prevTags => {
-            if (prevTags.includes(tag)) {
-                return prevTags.filter(t => t !== tag); // 이미 포함된 경우 제거
-            } else if (prevTags.length < 3) {
-                return [...prevTags, tag]; // 포함되지 않은 경우 추가
-            } else {
-                return prevTags; // 최대 선택 수 초과시 변경 없음
+    const toggleLike = async (event, memeId) => {
+        event.stopPropagation();
+        
+        // 먼저 UI에 반영
+        const updatedMemes = memes.map(meme => {
+            if (meme.id === memeId) {
+                const isLiked = !meme.isLiked;
+                const likeCount = isLiked ? meme.likeCount + 1 : meme.likeCount - 1;
+                return { ...meme, isLiked, likeCount };
             }
+            return meme;
         });
-    }
+
+        setMemes(updatedMemes);
+
+        try {
+            const response = await api.post(`/meme-posts/${memeId}/toggleLike`, {}, {
+                headers: {
+                    Authorization: `Bearer ${authState.token}`
+                }
+            });
+
+            const { isLiked } = response.data.data;
+            // 서버 응답에 따라 likeCount를 조정하지 않고 상태만 동기화
+            setMemes(prevMemes =>
+                prevMemes.map(meme =>
+                    meme.id === memeId
+                        ? { ...meme, isLiked }
+                        : meme
+                )
+            );
+
+        } catch (error) {
+            console.error('Failed to toggle like:', error);
+            // 에러 발생 시 상태 원복
+            setMemes(prevMemes => memes);
+        }
+    };
 
     return (
-        <div className="Home">
-            <div className="show-tags">
-                <select onChange={handleCategoryChange} value={selectedCategory} required>
-                    <option value="">대분류 선택</option>
-                    {Object.keys(categories).map((category) => (
-                        <option key={category} value={category}>{category}</option>
-                    ))}
-                </select>
-                <div className='selected-tags'>
-                    {selectedTags.map((tag) => (
-                        <div key={tag} className='selected-tag'>{tag}</div>
-                        
-                    ))}
-                </div>
-            </div>
-
-            {selectedCategory && (
-                <div className="subcategories">
-                    {categories[selectedCategory].map((tag) => (
-                        <div 
-                            key={tag}
-                            className={`subcategory ${selectedTags.includes(tag) ? 'selected' : ''}`}
-                            onClick={() => handleTagChange(tag)}
-                        >
-                            {tag}
+        <div className='home'>
+            <div className='meme-list'>
+                {memes.map((meme, index) => (
+                    <div key={meme.id} className="meme-item">
+                        <div className="meme-image-container">
+                            <Link to={`/meme/${meme.id}`}>
+                                <img src={`${fileBaseUrl}${meme.imageUrl}`} alt={`Meme ${index}`} />
+                                <div className="overlay">
+                                    <div className="meme-info">
+                                        <AiFillLike style={{ fontSize: '24px' }} /> {meme.likeCount}
+                                        <GrFormView style={{ fontSize: '36px' }} /> {meme.viewCount}
+                                    </div>
+                                </div>
+                            </Link>
+                            <button onClick={(e) => toggleLike(e, meme.id)}>
+                                {meme.isLiked ? (
+                                    <GoHeartFill style={{ fontSize: '30px', color: 'red' }} />
+                                ) : (
+                                    <GoHeart style={{ fontSize: '30px' }} />
+                                )}
+                            </button>
                         </div>
-                    ))}
-                </div>
-            )}
-
-            {/* 이미지 필터링 및 표시 */}
-            <div className='images'>
-                {images.map((image, index) => (
-                    <img key={index} src={image.url} alt={`Tag: ${image.tags.join(', ')}`} />
+                    </div>
                 ))}
             </div>
+            {loading && <p>Loading...</p>}
+            {!hasNext && <p>No more memes</p>}
         </div>
     );
 }
