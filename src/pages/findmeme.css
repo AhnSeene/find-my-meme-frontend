@@ -95,3 +95,11 @@
     font-weight: bold; /* 현재 페이지 버튼을 강조 */
     background-color: #f0f0f0; /* 강조된 버튼 배경색 */
 }
+
+.findmeme-btn button.active .icon {
+    color: #219C90; /* 아이콘 색상 변경 (예: 노란색) */
+}
+
+.findmeme-btn button .icon {
+    transition: color 0.3s ease; /* 아이콘 색상 전환 애니메이션 */
+}
