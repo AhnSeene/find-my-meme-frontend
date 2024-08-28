@@ -82,3 +82,11 @@
     border-radius: 8px;
     padding-left: 20px;
 }
+
+.comments-section {
+    width: 100%; /* findMemeDetail의 너비에 맞춰 설정 */
+    max-width: 1200px; /* 최대 너비 설정, 필요에 따라 조정 */
+    margin: 0 auto; /* 가운데 정렬 */
+    padding: 10px; /* 필요에 따라 패딩 추가 */
+    box-sizing: border-box; /* 패딩과 테두리를 포함한 너비 */
+}
