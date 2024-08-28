@@ -9,13 +9,15 @@ function SignUp(){
     const [formData,setFormData] = useState({
         id: '',
         password:'',
-        confirmPassword:''
+        confirmPassword:'',
+        email:''
     });
 
     const [errors,setErrors] = useState({
         id:'',
         password:'',
-        confirmPassword:''
+        confirmPassword:'',
+        email:''
     });
 
     const validate = (name,value)=> {
@@ -43,6 +45,14 @@ function SignUp(){
                     error = '비밀번호가 일치하지 않습니다'
                 }
                 break;
+
+            case 'email':
+                if (!value) {
+                    error = '이메일을 입력하세요';
+                } else if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(value)) {
+                    error = '유효한 이메일 주소를 입력하세요';
+                }
+                break;
             
             default:
                 break;
@@ -64,6 +74,33 @@ function SignUp(){
         }))
     }
 
+    const handleIdCheck = async (e)=>{
+        e.preventDefault();
+        const {id} = formData;
+        try{
+            const response = await axios.post('',{id});
+
+            if(response.data.available){
+                setErrors(prevErrors=>({
+                    ...prevErrors,
+                    id:'사용 가능한 아이디입니다'
+                }))
+            }
+            else{
+                setErrors(prevErrors=>({
+                    ...prevErrors,
+                    id:'이미 사용중인 아이디입니다'
+                }))
+            }
+        }catch(error){
+            console.error('아이디 중복검사 실패',error);
+            setErrors(prevErrors=>({
+                ...prevErrors,
+                id:'중복 검사 중 오류가 발생했습니다'
+            }))
+        }
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -71,7 +108,8 @@ function SignUp(){
         const newErrors = {
             id: validate('id', formData.id),
             password: validate('password', formData.password),
-            confirmPassword: validate('confirmPassword', formData.confirmPassword)
+            confirmPassword: validate('confirmPassword', formData.confirmPassword),
+            eamil: validate('email', formData.email)
         };
 
         if(Object.values(newErrors).some(error => error)) {
@@ -80,8 +118,12 @@ function SignUp(){
         }
 
         try{
-            const {id, password} = formData; //필요한 데이터만 추출하여 서버에 보냄
-            const response = await axios.post('api/register',id,password);
+            const {id, password,email} = formData; //필요한 데이터만 추출하여 서버에 보냄
+            const response = await axios.post('http://localhost:8080/api/v1/signup',{
+                username:id,
+                password,
+                email
+            });
             console.log('회원가입 성공!', response.data);
 
             navigate('/login',{replace:true});
@@ -104,6 +146,7 @@ function SignUp(){
                         placeholder="아이디"
                         required
                     />
+                    <button onClick={handleIdCheck}>중복검사</button>
                     {errors.id && <p className="error">{errors.id}</p>}
                 </div>
 
@@ -131,6 +174,19 @@ function SignUp(){
                         required
                     />
                     {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="email">이메일</label>
+                    <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="이메일"
+                        required
+                    />
+                    {errors.email && <p className="error">{errors.email}</p>}
                 </div>
 
                 <button type="submit">회원가입</button>
