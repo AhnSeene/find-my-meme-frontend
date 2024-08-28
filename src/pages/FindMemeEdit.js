@@ -2,20 +2,24 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
-import axios from "axios";
+import TagSelector from "../components/TagSelector";
+import api from "../contexts/api";
 import '../styles/common.css';
 
 function FindMemeEdit() {
+    const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
     const { state } = useLocation();
     const navigate = useNavigate();
     const [editorValue, setEditorValue] = useState('');
     const [title, setTitle] = useState('');
+    const [selectedSubTags, setSelectedSubTags] = useState([]);
     const quillRef = useRef(null);
-    console.log(state);
+
     useEffect(() => {
         if (state && state.post) {
             setEditorValue(state.post.htmlContent || '');
             setTitle(state.post.title || '');
+            setSelectedSubTags(state.post.tags.map(tag => tag.id));
         }
     }, [state]);
 
@@ -39,13 +43,13 @@ function FindMemeEdit() {
             formData.append('file', file);
 
             try {
-                const response = await axios.post('http://localhost:8080/api/v1/files/upload', formData, {
+                const response = await api.post('/files/upload', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
                 });
 
-                const imageUrl = `http://localhost:8080${response.data.data.fileUrl}`;
+                const imageUrl = `${fileBaseUrl}${response.data.data.fileUrl}`;
                 const quill = quillRef.current.getEditor();
                 const range = quill.getSelection();
                 quill.insertEmbed(range.index, 'image', imageUrl);
@@ -61,10 +65,11 @@ function FindMemeEdit() {
         const plainText = quillRef.current.getEditor().getText();
         console.log("id : ",state.post.id)
         try {
-            const response = await axios.put(`http://localhost:8080/api/v1/find-posts/${state.post.id}`, {
+            const response = await api.put(`/find-posts/${state.post.id}`, {
                 title: title,
                 htmlContent: editorValue,
-                content: plainText
+                content: plainText,
+                tags: selectedSubTags
             }, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -127,6 +132,10 @@ function FindMemeEdit() {
                     placeholder="내용을 입력하세요"
                     className="custom-editor"
                 />
+                <TagSelector 
+                    selectedSubTags={selectedSubTags} 
+                    setSelectedSubTags={setSelectedSubTags} 
+                />  
                 <button className="findMemeEdit-btn" type="submit">수정 완료</button>
             </form>
         </div>
