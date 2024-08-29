@@ -17,6 +17,11 @@ function FindMemeDetail() {
     const [commentCount,setCommentCount] = useState(0);
     const navigate = useNavigate();
 
+    //comments 업데이트 될때 출력 확인하려고
+    useEffect(() => {
+        console.log("Updated comments:", comments);
+    }, [comments]);
+
     useEffect(() => {
         const fetchPost = async () => {
             try {
@@ -83,14 +88,37 @@ function FindMemeDetail() {
         setCommentCount(prevCount => prevCount + 1); // 댓글 수 증가
     };
 
-    const handleCommentDeleted = (commentId) => {
-        const deleteComment = (comments) => comments.filter(comment => {
-            if (comment.id === commentId) return false;
-            if (comment.replies) comment.replies = deleteComment(comment.replies);
-            return true;
-        });
-        setComments(deleteComment(comments));
-        setCommentCount(prevCount => prevCount - 1); 
+    const handleDeleteComment = async (commentId) => {
+        try {
+            // 서버에 댓글 삭제 요청
+            const response = await api.delete(`/find-posts/${post.data.id}/comments/${commentId}`);
+            const updatedComment = response.data.data;
+            // 로컬 상태에서 해당 댓글을 '삭제된 댓글입니다.'로 업데이트
+            const updateDeletedComment = (comments) => comments.map(comment => {
+                if (comment.id === commentId) {
+                    return {
+                        ...comment,
+                        htmlContent: updatedComment.htmlContent,
+                        deletedAt: updatedComment.deletedAt,
+                        selected: updatedComment.selected,
+                    };
+                }
+                if (comment.replies) {
+                    return {
+                        ...comment,
+                        replies: updateDeletedComment(comment.replies),
+                    };
+                }
+                return comment;
+            });
+            
+            // 상태 업데이트
+            setComments(prevComments => updateDeletedComment(prevComments));
+            setCommentCount(prevCount => prevCount - 1); // 댓글 수 감소
+    
+        } catch (error) {
+            console.error('댓글 삭제 오류:', error);
+        }
     };
 
     const handleReply = (parentCommentId) => {
@@ -108,6 +136,10 @@ function FindMemeDetail() {
         setReplyingTo(null);
     };
 
+        // 답글 창 닫기 핸들러 추가
+    const handleCancelReply = () => {
+        setReplyingTo(null);  // 답글 창을 닫기 위해 replyingTo를 null로 설정
+    };
 
     return (
         <div className="findMemeDetail">
@@ -161,10 +193,11 @@ function FindMemeDetail() {
                 <CommentList
                     postId={post.data.id}
                     comments={comments}
-                    onDelete={handleCommentDeleted}
+                    onDelete={handleDeleteComment}
                     onReply={handleReply}
                     replyingTo={replyingTo}
                     onReplySubmit={handleCommentAdded}
+                    onCancelReply={handleCancelReply}
                     userUsername={authState.username} // 로그인된 사용자 이름 전달
                     postOwnerUsername={post.data.username}
                 />
