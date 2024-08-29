@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import logo from '../assets/logo.png';
 import './Header.css';
 
 function Header (){
@@ -33,7 +34,7 @@ function Header (){
     return(
         <div className="Header">
             <Link to="/" className="logo-link">
-                <h1>로고</h1>
+                <img src={logo} alt="Logo" className="logo-image" />
             </Link>
             <div className="nav-buttons">
                 {authState.isLoggedIn? (

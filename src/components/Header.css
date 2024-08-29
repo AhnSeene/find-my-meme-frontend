@@ -12,15 +12,13 @@
     z-index: 1000; /* 다른 요소들 위에 표시되도록 설정 */
     background-color: white; /* 배경색을 추가하여 내용이 겹치지 않도록 함 */
 }
-
-/* 로고 */
-.Header .logo-link {
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    position: absolute; /* 절대 위치로 중앙 정렬 */
-    left: 50%;
-    transform: translateX(-50%); /* 정확한 가운데 정렬 */
+.logo-image {
+  width: 200px; /* 원하는 크기로 조정 */
+  height: auto;
+  position: absolute; /* 절대 위치 */
+  top: 8px;
+  left: 20px; /* 왼쪽 상단에 배치 */
+  z-index: 1100; /* 헤더와 네비게이션 바보다 더 위에 위치 */
 }
 
 .Header h1 {
