@@ -1,0 +1,122 @@
+/* profile.css */
+
+.profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    max-width: 300px;
+    margin: 20px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-image-container {
+    position: relative; /* Ensure the icon can be positioned absolutely within this container */
+    display: inline-block; /* Ensures the container fits the size of its content */
+}
+
+.profile-image-container img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: opacity 0.3s ease; /* Smooth transition for darkening effect */
+}
+
+.profile-image-container.overlay-active img {
+    opacity: 0.3; /* Darken the image when editing */
+}
+
+.profile-image-container .edit-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the icon */
+    font-size: 30px;
+    color: #007bff;
+    pointer-events: none; /* Make sure clicks go through the icon */
+    opacity: 0; /* Hide icon by default */
+    transition: opacity 0.3s ease; /* Smooth transition for icon appearance */
+}
+
+.profile-image-container.overlay-active .edit-icon {
+    opacity: 1; /* Show the icon when editing */
+}
+
+.profile-image-container .edit-icon-bottom {
+    position: absolute;
+    bottom: -20px; /* Move the icon slightly below the image */
+    left: 50%;
+    transform: translateX(-50%); /* Center the icon horizontally */
+    font-size: 24px; /* Slightly smaller size */
+    color: black; /* Set the icon color to black */
+    cursor: pointer; /* Show a pointer cursor on hover */
+    transition: opacity 0.3s ease; /* Smooth transition for icon appearance */
+    opacity: 0; /* Hide icon by default */
+}
+
+.profile-image-container.overlay-active .edit-icon-bottom {
+    opacity: 1; /* Show the icon when editing */
+}
+
+.profile div {
+    margin-top: 20px; /* Increased margin to provide more space below the image */
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.profile button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.profile button:hover {
+    background-color: #0056b3;
+}
+
+.profile input[type="file"] {
+    display: none; /* Hide the file input */
+}
+
+.profile .edit-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.profile .edit-section input[type="file"] {
+    margin-bottom: 10px;
+}
+
+.profile .edit-section button {
+    background-color: #28a745;
+}
+
+.profile .edit-section button:hover {
+    background-color: #218838;
+}
+
+.profile .edit-section button.cancel {
+    background-color: #dc3545;
+}
+
+.profile .edit-section button.cancel:hover {
+    background-color: #c82333;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}

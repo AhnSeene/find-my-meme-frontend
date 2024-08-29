@@ -1,0 +1,17 @@
+{
+    "images": [
+      {
+        "url": "/images/image1.jpeg",
+        "tags": ["귀여운", "웃긴"]
+      },
+      {
+        "url": "/images/image2.jpeg",
+        "tags": ["화난", "귀여운"]
+      },
+      {
+        "url": "/images/image3.jpeg",
+        "tags": ["안녕하세요", "새해인사"]
+      }
+    ]
+  }
+  

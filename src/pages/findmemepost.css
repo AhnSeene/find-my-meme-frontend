@@ -1,0 +1,130 @@
+.findMemePost {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    width: 80%;
+    max-width: 1200px;
+}
+
+.findMemePost form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.findMemePost h2 {
+    margin-bottom: 20px;
+}
+
+.findMemePost input {
+    font-size: 16px;
+    padding: 8px 12px;
+    margin-bottom: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.custom-editor {
+    width: 100%;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+.custom-editor .ql-container {
+    height: 100%;
+}
+
+.custom-editor .ql-editor {
+    min-height: 400px;
+}
+
+.findMemePost-tag {
+    width: 100%;
+    margin-bottom: 20px; /* 폼 요소와 등록 버튼 사이의 간격 */
+}
+.findMemePost-tag-top{
+    display: flex;
+}
+
+.findMemePost-tag select {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.findMemePost-tag .tag-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* 버튼 사이의 간격 */
+}
+
+.findMemePost-tag button {
+    background-color: #219C90;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3), 0px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.findMemePost-tag .selected-tag {
+    display: flex;
+    align-items: center;
+    background-color: #e0f4f1;
+    border: 1px solid #219C90;
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+.findMemePost-tag .selected-tag button {
+    background-color: #ff4d4d; /* 제거 버튼 색상 */
+    border: none;
+    color: white;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.findMemePost-tag .selected-tag button:hover {
+    background-color: #e60000;
+}
+
+.findMemePost-btn {
+    width: 100px;
+    height: 40px;
+    border: none;
+    background-color: #219C90;
+    font-size: 16px;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3), 0px 1px 3px rgba(0, 0, 0, 0.2);
+    margin-top: 20px; /* 등록 버튼과 폼 요소 간의 간격 */
+}
+
+/* 버튼에 호버 효과 추가 */
+.findMemePost-btn:hover {
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.4), 0px 2px 4px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+}
+
+/* 버튼을 클릭했을 때의 효과 */
+.findMemePost-btn:active {
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4), 0px 1px 2px rgba(0, 0, 0, 0.3);
+    transform: translateY(1px);
+}
+
+.findMemePost-tag .selected-tags {
+    display: flex;
+    flex-wrap: wrap; /* 태그가 가로로 나열되며 공간이 부족할 경우 줄 바꿈 */
+    gap: 10px; /* 태그 간의 간격 */
+    margin-bottom: 10px; /* 선택된 태그와 다른 요소들 간의 간격 */
+}
