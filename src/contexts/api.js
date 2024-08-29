@@ -1,8 +1,8 @@
 import axios from 'axios';
-
+const apiUrl= process.env.REACT_APP_API_URL;
 // Axios 인스턴스 생성
 const api = axios.create({
-  baseURL: 'http://localhost:8080/api/v1/', // API의 기본 URL
+  baseURL: `${apiUrl}/api/v1/`, // API의 기본 URL
 });
 
 // 요청 인터셉터 추가 - 모든 요청에 Authorization 헤더를 추가

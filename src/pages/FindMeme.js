@@ -1,5 +1,5 @@
 import { useState, useEffect} from "react";
-import axios from "axios";
+import api from "../contexts/api";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import './findmeme.css';
@@ -32,7 +32,7 @@ function FindMeme(){
     const fetchData = async (url, setData) => {
         setLoading(true);
         try {
-            const response = await axios.get(url);
+            const response = await api.get(url);
             setData(response.data.data.content);
             setTotalPages(response.data.data.totalPages);
         } catch (error) {
@@ -43,11 +43,11 @@ function FindMeme(){
     };
 
     useEffect(() => {
-        fetchData(`http://localhost:8080/api/v1/find-posts?page=${currentPage}&size=3`, setFindPost);
+        fetchData(`/find-posts?page=${currentPage}&size=3`, setFindPost);
     }, [currentPage]);
 
     const handleFind = () => {
-        fetchData(`http://localhost:8080/api/v1/find-posts?page=${currentPage}&size=3&status=FIND`, setFindPost);
+        fetchData(`/find-posts?page=${currentPage}&size=3&status=FIND`, setFindPost);
        
         setIsFindActive(true);
     }

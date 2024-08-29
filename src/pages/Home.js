@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import { AiFillLike } from "react-icons/ai";
 import { GrFormView } from "react-icons/gr";
 import { GoHeart, GoHeartFill } from "react-icons/go";
@@ -27,7 +26,6 @@ function Home() {
     
         setLoading(true);
         try {
-            console.log('ggg')
             const response = await api.get(`/meme-posts?page=${page}&size=5`);
             const newMemes = response.data.data.content;
             setMemes(prevMemes => [...prevMemes, ...newMemes]);

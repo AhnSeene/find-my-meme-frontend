@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../contexts/api";
 import './signup.css';
 import { useNavigate } from "react-router";
 
@@ -78,7 +78,7 @@ function SignUp(){
         e.preventDefault();
         const {id} = formData;
         try{
-            const response = await axios.post('',{id});
+            const response = await api.post('',{id});
 
             if(response.data.available){
                 setErrors(prevErrors=>({
@@ -119,7 +119,7 @@ function SignUp(){
 
         try{
             const {id, password,email} = formData; //필요한 데이터만 추출하여 서버에 보냄
-            const response = await axios.post('http://localhost:8080/api/v1/signup',{
+            const response = await api.post('/signup',{
                 username:id,
                 password,
                 email

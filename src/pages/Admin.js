@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../contexts/api";
 import './admin.css'
 
 function Admin() {
@@ -16,7 +16,7 @@ function Admin() {
     const fetchTags = async () => {
         try {
             setLoading(true);
-            const response = await axios.get("http://localhost:8080/api/v1/tags");
+            const response = await api.get("/tags");
             setTags(response.data.data);
         } catch (error) {
             console.error("Failed to fetch tags:", error);
@@ -29,7 +29,7 @@ function Admin() {
         if (!newParentTagName) return;
 
         try {
-            await axios.post('http://localhost:8080/api/v1/tags', {
+            await api.post('/tags', {
                 name: newParentTagName,
                 slug: newParentTagName.toLowerCase().replace(/ /g, "-"),  // slug 자동 생성
                 parentTagId: null
@@ -56,7 +56,7 @@ function Admin() {
             await Promise.all(newSubTags
                 .filter(subTag => subTag.trim() !== "") // 빈 값 필터링
                 .map(subTag => 
-                    axios.post('http://localhost:8080/api/v1/tags', {
+                    api.post('/tags', {
                         name: subTag,
                         slug: subTag.toLowerCase().replace(/ /g, "-"), // slug 자동 생성
                         parentTagId: selectedParentTagId
