@@ -3,7 +3,7 @@ import CommentForm from "./CommentForm";
 import api from "../contexts/api";
 import './commentlist.css';
 
-function CommentList({ comments, onDelete, onReply, replyingTo, onReplySubmit: onReplySubmitProp, postId, userUsername, postOwnerUsername }) {
+function CommentList({ comments, onDelete, onReply, replyingTo, onReplySubmit: onReplySubmitProp, onCancelReply, postId, userUsername, postOwnerUsername }) {
   const [commentList, setCommentList] = useState(comments || []);
 
   useEffect(() => {
@@ -53,21 +53,6 @@ function CommentList({ comments, onDelete, onReply, replyingTo, onReplySubmit: o
     return comment;
   };
 
-  const handleDelete = async (commentId) => {
-    try {
-        const response = await api.delete(`/find-posts/${postId}/comments/${commentId}`);
-        const updatedComment = response.data.data;
-        setCommentList(prevComments =>
-            prevComments.map(comment =>
-                comment.id === commentId
-                    ? { ...comment, ...updatedComment }
-                    : comment
-            )
-        );
-    } catch (error) {
-        console.error('댓글 삭제 오류:', error);
-    }
-};
   const handleReply = (commentId) => {
     const topParentCommentId = findTopParentCommentId(commentId, commentList);
     onReply(topParentCommentId || commentId);
@@ -95,32 +80,24 @@ function CommentList({ comments, onDelete, onReply, replyingTo, onReplySubmit: o
 
   const renderCommentsAndReplies = (comments) => {
     return comments.map(comment => (
-        <div key={comment.id} className={`comment-container ${comment.selected ? 'selected' : ''}`}>
-            <div className={`comment ${comment.selected ? 'selected' : ''}`}>
-                <div className="comment-username">{comment.username}</div>
-                <div dangerouslySetInnerHTML={{ __html: comment.htmlContent }} />
-                {comment.deletedAt && (
-                    <div className="deleted-info">
-                        삭제된 시간: {formatDateTime(comment.deletedAt)}
-                    </div>
-                )}
-                {comment.username === userUsername && !comment.deletedAt && (
-                    <button onClick={() => handleDelete(comment.id)}>삭제</button>
-                )}
-                {postOwnerUsername === userUsername && !comment.selected && !comment.deletedAt && (
-                    <button onClick={() => handleSelect(comment.id)}>채택</button>
-                )}
-                <button onClick={() => handleReply(comment.id)}>답글</button>
+      <div key={comment.id} className={`comment-container ${comment.selected ? 'selected' : ''}`}>
+        <div className={`comment ${comment.selected ? 'selected' : ''}`}>
+          <div className="comment-username">{comment.username}</div>
+          <div dangerouslySetInnerHTML={{ __html: comment.htmlContent }} />
+          {comment.deletedAt && (
+            <div className="deleted-info">
+              삭제된 시간: {formatDateTime(comment.deletedAt)}
             </div>
-
-        {replyingTo === comment.id && (
-          <CommentForm
-            postId={postId}
-            onCommentAdded={onReplySubmitProp}
-            replyingTo={comment.id}
-          />
-        )}
-
+          )}
+          {comment.username === userUsername && !comment.deletedAt && (
+            <button onClick={() => onDelete(comment.id)}>삭제</button>
+          )}
+          {postOwnerUsername === userUsername && !comment.selected && !comment.deletedAt && (
+            <button onClick={() => handleSelect(comment.id)}>채택</button>
+          )}
+          <button onClick={() => handleReply(comment.id)}>답글</button>
+        </div>
+  
         {comment.replies && comment.replies.length > 0 && (
           <div className="reply-list">
             {comment.replies
@@ -129,32 +106,53 @@ function CommentList({ comments, onDelete, onReply, replyingTo, onReplySubmit: o
                 <div key={reply.id} className={`reply ${reply.selected ? 'selected' : ''}`}>
                   <div className="reply-to">@{comment.username} <span className="username">{reply.username}</span></div>
                   <div dangerouslySetInnerHTML={{ __html: reply.htmlContent }} />
-                  <button onClick={() => handleDelete(reply.id)}>삭제</button>
-                  <button onClick={() => handleReply(reply.id)}>답글</button>
-                  <button onClick={() => handleSelect(reply.id)}>채택</button>
-
-                  {replyingTo === reply.id && (
-                    <CommentForm
-                      postId={postId}
-                      onCommentAdded={onReplySubmitProp}
-                      replyingTo={reply.id}
-                    />
+                  {reply.deletedAt && (
+                    <div className="deleted-info">
+                      삭제된 시간: {formatDateTime(reply.deletedAt)}
+                    </div>
                   )}
-                  
+                  {reply.username === userUsername && !reply.deletedAt && (
+                    <button onClick={() => onDelete(reply.id)}>삭제</button>
+                  )}
+                  {postOwnerUsername === userUsername && !reply.selected && !reply.deletedAt && (
+                    <button onClick={() => handleSelect(reply.id)}>채택</button>
+                  )}
+                  <button onClick={() => handleReply(reply.id)}>답글</button>
+  
                   {/* 대댓글에 대한 대댓글도 렌더링 */}
                   {reply.replies && reply.replies.length > 0 && (
                     <div className="reply-list">
                       {renderCommentsAndReplies(reply.replies)}  {/* 재귀 호출 */}
                     </div>
                   )}
+  
+                  {/* 답글 입력 폼을 여기로 이동 */}
+                  {replyingTo === reply.id && (
+                    <CommentForm
+                      postId={postId}
+                      onCommentAdded={onReplySubmitProp}
+                      replyingTo={reply.id}
+                      onCancel={onCancelReply}
+                    />
+                  )}
                 </div>
               ))}
           </div>
         )}
+  
+        {/* 최상위 댓글에 대한 답글 입력 폼*/}
+        {replyingTo === comment.id && (
+          <CommentForm
+            postId={postId}
+            onCommentAdded={onReplySubmitProp}
+            replyingTo={comment.id}
+            onCancel={onCancelReply}
+          />
+        )}
       </div>
     ));
   };
-
+  
   return (
     <div className="comments-section">
       {commentList.length > 0 ? renderCommentsAndReplies(commentList) : <p>댓글이 없습니다.</p>}
