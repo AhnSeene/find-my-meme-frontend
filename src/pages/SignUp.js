@@ -77,10 +77,13 @@ function SignUp(){
     const handleIdCheck = async (e)=>{
         e.preventDefault();
         const {id} = formData;
+        
         try{
-            const response = await api.post('',{id});
+            const response = await api.post('/users/check-username', {
+                username: id 
+            });
 
-            if(response.data.available){
+            if(response.data.success){
                 setErrors(prevErrors=>({
                     ...prevErrors,
                     id:'사용 가능한 아이디입니다'
@@ -109,7 +112,7 @@ function SignUp(){
             id: validate('id', formData.id),
             password: validate('password', formData.password),
             confirmPassword: validate('confirmPassword', formData.confirmPassword),
-            eamil: validate('email', formData.email)
+            email: validate('email', formData.email)
         };
 
         if(Object.values(newErrors).some(error => error)) {
@@ -146,7 +149,7 @@ function SignUp(){
                         placeholder="아이디"
                         required
                     />
-                    <button onClick={handleIdCheck}>중복검사</button>
+                    <button type="button" onClick={handleIdCheck}>중복검사</button>
                     {errors.id && <p className="error">{errors.id}</p>}
                 </div>
 
