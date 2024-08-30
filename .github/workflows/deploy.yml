@@ -44,7 +44,6 @@ jobs:
             FILE_BASEURL=${{ secrets.FILE_BASEURL }} \
             FILE_BASEDIR=${{ secrets.FILE_BASEDIR }} \
             DEFAULT_PROFILE_URL=${{ secrets.DEFAULT_PROFILE_URL }} \
-            FREACT_APP_FILE_BASEURL=${{ secrets.REACT_APP_FILE_BASEURL }} \
+            REACT_APP_FILE_BASEURL=${{ secrets.REACT_APP_FILE_BASEURL }} \
             REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }} \
-            
             docker-compose up -d
