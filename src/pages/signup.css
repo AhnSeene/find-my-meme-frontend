@@ -1,3 +1,42 @@
+.signup{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* 수평 중앙 정렬 */
+    margin: 0 auto;
+}
+.form-group{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-bottom: 10px;
+}
+.form-group label{
+    display: flex;
+    flex-direction: flex-start;
+    color: rgb(170, 170, 170);
+    margin-bottom: 6px;
+}
+.form-group input{
+    width: 400px;
+    height: 40px;
+    padding-left: 10px;
+    margin-right: 90px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+.form-group button {
+    position: absolute;
+    right: 0;
+    top: 28px; /* 버튼을 입력창과 수직으로 정렬 */
+    bottom: 0; /* 입력창과 수직 중앙 정렬 */
+    height: 34px;
+    padding: 0 10px;
+    margin: 0;
+    box-sizing: border-box;
+}
 .error{
     color: red;
+    font-size: 14px;
+    margin: 0px 0px;
 }
