@@ -1,5 +1,6 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Grid } from 'swiper/modules';
+import { Link } from "react-router-dom";
 import 'swiper/css/navigation';
 import 'swiper/css';
 import 'swiper/css/grid';
@@ -26,7 +27,9 @@ const MemeSlider = ({ memes, title }) => {
             >
                 {memes.map((meme, index) => (
                     <SwiperSlide key={index} style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <img src={`${fileBaseUrl}${meme.imageUrl}`} alt={`Meme ${index + 1}`} style={{ width: "90%", height: "90%", objectFit: "cover" }} />
+                        <Link  to={`/meme/${meme.id}`}>
+                            <img src={`${fileBaseUrl}${meme.imageUrl}`} alt={`Meme ${index + 1}`} style={{ width: "90%", height: "90%", objectFit: "cover" }} />
+                        </Link>
                     </SwiperSlide>
                 ))}
             </Swiper>
