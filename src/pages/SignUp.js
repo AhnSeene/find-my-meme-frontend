@@ -1,7 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
+import { BiShow } from "react-icons/bi";
+import { BiHide } from "react-icons/bi";
+import { IoMdCloseCircle } from "react-icons/io";
+import Modal from 'react-modal';
 import api from "../contexts/api";
 import './signup.css'
-import { useNavigate } from "react-router";
+import { Navigation } from "swiper/modules";
 
 function SignUp(){
     const navigate = useNavigate();
@@ -19,6 +24,22 @@ function SignUp(){
         confirmPassword:'',
         email:''
     });
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
+    const [isSignupModal, setIsSignupModal] = useState(false);
+    const [isIdChecked, setIsIdChecked] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);  // 비밀번호 보기 상태 관리
+    const [showPwConfirm, setShowPwConfirm] = useState(false);
+
+    const togglePwShow = () => setShowPassword(prevState => !prevState);
+    const togglePwConfirmShow = () => setShowPwConfirm(prevState => !prevState);
+
+    const resetId = () => {
+        setFormData(prevData => ({ ...prevData, id: '' }));
+        setIsIdChecked(false)
+    }
+    const resetEmail = () => setFormData(prevData => ({ ...prevData, email: '' }));
 
     const validate = (name,value)=> {
         let error='';
@@ -84,28 +105,40 @@ function SignUp(){
             });
 
             if(response.data.success){
-                setErrors(prevErrors=>({
-                    ...prevErrors,
-                    id:'사용 가능한 아이디입니다'
-                }))
+                setModalMessage('사용 가능한 아이디입니다.');
+                setIsModalOpen(true);  // 모달창 열기
+                setIsIdChecked(true);  // 중복검사 통과
             }
             else{
-                setErrors(prevErrors=>({
-                    ...prevErrors,
-                    id:'이미 사용중인 아이디입니다'
-                }))
+                setModalMessage('이미 사용중인 아이디입니다.');
+                setIsModalOpen(true);
+                setIsIdChecked(false);  // 중복검사 통과
             }
         }catch(error){
-            console.error('아이디 중복검사 실패',error);
-            setErrors(prevErrors=>({
-                ...prevErrors,
-                id:'중복 검사 중 오류가 발생했습니다'
-            }))
+            console.error('아이디 중복검사 실패', error);
+            setModalMessage('중복 검사 중 오류가 발생했습니다.');
+            setIsModalOpen(true);
+            setIsIdChecked(false);  // 중복검사 통과
         }
+    }
+
+    const closeModal = () => {
+        setIsModalOpen(false);  // 모달창 닫기
+    };
+
+    const handleLogin = () => {
+        setIsSignupModal(false);
+        navigate(`/login`);
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!isIdChecked) {
+            setModalMessage('아이디 중복검사를 통과해야 합니다.');
+            setIsModalOpen(true);
+            return;
+        }
 
         //전체 폼 데이터 유효성 검사
         const newErrors = {
@@ -128,8 +161,8 @@ function SignUp(){
                 email
             });
             console.log('회원가입 성공!', response.data);
-
-            navigate('/login',{replace:true});
+            setModalMessage('회원가입을 완료하였습니다!');
+            setIsSignupModal(true)
         } catch(error){
             console.error('회원가입 실패', error);
         }
@@ -141,58 +174,141 @@ function SignUp(){
             <form onSubmit={handleSubmit}> 
                 <div className="form-group">
                     <label htmlFor="id">아이디</label>
-                    <input
-                        type="text"
-                        name="id"
-                        value={formData.id}
-                        onChange={handleChange}
-                        placeholder="아이디"
-                        required
-                    />
-                    <button type="button" onClick={handleIdCheck}>중복검사</button>
+                    <div style={{position:'relative'}}>
+                        <input
+                            type="text"
+                            name="id"
+                            value={formData.id}
+                            onChange={handleChange}
+                            placeholder="아이디"
+                            required
+                        />
+                        <span
+                            onClick={resetId}
+                            style={{
+                                position:'absolute',
+                                right: '100px', 
+                                top: '46%', 
+                                transform: 'translateY(-50%)',
+                                cursor:'pointer'
+                            }}
+                        >
+                            <IoMdCloseCircle />
+                        </span>
+                    </div>
+                    <button
+                        type="button" 
+                        onClick={handleIdCheck}
+                        disabled={isIdChecked}
+                    >
+                        중복검사
+                    </button>
                     {errors.id && <p className="error">{errors.id}</p>}
                 </div>
 
+                <Modal
+                    isOpen={isModalOpen && !isSignupModal}
+                    onRequestClose={closeModal}
+                    contentLabel="아이디 중복 확인"
+                    className="Modal"
+                    overlayClassName="Overlay"
+                >
+                    <p>{modalMessage}</p>
+                    <button onClick={closeModal}>확인</button>
+                </Modal>
+
                 <div className="form-group">
                     <label htmlFor="password">비밀번호</label>
-                    <input
-                        type="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        placeholder="비밀번호"
-                        required
-                    />
+                    <div style={{position:'relative'}}>
+                        <input
+                            type={showPassword? "text":"password"}
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            placeholder="비밀번호"
+                            required
+                        />
+                        <span
+                            onClick={togglePwShow}
+                            style={{
+                                position:'absolute',
+                                right: '100px', 
+                                top: '46%', 
+                                transform: 'translateY(-50%)',
+                                cursor:'pointer'
+                            }}
+                        >
+                            {showPassword ? <BiShow/>:<BiHide/>}
+                        </span>
+                    </div>
                     {errors.password && <p className="error">{errors.password}</p>}
                 </div>
 
                 <div className="form-group">
                     <label htmlFor="confirmPassword">비밀번호 확인</label>
-                    <input
-                        type="password"
-                        name="confirmPassword"
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
-                        placeholder="비밀번호 확인"
-                        required
-                    />
+                    <div style={{position:'relative'}}>
+                        <input
+                            type={showPwConfirm? "text":"password"}
+                            name="confirmPassword"
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
+                            placeholder="비밀번호 확인"
+                            required
+                        />
+                        <span
+                            onClick={togglePwConfirmShow}
+                            style={{
+                                position:'absolute',
+                                right: '100px', 
+                                top: '46%', 
+                                transform: 'translateY(-50%)',
+                                cursor:'pointer'
+                            }}
+                        >
+                            {showPwConfirm ? <BiShow/>:<BiHide/>}
+                        </span>
+                    </div>
                     {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
                 </div>
 
                 <div className="form-group">
                     <label htmlFor="email">이메일</label>
-                    <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="이메일"
-                        required
-                    />
+                    <div style={{position:'relative'}}>
+                        <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="이메일"
+                            required
+                        />
+                        <span
+                            onClick={resetEmail}
+                            style={{
+                                position:'absolute',
+                                right: '100px', 
+                                top: '46%', 
+                                transform: 'translateY(-50%)',
+                                cursor:'pointer'
+                            }}
+                        >
+                            <IoMdCloseCircle />
+                        </span>
+                    </div>
                     {errors.email && <p className="error">{errors.email}</p>}
                 </div>
 
-                <button type="submit">회원가입</button>
+                <button className="signup-btn" type="submit">회원가입</button>
+                <Modal
+                    isOpen={isSignupModal}
+                    onRequestClose={handleLogin}
+                    contentLabel="회원가입 성공 여부"
+                    className="Modal"
+                    overlayClassName="Overlay"
+                >
+                    <p>{modalMessage}</p>
+                    <button onClick={handleLogin}>로그인하러가기</button>
+                </Modal>
             </form>
         </div>
     )
