@@ -12,6 +12,11 @@
     z-index: 999; /* 헤더 아래지만 다른 콘텐츠 위에 표시되도록 설정 */
     border-bottom: 1px solid #D9D9D9;
 }
+.navbar-input{
+    width: 300px;
+    height: 30px;
+    margin-left: 100px;
+}
 .navbar ul{
     display: flex;
     align-items: center;
@@ -19,7 +24,8 @@
     background-color:none;
     padding: 0px;
     margin: 0;
-    padding-left: 400px;
+    padding-left: 300px;
+    padding-right: 20px;
     list-style-type: none; /* 기본 점 제거 */
     gap: 60px;
 }
