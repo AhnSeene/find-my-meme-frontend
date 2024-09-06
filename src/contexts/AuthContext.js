@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
@@ -7,8 +8,10 @@ export function AuthProvider({ children }) {
     isLoggedIn: false,
     token: null,
     username: null,  // username 필드 추가
+    roles: [] 
   });
-
+  const navigate = useNavigate();
+  
   // 페이지 로드 시 로컬 스토리지에서 토큰과 username을 가져와 상태 복원
   useEffect(() => {
     const storedToken = localStorage.getItem('jwtToken');
