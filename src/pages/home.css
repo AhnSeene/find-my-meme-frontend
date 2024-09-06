@@ -1,21 +1,16 @@
 .home {
     width: 80%;
     margin: 0 auto;
+    margin-top: 50px;
     display: flex;
     flex-direction: column;
     justify-content: center; /* 자식 요소를 가로로 가운데 정렬 */
-}
-
-.meme-list {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    justify-content: center; /* 아이템을 flex 내부에서 중앙으로 배치 */
+    gap: 20px;
 }
 
 .meme-item {
     position: relative;
-    overflow: hidden;
+    margin-bottom: 15px;
 }
 
 .meme-image-container {
@@ -96,4 +91,17 @@
 
 .meme-info svg { /* 아이콘에 대한 스타일 */
     vertical-align: middle;  /* 아이콘이 텍스트와 수평으로 정렬되도록 함 */
+}
+
+/* 태그를 이미지 바닥에 고정시키기 위한 스타일 */
+.meme-tags {
+    position: absolute;
+    bottom: 14px; /* 이미지의 하단에 고정 */
+    left: 14px; /* 좌측 정렬 */
+    color: white;
+    font-size: 16px;
+    display: flex;
+    justify-content: flex-start; /* 태그들을 좌측 정렬 */
+    gap: 8px; /* 태그들 사이 간격 */
+    flex-wrap: wrap; /* 태그가 많을 때 줄바꿈 */
 }

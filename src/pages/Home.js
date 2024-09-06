@@ -3,7 +3,10 @@ import { Link } from 'react-router-dom';
 import { AiFillLike } from "react-icons/ai";
 import { GrFormView } from "react-icons/gr";
 import { GoHeart, GoHeartFill } from "react-icons/go";
+import { IoMdDownload } from "react-icons/io";
 import { useAuth } from '../contexts/AuthContext';
+import TagSelector from '../components/TagSelector';
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"; 
 import api from '../contexts/api';
 import './home.css';
 
@@ -12,6 +15,7 @@ function Home() {
     const { authState } = useAuth();
     const [memes, setMemes] = useState([]);
     const [page, setPage] = useState(0);
+    const [selectedSubTags, setSelectedSubTags] = useState([]);
     const [loading, setLoading] = useState(false);
     const [hasNext, setHasNext] = useState(true);
 
@@ -85,7 +89,12 @@ function Home() {
 
     return (
         <div className='home'>
-            <div className='meme-list'>
+            <TagSelector 
+                selectedSubTags={selectedSubTags} 
+                setSelectedSubTags={setSelectedSubTags} 
+            />
+            <ResponsiveMasonry columnsCountBreakPoints={{ 425: 2, 750: 3, 1200: 4 }}>
+                <Masonry gutter="20px">
                 {memes.map((meme, index) => (
                     <div key={meme.id} className="meme-item">
                         <div className="meme-image-container">
@@ -93,8 +102,16 @@ function Home() {
                                 <img src={`${fileBaseUrl}${meme.imageUrl}`} alt={`Meme ${index}`} />
                                 <div className="overlay">
                                     <div className="meme-info">
-                                        <AiFillLike style={{ fontSize: '24px' }} /> {meme.likeCount}
-                                        <GrFormView style={{ fontSize: '36px' }} /> {meme.viewCount}
+                                        <GoHeartFill style={{ fontSize: '20px' }} /> {meme.likeCount}
+                                        <GrFormView style={{ fontSize: '30px' }} /> {meme.viewCount}
+                                        <IoMdDownload style={{ fontSize: '24px' }} /> {meme.downloadCount}
+                                    </div>
+                                    <div className="meme-tags">
+                                        {meme.tags.map((tag, tagIndex) => (
+                                            <span key={tagIndex} className="meme-tag">
+                                                #{tag}
+                                            </span>
+                                        ))}
                                     </div>
                                 </div>
                             </Link>
@@ -108,7 +125,8 @@ function Home() {
                         </div>
                     </div>
                 ))}
-            </div>
+                </Masonry>
+            </ResponsiveMasonry>
             {loading && <p>Loading...</p>}
             {!hasNext && <p>No more memes</p>}
         </div>
