@@ -48,15 +48,25 @@ function MemeDetail(){
     if (loading) return <div>Loadding...</div>;
     if (error) return <div>{Error}</div>
 
-    const handleDownload = async () => {
-        const imageUrl = `${fileBaseUrl}${meme.imageUrl}`;
+    const handleDownload = async () => { 
         try {
-            const response = await fetch(imageUrl, { mode: 'cors' });
-            const blob = await response.blob();
+            const response = await api.get(`/meme-posts/${meme.id}/download`, {
+                responseType: 'blob',
+            });
+
+            if (response.status !== 200) {
+                throw new Error('Network response was not ok');
+            }
+            const disposition = response.headers['content-disposition'];
+            const filename = disposition && disposition.match(/filename="(.+)"/)
+                ? disposition.match(/filename="(.+)"/)[1]
+                : 'downloaded-file';
+
+            const blob = response.data;
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = meme.originalFilename;
+            link.download = "findmymeme-" + filename; 
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);

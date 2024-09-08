@@ -1,0 +1,37 @@
+/* MemeSwiper.css */
+
+/* Swiper 컨테이너의 스타일 */
+.swiper {
+    width: 100%; /* Swiper 컨테이너가 전체 너비를 사용하도록 설정 */
+    height: auto; /* 높이를 자동으로 설정 */
+}
+
+/* Swiper 슬라이드의 스타일 */
+.swiper-slide {
+    display: flex; /* Flexbox 사용 */
+    align-items: center; /* 슬라이드 내 아이템 수직 중앙 정렬 */
+    justify-content: center; /* 슬라이드 내 아이템 수평 중앙 정렬 */
+    padding: 5px; /* 슬라이드 내부 여백 */
+}
+
+/* 이미지의 스타일 */
+.swiper-slide img {
+    width: 100%; /* 이미지가 슬라이드의 전체 너비를 채우도록 설정 */
+    height: 300px; /* 이미지의 높이를 자동으로 조정 */
+    object-fit: cover; /* 이미지가 컨테이너를 채우도록 설정 */
+    border-radius: 8px; /* 이미지에 둥근 모서리 추가 (선택 사항) */
+}
+
+/* 작은 화면에서 슬라이드 내부 여백 줄이기 */
+@media (max-width: 768px) {
+    .swiper-slide {
+        padding: 2px; /* 작은 화면에서 슬라이드 내부 여백 줄이기 */
+    }
+}
+
+/* 매우 작은 화면에서 슬라이드 수 조정 */
+@media (max-width: 480px) {
+    .swiper-slide img {
+        object-fit: contain; /* 이미지가 슬라이드 내에서 비율 유지 */
+    }
+}

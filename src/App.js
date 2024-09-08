@@ -10,10 +10,11 @@ import MemeDetail from './pages/MemeDetail';
 import FindMemePost from './pages/FindMemePost';
 import FindMemeDetail from './pages/FindMemeDetail';
 import FindMemeEdit from './pages/FindMemeEdit';
+import Admin from './pages/Admin';
 import TopMeme from './pages/TopMeme';
 import Header from './components/Header';
 import Navbar from './components/Navbar';
-import Admin from './pages/Admin';
+import PrivateRoute from './components/PrivateRoute';
 import './App.css';
 
 function App() {
@@ -35,7 +36,11 @@ function App() {
             <Route path="/findmeme/:id" element={<FindMemeDetail/>} />
             <Route path="/findmeme/edit/:id" element={<FindMemeEdit/>}/>
             <Route path="/topmeme" element={<TopMeme/>}/>
-            <Route path="/admin" element={<Admin/>}/>
+            <Route path="/admin" element={
+              <PrivateRoute>
+                <Admin/>
+              </PrivateRoute>
+            }/>
           </Routes>
         </div>
       </BrowserRouter>

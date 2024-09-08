@@ -6,7 +6,9 @@ import { GoHeart, GoHeartFill } from "react-icons/go";
 import { Link } from 'react-router-dom';
 import { BiEditAlt } from "react-icons/bi";
 import { BsFillPlusCircleFill } from "react-icons/bs";
+import { IoMdDownload } from "react-icons/io";
 import { useAuth } from '../contexts/AuthContext';
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"; 
 import './profile.css'; // Import CSS for styling
 
 function Profile({username}) {
@@ -147,7 +149,7 @@ function Profile({username}) {
         <div className="profile">
             <div className={`profile-image-container ${isEditing ? 'overlay-active' : ''}`}>
                 <img
-                    src={selectedFile ? URL.createObjectURL(selectedFile) : `http://localhost:8080${profilePic}?t=${new Date().getTime()}`}
+                    src={selectedFile ? URL.createObjectURL(selectedFile) : `${fileBaseUrl}${profilePic}?t=${new Date().getTime()}`}
                     alt={`${username}'s profile picture`}
                     onClick={handleImageClick}
                 />
@@ -186,28 +188,40 @@ function Profile({username}) {
             />
         </div>
         <div className='meme-list'>
-            {memes.map((meme, index) => (
-                <div key={meme.id} className="meme-item">
-                    <div className="meme-image-container">
-                        <Link to={`/meme/${meme.id}`}>
-                            <img src={`${fileBaseUrl}${meme.imageUrl}`} alt={`Meme ${index}`} />
-                            <div className="overlay">
-                                <div className="meme-info">
-                                    <AiFillLike style={{ fontSize: '24px' }} /> {meme.likeCount}
-                                    <GrFormView style={{ fontSize: '36px' }} /> {meme.viewCount}
-                                </div>
+        <ResponsiveMasonry columnsCountBreakPoints={{ 425: 2, 750: 3, 1200: 4 }}>
+                <Masonry gutter="20px">
+                    {memes.map((meme, index) => (
+                        <div key={meme.id} className="meme-item">
+                            <div className="meme-image-container">
+                                <Link to={`/meme/${meme.id}`}>
+                                    <img src={`${fileBaseUrl}${meme.imageUrl}`} alt={`Meme ${index}`} />
+                                    <div className="overlay">
+                                        <div className="meme-info">
+                                            <GoHeartFill style={{ fontSize: '20px' }} /> {meme.likeCount}
+                                            <GrFormView style={{ fontSize: '30px' }} /> {meme.viewCount}
+                                            <IoMdDownload style={{ fontSize: '24px' }} /> {meme.downloadCount}
+                                        </div>
+                                        <div className="meme-tags">
+                                            {meme.tags.map((tag, tagIndex) => (
+                                                <span key={tagIndex} className="meme-tag">
+                                                    #{tag}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </Link>
+                                <button onClick={(e) => toggleLike(e, meme.id)}>
+                                    {meme.isLiked ? (
+                                        <GoHeartFill style={{ fontSize: '30px', color: 'red' }} />
+                                    ) : (
+                                        <GoHeart style={{ fontSize: '30px' }} />
+                                    )}
+                                </button>
                             </div>
-                        </Link>
-                        <button onClick={(e) => toggleLike(e, meme.id)}>
-                            {meme.isLiked ? (
-                                <GoHeartFill style={{ fontSize: '30px', color: 'red' }} />
-                            ) : (
-                                <GoHeart style={{ fontSize: '30px' }} />
-                            )}
-                        </button>
-                    </div>
-                </div>
-            ))}
+                        </div>
+                    ))}
+            </Masonry>
+        </ResponsiveMasonry>
         {loading && <p>Loading...</p>}
         {!hasNext && <p>No more memes</p>}
     </div>
