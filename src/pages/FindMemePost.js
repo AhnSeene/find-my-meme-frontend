@@ -125,7 +125,8 @@ function FindMemePost() {
                 />
                 <TagSelector 
                     selectedSubTags={selectedSubTags} 
-                    setSelectedSubTags={setSelectedSubTags} 
+                    setSelectedSubTags={setSelectedSubTags}
+                    isWritingMode={true} 
                 /> 
                 <button className="findMemePost-btn" type="submit">등록</button>
             </form>
