@@ -1,62 +1,62 @@
-.Login{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 100px;
+.Login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
 }
-.LoginForm{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 400px;
-    align-items: center; 
+.LoginForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 400px;
+  align-items: center;
 }
 
 .LoginForm input[type="text"],
-.LoginForm input[type="password"]{
-    width: 300px;
-    height: 30px;
-    padding-left: 10px;
+.LoginForm input[type="password"] {
+  width: 300px;
+  height: 30px;
+  padding-left: 10px;
 }
-.rememberId-checkbox{
-    width: 18px;
-    height: 18px;
+.rememberId-checkbox {
+  width: 18px;
+  height: 18px;
 }
 .LoginForm button {
-    width: 200px;
-    height: 40px;
-    background-color: #219C90; /* 기본 버튼 색상 */
-    color: white;
-    border: none;
-    border-radius: 5px; /* 둥근 모서리 */
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
+  width: 200px;
+  height: 40px;
+  background-color: #219c90; /* 기본 버튼 색상 */
+  color: white;
+  border: none;
+  border-radius: 5px; /* 둥근 모서리 */
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
 }
-.LoginForm button:hover{
-    background-color: #1a7a6d
+.LoginForm button:hover {
+  background-color: #1a7a6d;
 }
 
 .LoginForm .remember-me {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    width: 300px;
-    gap: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 300px;
+  gap: 5px;
 }
 
 .LoginForm .signup-container {
-    display: flex;
-    align-items: center;
-    gap: 5px; /* 버튼과 텍스트 사이 간격 */
+  display: flex;
+  align-items: center;
+  gap: 5px; /* 버튼과 텍스트 사이 간격 */
 }
 
 .LoginForm .signup-button {
-    width: 70px;
-    background-color: transparent;
-    border: none;
-    color: #007bff;
-    cursor: pointer;
-    font-size: 14px;
-    text-decoration: underline; /* 버튼 텍스트에 밑줄 추가 */
+  width: 70px;
+  background-color: transparent;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: underline; /* 버튼 텍스트에 밑줄 추가 */
 }
