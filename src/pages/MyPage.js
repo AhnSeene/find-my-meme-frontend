@@ -3,61 +3,81 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import Profile from "../components/Profile";
 import MyInfo from "../components/MyInfo";
-import './mypage.css';
+import MemeGrid from "../components/MemeGrid";
+import useToggleLike from "../hooks/useToggleLike";
+import useInfiniteScroll from "../hooks/useInfiniteScroll";
+import "./mypage.css";
 
-function MyPage(){
-    const [activeTab, setActiveTab] = useState('profile');
-    const { username } = useParams();
-    const { authState } = useAuth();
-    const navigate = useNavigate();
-    
-    useEffect(() => {
-        if (username && username !== authState.username) {
-            // 다른 사용자의 프로필을 보려는 경우
-            // 서버에서 해당 사용자 정보를 가져오는 로직을 추가할 수 있습니다.
-            // 필요에 따라 서버 요청이나 다른 로직을 추가합니다.
-        } else if (!username && authState.isLoggedIn) {
-            // 로그인된 사용자의 마이페이지를 표시
-        } else {
-            // 로그인되지 않았거나 잘못된 접근일 경우 처리
-            // navigate('/login'); // 로그인 페이지로 리다이렉트 등
-        }
-    }, [username, authState, navigate]);
+function MyPage() {
+  const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
+  const [activeTab, setActiveTab] = useState("myMeme");
+  const { username } = useParams();
+  const { authState } = useAuth();
+  const navigate = useNavigate();
 
-    const renderContent = () => {
-        if (username && username !== authState.username) {
-            // 다른 사용자의 프로필을 볼 때는 프로필만 렌더링
-            return <Profile username={username}/>;
-        }
-        
-        // 로그인된 사용자의 경우 전체 마이페이지 콘텐츠 렌더링
-        switch (activeTab) {
-            case 'profile':
-                return <Profile username={username}/>;
-            case 'myInfo':
-                return <MyInfo />;
-            case 'postManagement':
-                return <div>게시글 관리 컴포넌트</div>;
-            default:
-                return null;
-        }
-    };
+  // 현재 페이지가 내 프로필인지 다른 사람의 프로필인지 확인
+  const isOwnProfile = authState.username === username;
+  console.log("로그인된 계정", authState.username);
+  console.log("지금 user", username);
+  console.log(isOwnProfile);
+  const { memes, setMemes, loading, hasNext, setPage } = useInfiniteScroll(
+    [],
+    true, //isProfile이 true일 때 해당 계정이 올린 밈을 가져옴
+    username
+  );
+  const toggleLike = useToggleLike(memes, setMemes, authState);
 
-    
-    return (
-        <div className="mypage">
-            {username === authState.username ? (
-                <div className="nav-tabs">
-                    <button onClick={() => setActiveTab('profile')}>프로필</button>
-                    <button onClick={() => setActiveTab('myInfo')}>내 정보</button>
-                    <button onClick={() => setActiveTab('postManagement')}>게시글 관리</button>
-                </div>
-            ) : null}
-            <div className="tab-content">
-                {renderContent()}
-            </div>
-        </div>
-    );
+  useEffect(() => {
+    if (!username && authState.isLoggedIn) {
+      navigate("/login");
+    }
+  }, []);
+
+  const renderContent = () => {
+    // 로그인된 사용자의 경우 탭에 따라 콘텐츠 렌더링
+    if (isOwnProfile) {
+      if (activeTab === "myMeme") {
+        return (
+          <MemeGrid
+            memes={memes}
+            toggleLike={toggleLike}
+            fileBaseUrl={fileBaseUrl}
+          />
+        );
+      } else if (activeTab === "myInfo") {
+        return <MyInfo />;
+      } else if (activeTab === "postManagement") {
+        return <div>게시글 관리 컴포넌트</div>;
+      }
+    } else {
+      return (
+        <MemeGrid
+          memes={memes}
+          toggleLike={toggleLike}
+          fileBaseUrl={fileBaseUrl}
+        />
+      );
+    }
+  };
+
+  return (
+    <div className="mypage">
+      <Profile username={username} isOwnProfile={isOwnProfile} />
+      {username === authState.username ? (
+        <>
+          {/* 로그인된 사용자의 경우 탭 표시 */}
+          <div className="nav-tabs">
+            <button onClick={() => setActiveTab("myMeme")}>나의 밈</button>
+            <button onClick={() => setActiveTab("myInfo")}>내 정보</button>
+            <button onClick={() => setActiveTab("postManagement")}>
+              게시글 관리
+            </button>
+          </div>
+        </>
+      ) : null}
+      <div className="tab-content">{renderContent()}</div>
+    </div>
+  );
 }
 
 export default MyPage;
