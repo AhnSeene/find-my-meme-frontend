@@ -6,6 +6,7 @@ import { BiHide } from "react-icons/bi";
 import { IoMdCloseCircle } from "react-icons/io";
 import Button from "../components/Button";
 import api from "../contexts/api";
+import Modal from "react-modal";
 import "./Login.css";
 
 function Login() {
@@ -13,6 +14,8 @@ function Login() {
   const [rememberId, setRememberId] = useState(false);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const { login } = useAuth(); // login 함수 가져오기
   const navigate = useNavigate();
 
@@ -57,9 +60,18 @@ function Login() {
 
         navigate("/", { replace: true });
       } else {
+        setErrorMessage("로그인 중 문제가 발생되었습니다.");
         console.error("로그인 실패:", response.status);
       }
     } catch (error) {
+      if (error.rsesponse && error.response.status === 401) {
+        setErrorMessage("사용자 이름 또는 비밀번호가 잘못되었습니다.");
+      } else {
+        setErrorMessage("로그인 중 문제가 발생했습니다. 다시 시도해주세요.");
+      }
+
+      setIsModalOpen(true);
+
       console.error("로그인 오류:", error);
     }
   };
@@ -131,6 +143,18 @@ function Login() {
         </div>
         <Button text="로그인" type="submit" className="login-button" />
       </form>
+
+      <Modal
+        isOpen={isModalOpen}
+        // onRequestClose={() => setIsModalOpen(false)}
+        contentLabel="로그인 오류"
+        className="Modal"
+        overlayClassName="Overlay"
+        appElement={document.getElementById("root")}
+      >
+        <p>{errorMessage}</p>
+        <Button text={"확인"} onClick={() => setIsModalOpen(false)} />
+      </Modal>
     </div>
   );
 }
