@@ -25,14 +25,16 @@ function Navbar() {
           <Link to="/findmeme">내 표현을 찾아줘</Link>
         </li>
       </ul>
-      <input
-        className="navbar-input"
-        type="text"
-        placeholder="검색어 입력"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-      <Button onClick={handleSearch} text="검색" />
+      <div className="navbar-search">
+        <input
+          className="navbar-input"
+          type="text"
+          placeholder="검색어 입력"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <Button onClick={handleSearch} text="검색" />
+      </div>
     </div>
   );
 }
