@@ -1,8 +1,7 @@
 .Header {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
   position: fixed;
   top: 0;
   left: 0;
@@ -10,27 +9,29 @@
   height: 70px;
   box-sizing: border-box; /* 패딩과 테두리를 포함하여 높이와 너비를 계산 */
   z-index: 1000; /* 다른 요소들 위에 표시되도록 설정 */
-  background-color: white; /* 배경색을 추가하여 내용이 겹치지 않도록 함 */
+  padding: 0 20px;
 }
-.logo-image {
-  width: 200px; /* 원하는 크기로 조정 */
+.Header .logo{
+  position: relative;
+  height: 100%;
+  top: 20px;
+}
+.Header .logo .logo-image {
+  width: 150px; /* 원하는 크기로 조정 */
   height: auto;
   position: absolute; /* 절대 위치 */
-  top: 8px;
-  left: 20px; /* 왼쪽 상단에 배치 */
   z-index: 1100; /* 헤더와 네비게이션 바보다 더 위에 위치 */
 }
 
-/* 오른쪽 버튼들 */
 .Header .nav-buttons {
-  margin-left: auto; /* 오른쪽으로 정렬 */
   display: flex;
+  margin-left: auto; /* 오른쪽으로 정렬 */
   gap: 20px;
-  margin-right: 40px; /* 오른쪽 여백 추가 */
+  font-size: 16px;
 }
 
-.Header button {
-  padding: 6px 10px;
+.Header .nav-buttons button {
+  padding: 8px 16px;
   background-color: #219c90;
   color: white;
   border-radius: 4px;
@@ -38,11 +39,11 @@
   cursor: pointer;
 }
 
-.nav-dropdown {
+.Header .nav-buttons .nav-dropdown {
   position: relative;
 }
 
-.dropdown-menu {
+.Header .nav-buttons .nav-dropdown .dropdown-menu {
   display: none;
   position: absolute;
   top: 100%;
@@ -76,20 +77,21 @@
   display: block;
 }
 
-@media (max-width: 768px) {
-  .logo-image {
-    width: 120px; /* 원하는 크기로 조정 */
-    height: auto;
-    position: absolute; /* 절대 위치 */
-    top: 8px;
-    left: 20px; /* 왼쪽 상단에 배치 */
-    z-index: 1100; /* 헤더와 네비게이션 바보다 더 위에 위치 */
+@media (max-width:600px) {
+  .Header{
+    height: 60px;
+    padding: 0 10px;
   }
-  .Header .nav-buttons {
-    margin-left: 130px; /* 오른쪽으로 정렬 */
-    display: flex;
-    gap: 20px;
-    margin-right: 40px; /* 오른쪽 여백 추가 */
-    white-space: nowrap;
+  .Header .logo {
+    top: 10px;
+  }
+  .Header .logo .logo-image{
+    width: auto;
+    height: 50px;
+  }
+  .Header .nav-buttons button {
+    padding: 6px 12px;
+    font-size: 14px;
   }
 }
+
