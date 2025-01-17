@@ -6,6 +6,7 @@ import MyInfo from "../components/MyInfo";
 import MemeGrid from "../components/MemeGrid";
 import useToggleLike from "../hooks/useToggleLike";
 import useInfiniteScroll from "../hooks/useInfiniteScroll";
+import Button from "../components/Button";
 import "./mypage.css";
 
 function MyPage() {
@@ -60,6 +61,10 @@ function MyPage() {
     }
   };
 
+  const follow = () => {
+    console.log("팔로우하기");
+  };
+
   return (
     <div className="mypage">
       <Profile username={username} isOwnProfile={isOwnProfile} />
@@ -74,7 +79,11 @@ function MyPage() {
             </button>
           </div>
         </>
-      ) : null}
+      ) : (
+        <div>
+          <Button text={"팔로우하기"} onClick={follow()} />
+        </div>
+      )}
       <div className="tab-content">{renderContent()}</div>
     </div>
   );

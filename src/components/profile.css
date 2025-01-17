@@ -2,15 +2,15 @@
 
 .profile {
   display: flex;
-  flex-direction: column;
   align-items: center;
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 10px;
   background-color: #f9f9f9;
-  max-width: 300px;
+  max-width: 80%;
   margin: 20px auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  gap: 50px;
 }
 
 .profile-image img {
@@ -19,4 +19,9 @@
 }
 .profile-image input {
   margin-bottom: 10px;
+}
+
+.profile-follow {
+  display: flex;
+  gap: 60px;
 }

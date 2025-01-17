@@ -49,9 +49,12 @@ function Profile({ username, isOwnProfile }) {
     }
   };
 
+  const follow = () => {
+    console.log("팔로우 버튼");
+  };
+
   return (
     <div className="profile">
-      <h2>Profile</h2>
       <div className="profile-image">
         {isEditing ? (
           <div>
@@ -86,6 +89,10 @@ function Profile({ username, isOwnProfile }) {
             )}
           </>
         )}
+      </div>
+      <div className="profile-follow">
+        <div>팔로잉</div>
+        <div>팔로워</div>
       </div>
     </div>
   );
