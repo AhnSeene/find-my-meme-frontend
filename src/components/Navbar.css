@@ -1,34 +1,29 @@
+ul{
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
 .navbar {
   position: fixed; /* 헤더 아래에 고정 */
   top: 70px; /* 헤더 높이 바로 아래에 위치하도록 설정 */
   left: 0;
   width: 100%;
   height: 50px; /* 네비게이션 바의 높이 */
-  background-color: rgb(255, 255, 255);
   display: flex;
   align-items: center;
-  padding-left: 80px;
   box-sizing: border-box; /* 패딩을 포함하여 너비 계산 */
   z-index: 999; /* 헤더 아래지만 다른 콘텐츠 위에 표시되도록 설정 */
   border-bottom: 1px solid #d9d9d9;
-}
-.navbar-input {
-  width: 300px;
-  height: 30px;
-  margin-left: 100px;
-  margin-right: 5px;
+  padding: 0 20px;
+  gap: 30px;
 }
 .navbar ul {
   display: flex;
   align-items: center;
   height: 100%;
-  background-color: none;
-  padding: 0px;
-  margin: 0;
-  padding-left: 300px;
-  padding-right: 20px;
-  list-style-type: none; /* 기본 점 제거 */
-  gap: 60px;
+  gap:70px;
+  padding-left: 200px;
 }
 .navbar ul li a {
   text-decoration: none;
@@ -40,30 +35,39 @@
   color: #219c90;
 }
 
-@media (max-width: 1024px) {
+.navbar .navbar-search {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 10px;
+}
+.navbar .navbar-search .navbar-input {
+  width: 300px;
+  height: 30px;
+}
+@media (max-width:480px) {
+  .navbar ul{
+    gap: 20px;
+  }
+}
+@media (max-width: 600px) {
+  .navbar{
+    top: 60px;
+    justify-content: center;
+  }
   .navbar ul {
-    gap: 20px; /* 더 작은 화면에서 간격 줄이기 */
+    gap: 40px; /* 더 작은 화면에서 간격 줄이기 */
+    justify-content: center;
+    padding: 0;
   }
 
-  .navbar-input {
-    width: 200px; /* 검색창 크기 줄이기 */
+  .navbar .navbar-search{
+    display: none;
   }
 }
 
-@media (max-width: 768px) {
-  .navbar {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  .navbar ul {
-    gap: 10px; /* 모바일에서 항목 간 간격 줄이기 */
-    padding-left: 0;
-    padding-right: 0;
-  }
-
-  .navbar-input {
-    width: 150px; /* 모바일에서 검색 입력란 폭 줄이기 */
-    margin-left: 10px;
+@media(max-width: 1000px){
+  .navbar .navbar-search{
+    display: none;
   }
 }
