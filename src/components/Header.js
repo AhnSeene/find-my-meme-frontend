@@ -3,6 +3,8 @@ import { useAuth } from "../contexts/AuthContext";
 import logo from "../assets/logo.png";
 import "./Header.css";
 
+// 맨 위 Header 
+// 로그인 전에 회원가입/로그인 버튼, 로그인 후 짤등록/마이페이지 버튼
 function Header() {
   const navigate = useNavigate();
   const { authState, logout } = useAuth();
@@ -32,9 +34,11 @@ function Header() {
 
   return (
     <div className="Header">
-      <Link to="/" className="logo-link">
-        <img src={logo} alt="Logo" className="logo-image" />
-      </Link>
+      <h1 className="logo">
+        <Link to="/" className="logo-link">
+          <img src={logo} alt="Find My Meme 로고" className="logo-image" />
+        </Link>
+      </h1>
       <div className="nav-buttons">
         {authState.isLoggedIn ? (
           <>
