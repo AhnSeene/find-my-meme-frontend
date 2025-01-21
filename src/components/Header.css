@@ -20,7 +20,7 @@
   width: 150px; /* 원하는 크기로 조정 */
   height: auto;
   position: absolute; /* 절대 위치 */
-  z-index: 1100; /* 헤더와 네비게이션 바보다 더 위에 위치 */
+  z-index: 1001; /* 헤더와 네비게이션 바보다 더 위에 위치 */
 }
 
 .Header .nav-buttons {
@@ -39,7 +39,7 @@
   cursor: pointer;
 }
 
-.Header .nav-buttons .nav-dropdown {
+.Header .nav-buttons .nav-dropdown{
   position: relative;
 }
 
@@ -52,30 +52,36 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-  min-width: 150px;
-  z-index: 1000;
+  width: 100%;
+  z-index: 2000; 
 }
 
-.dropdown-menu a,
-.dropdown-menu button {
+
+.Header .nav-buttons .nav-dropdown:hover .dropdown-menu,
+.Header .nav-buttons .nav-dropdown .dropdown-menu:hover {
   display: block;
+}
+
+
+.Header .nav-buttons .nav-dropdown:hover .dropdown-menu button{
+  display: block;
+  background-color: white; /* dropdown-menu 안의 button은 기본 배경 흰색 */
+  color: black; /* 버튼 글씨 색 */
   padding: 8px 12px;
-  text-align: left;
-  text-decoration: none;
-  color: black;
-  border: none;
-  background: none;
   cursor: pointer;
+  width: 100%;
 }
 
-.dropdown-menu a:hover,
-.dropdown-menu button:hover {
-  background-color: #f1f1f1;
+.Header .nav-buttons .nav-dropdown .dropdown-menu button:hover {
+  background: rgb(248, 246, 246);
 }
 
-.nav-dropdown:hover .dropdown-menu {
-  display: block;
+.Header .nav-buttons .nav-dropdown .dropdown-menu #logout {
+  color: #0f7e73;
 }
+
+
+
 
 @media (max-width:600px) {
   .Header{

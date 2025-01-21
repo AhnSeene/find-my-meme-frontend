@@ -49,7 +49,7 @@ function Header() {
                 <button onClick={handleMyPage}>나의 밈</button>
                 <button onClick={handleMyPage}>내 정보</button>
                 <button onClick={handleMyPage}>게시글 관리</button>
-                <button onClick={handleLogout}>로그아웃</button>
+                <button id="logout" onClick={handleLogout}>로그아웃</button>
               </div>
             </div>
           </>
