@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import api from "../contexts/api";
 
 const useInfiniteScroll = (
-  selectedSubTags,
+  selectedSubTags=[],
   isProfile = false,
   username = ""
 ) => {
