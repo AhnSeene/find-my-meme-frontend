@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import TagSelector from "../components/TagSelector";
-import "./home.css";
 import MemeGrid from "../components/MemeGrid";
 import useInfiniteScroll from "../hooks/useInfiniteScroll";
 import useToggleLike from "../hooks/useToggleLike";
+import "./home.css";
 
 function Home() {
   const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
