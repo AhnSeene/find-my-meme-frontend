@@ -4,6 +4,7 @@ import Button from "./Button";
 import "./Navbar.css";
 function Navbar() {
   const [search, setSearch] = useState("");
+  const [activeMenu, setActiveMenu] = useState("/");
 
   const handleSearch = () => {
     if (search.trim()) {
@@ -12,16 +13,36 @@ function Navbar() {
       console.log("검색어를 입력하세요");
     }
   };
+
   return (
     <div className="navbar">
       <ul>
-        <li>
+        <li
+          className={`menu-all ${activeMenu === "/" ? "active-menu" : ""}`}
+          onClick={() => {
+            setActiveMenu("/");
+          }}
+        >
           <Link to="/">모든 표현</Link>
         </li>
-        <li>
+        <li
+          className={`menu-top ${
+            activeMenu === "/topmeme" ? "active-menu" : ""
+          }`}
+          onClick={() => {
+            setActiveMenu("/topmeme");
+          }}
+        >
           <Link to="/topmeme">인기 표현</Link>
         </li>
-        <li>
+        <li
+          className={`menu-find ${
+            activeMenu === "/findmeme" ? "active-menu" : ""
+          }`}
+          onClick={() => {
+            setActiveMenu("/findmeme");
+          }}
+        >
           <Link to="/findmeme">내 표현을 찾아줘</Link>
         </li>
       </ul>
