@@ -4,8 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 import Profile from "../components/Profile";
 import MyInfo from "../components/MyInfo";
 import MemeGrid from "../components/MemeGrid";
-import useToggleLike from "../hooks/useToggleLike";
-import useInfiniteScroll from "../hooks/useInfiniteScroll";
+import useInfiniteMemesQuery from "../hooks/useInfiniteMemesQuery";
 import Button from "../components/Button";
 import "./mypage.css";
 
@@ -21,18 +20,18 @@ function MyPage() {
   console.log("로그인된 계정", authState.username);
   console.log("지금 user", username);
   console.log(isOwnProfile);
-  const { memes, setMemes, loading, hasNext, setPage } = useInfiniteScroll(
-    [],
-    true, //isProfile이 true일 때 해당 계정이 올린 밈을 가져옴
-    username
-  );
-  const toggleLike = useToggleLike(memes, setMemes, authState);
+  const { memes, fetchNextPage, hasNextPage, isLoading } =
+    useInfiniteMemesQuery(
+      [],
+      true, //isProfile이 true일 때 해당 계정이 올린 밈을 가져옴
+      username
+    );
 
   useEffect(() => {
     if (!username && authState.isLoggedIn) {
       navigate("/login");
     }
-  }, []);
+  }, [username, authState.isLoggedIn, navigate]);
 
   const renderContent = () => {
     // 로그인된 사용자의 경우 탭에 따라 콘텐츠 렌더링
@@ -41,8 +40,9 @@ function MyPage() {
         return (
           <MemeGrid
             memes={memes}
-            toggleLike={toggleLike}
             fileBaseUrl={fileBaseUrl}
+            isProfile={true}
+            username={username}
           />
         );
       } else if (activeTab === "myInfo") {
@@ -54,8 +54,9 @@ function MyPage() {
       return (
         <MemeGrid
           memes={memes}
-          toggleLike={toggleLike}
           fileBaseUrl={fileBaseUrl}
+          isProfile={true}
+          username={username}
         />
       );
     }
@@ -72,9 +73,22 @@ function MyPage() {
         <>
           {/* 로그인된 사용자의 경우 탭 표시 */}
           <div className="nav-tabs">
-            <button onClick={() => setActiveTab("myMeme")}>나의 밈</button>
-            <button onClick={() => setActiveTab("myInfo")}>내 정보</button>
-            <button onClick={() => setActiveTab("postManagement")}>
+            <button
+              onClick={() => setActiveTab("myMeme")}
+              className={activeTab === "myMeme" ? "active" : ""}
+            >
+              나의 밈
+            </button>
+            <button
+              onClick={() => setActiveTab("myInfo")}
+              className={activeTab === "myInfo" ? "active" : ""}
+            >
+              내 정보
+            </button>
+            <button
+              onClick={() => setActiveTab("postManagement")}
+              className={activeTab === "postManagement" ? "active" : ""}
+            >
               게시글 관리
             </button>
           </div>

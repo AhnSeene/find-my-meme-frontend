@@ -1,17 +1,29 @@
-.nav-tabs{
-    background-color: antiquewhite;
-    display: flex;
-    gap: 20px;
-    justify-content: center;
+.mypage {
+  width: 80%;
+  margin: 0 auto;
+}
+.mypage .nav-tabs {
+  background-color: #f5d95c;
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  height: 40px;
+  margin-bottom: 20px;
+  border-radius: 6px;
 }
 
-.nav-tabs button{
-    background: none;
-    border: none;
-
+.mypage .nav-tabs button.active {
+  color: #fc3c76;
+  font-weight: bold;
 }
 
-.tab-content{
-    width: 80%;
-    margin: 0 auto;
+.mypage .nav-tabs button {
+  background: none;
+  border: none;
+  font-size: 16px;
+}
+
+.mypage .tab-content {
+  width: 80%;
+  margin: 0 auto;
 }
