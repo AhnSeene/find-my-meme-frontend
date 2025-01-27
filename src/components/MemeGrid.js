@@ -1,19 +1,44 @@
 // MemeGrid.js
-import React from "react";
+import React, { useEffect } from "react";
 import Masonry from "react-masonry-css";
 import { Link } from "react-router-dom";
 import { GoHeartFill, GoHeart } from "react-icons/go";
 import { GrFormView } from "react-icons/gr";
 import { IoMdDownload } from "react-icons/io";
+import useToggleLike from "../hooks/useToggleLike";
+import { useAuth } from "../contexts/AuthContext";
 import "./MemeGrid.css";
 
-function MemeGrid({ memes = [], toggleLike, fileBaseUrl }) {
+function MemeGrid({
+  memes,
+  fileBaseUrl,
+  selectedSubTags,
+  isProfile,
+  username,
+}) {
+  const { authState } = useAuth();
+  const { mutate } = useToggleLike({
+    selectedSubTags,
+    isProfile,
+    username,
+    authState,
+  });
+
+  console.log("Memes data:", memes);
   const breakpointColumnsObj = {
-    default: 3,
-    1024: 3,
-    768: 2,
-    500: 1,
+    default: 5,
+    1024: 5,
+    768: 4,
+    500: 2,
   };
+  const handleLikeClick = (memeId, isLiked) => {
+    console.log(" handleLikeClick");
+    // 서버 요청 및 캐시 업데이트
+    mutate({ memeId, isLiked });
+  };
+  useEffect(() => {
+    console.log("memegrid:", memes);
+  });
   return (
     <div className="MemeGrid">
       <Masonry
@@ -46,7 +71,7 @@ function MemeGrid({ memes = [], toggleLike, fileBaseUrl }) {
                   </div>
                 </div>
               </Link>
-              <button onClick={(e) => toggleLike(e, meme.id)}>
+              <button onClick={() => handleLikeClick(meme.id, meme.isLiked)}>
                 {meme.isLiked ? (
                   <GoHeartFill style={{ fontSize: "30px", color: "red" }} />
                 ) : (
