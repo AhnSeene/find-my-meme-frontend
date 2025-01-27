@@ -3,19 +3,62 @@
 .profile {
   display: flex;
   align-items: center;
-  padding: 20px;
+  padding: 30px;
   border: 1px solid #ddd;
-  border-radius: 10px;
+  border-radius: 15px;
   background-color: #f9f9f9;
-  max-width: 80%;
+  max-width: 100%;
   margin: 20px auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   gap: 50px;
+  height: 200px;
+  justify-content: space-around;
+}
+.profile .profile-image {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.profile-image img {
+.profile .profile-image img {
   width: 100%;
-  border-radius: 10px;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* 버튼 스타일 */
+.profile .profile-image button {
+  background-color: #219c90;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: 5px;
+}
+
+.profile .profile-image button:hover {
+  background-color: #219c90c7;
+}
+
+.profile .profile-image .edit-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: rgba(70, 70, 70, 0.747);
+}
+.profile .profile-image .edit-icon:hover {
+  color: rgba(70, 70, 70, 0.404);
+  background-color: transparent;
 }
 .profile-image input {
   margin-bottom: 10px;

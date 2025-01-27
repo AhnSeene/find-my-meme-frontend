@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./profile.css"; // 프로필 스타일
 import api from "../contexts/api";
+import { FiPlusCircle } from "react-icons/fi";
 
 function Profile({ username, isOwnProfile }) {
   const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
@@ -29,6 +30,7 @@ function Profile({ username, isOwnProfile }) {
     if (file) {
       setNewProfileImage(file);
       setPreviewImage(URL.createObjectURL(file)); // 미리보기 URL 설정
+      setIsEditing(true);
     }
   };
 
@@ -58,7 +60,6 @@ function Profile({ username, isOwnProfile }) {
       <div className="profile-image">
         {isEditing ? (
           <div>
-            <input type="file" accept="image/*" onChange={handleFileChange} />
             <img
               src={previewImage || `${fileBaseUrl}${profileImage}`} // 미리보기 URL 우선 표시, 없으면 서버 URL 표시
               alt="Profile Preview"
@@ -78,14 +79,23 @@ function Profile({ username, isOwnProfile }) {
           <>
             <img src={`${fileBaseUrl}${profileImage}`} alt="Profile" />
             {isOwnProfile && (
-              <button
-                onClick={() => {
-                  console.log("Editing mode enabled");
-                  setIsEditing(true);
-                }}
-              >
-                수정하기
-              </button>
+              <>
+                <input
+                  type="file"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  id="fileInput"
+                  onChange={handleFileChange}
+                />
+                <button
+                  className="edit-icon"
+                  onClick={() => {
+                    document.getElementById("fileInput").click();
+                  }}
+                >
+                  <FiPlusCircle size={40} />
+                </button>
+              </>
             )}
           </>
         )}
