@@ -10,8 +10,9 @@
   box-sizing: border-box; /* 패딩과 테두리를 포함하여 높이와 너비를 계산 */
   z-index: 1000; /* 다른 요소들 위에 표시되도록 설정 */
   padding: 0 20px;
+  background-color: #fff;
 }
-.Header .logo{
+.Header .logo {
   position: relative;
   height: 100%;
   top: 20px;
@@ -39,7 +40,7 @@
   cursor: pointer;
 }
 
-.Header .nav-buttons .nav-dropdown{
+.Header .nav-buttons .nav-dropdown {
   position: relative;
 }
 
@@ -53,17 +54,15 @@
   border-radius: 4px;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
   width: 100%;
-  z-index: 2000; 
+  z-index: 2000;
 }
-
 
 .Header .nav-buttons .nav-dropdown:hover .dropdown-menu,
 .Header .nav-buttons .nav-dropdown .dropdown-menu:hover {
   display: block;
 }
 
-
-.Header .nav-buttons .nav-dropdown:hover .dropdown-menu button{
+.Header .nav-buttons .nav-dropdown:hover .dropdown-menu button {
   display: block;
   background-color: white; /* dropdown-menu 안의 button은 기본 배경 흰색 */
   color: black; /* 버튼 글씨 색 */
@@ -80,18 +79,15 @@
   color: #0f7e73;
 }
 
-
-
-
-@media (max-width:600px) {
-  .Header{
+@media (max-width: 600px) {
+  .Header {
     height: 60px;
     padding: 0 10px;
   }
   .Header .logo {
     top: 10px;
   }
-  .Header .logo .logo-image{
+  .Header .logo .logo-image {
     width: auto;
     height: 50px;
   }
@@ -100,4 +96,3 @@
     font-size: 14px;
   }
 }
-
