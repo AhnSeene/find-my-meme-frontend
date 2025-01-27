@@ -1,25 +1,47 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import TagSelector from "../components/TagSelector";
 import MemeGrid from "../components/MemeGrid";
-import useInfiniteScroll from "../hooks/useInfiniteScroll";
-import useToggleLike from "../hooks/useToggleLike";
+import useInfiniteMemesQuery from "../hooks/useInfiniteMemesQuery";
 import "./home.css";
 
 function Home() {
   const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
-  const { authState } = useAuth();
   const [selectedSubTags, setSelectedSubTags] = useState([]);
 
-  const { memes, setMemes, loading, hasNext, setPage } =
-    useInfiniteScroll(selectedSubTags);
-  const toggleLike = useToggleLike(memes, setMemes, authState);
+  // 기본값 설정
+  const isProfile = false;
+  const username = "";
+
+  const { memes, fetchNextPage, hasNextPage, isLoading } =
+    useInfiniteMemesQuery(selectedSubTags);
+
+  const observerRef = useRef(null);
+
+  const handleObserver = useCallback(
+    (entries) => {
+      const [entry] = entries;
+      if (entry.isIntersecting && hasNextPage && !isLoading) {
+        fetchNextPage();
+      }
+    },
+    [fetchNextPage, hasNextPage, isLoading]
+  );
 
   useEffect(() => {
-    // 태그가 변경될 때 메모리를 초기화하고 페이지를 0으로 설정
-    setMemes([]); // 메모리 목록 초기화
-    setPage(0); // 페이지 초기화
-  }, [selectedSubTags, setMemes, setPage]);
+    console.log("Infinite Memes Query Data:", memes);
+
+    const observer = new IntersectionObserver(handleObserver, {
+      root: null, //뷰포트 기준
+      rootMargin: "100px", // 트리거를 뷰포트보다 약간 일찍 실행
+      threshold: 0.1, //요소가 10%이상 보이면 트리거
+    });
+    if (observerRef.current) observer.observe(observerRef.current);
+
+    return () => {
+      if (observerRef.current) observer.unobserve(observerRef.current);
+    };
+  }, [handleObserver]);
 
   return (
     <div className="home">
@@ -29,11 +51,14 @@ function Home() {
       />
       <MemeGrid
         memes={memes}
-        toggleLike={toggleLike}
         fileBaseUrl={fileBaseUrl}
+        selectedSubTags={selectedSubTags}
+        isProfile={isProfile}
+        username={username}
       />
 
-      {loading && <p>Loading...</p>}
+      {isLoading && <p>Loading...</p>}
+      <div ref={observerRef} style={{ height: "1px" }} />
     </div>
   );
 }
