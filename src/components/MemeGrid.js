@@ -12,7 +12,7 @@ import "./MemeGrid.css";
 function MemeGrid({
   memes,
   fileBaseUrl,
-  selectedSubTags,
+  selectedSubTags = [],
   isProfile,
   username,
 }) {
