@@ -15,6 +15,7 @@ function MemeGrid({
   selectedSubTags = [],
   isProfile,
   username,
+  mediaType,
 }) {
   const { authState } = useAuth();
   const { mutate } = useToggleLike({
@@ -22,6 +23,7 @@ function MemeGrid({
     isProfile,
     username,
     authState,
+    mediaType,
   });
 
   console.log("Memes data:", memes);

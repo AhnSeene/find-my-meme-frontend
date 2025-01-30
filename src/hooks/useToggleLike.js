@@ -5,6 +5,7 @@ const useToggleLike = ({
   isProfile = false,
   username = "",
   authState,
+  mediaType = "",
 }) => {
   const queryClient = useQueryClient();
 
@@ -17,7 +18,10 @@ const useToggleLike = ({
       );
     },
     onMutate: async ({ memeId, isLiked }) => {
-      const queryKey = ["memes", { selectedSubTags, isProfile, username }];
+      const queryKey = [
+        "memes",
+        { selectedSubTags, isProfile, username, mediaType },
+      ];
 
       // 이전 데이터 가져오기
       const previousData = queryClient.getQueryData(queryKey);
