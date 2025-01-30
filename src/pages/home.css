@@ -3,3 +3,26 @@
   margin: 0 auto;
   margin-top: 50px;
 }
+
+.home .mediaTypeSelect {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.home .mediaTypeSelect button {
+  background-color: transparent;
+  border: none;
+  padding: 4px 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+.home .mediaTypeSelect button:hover {
+  background-color: rgba(221, 221, 221, 0.452);
+}
+.home .mediaTypeSelect button.active {
+  color: #219c90;
+  font-weight: bold;
+  background-color: #f5d95c9d;
+}

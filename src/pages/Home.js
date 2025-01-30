@@ -8,13 +8,14 @@ import "./home.css";
 function Home() {
   const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
   const [selectedSubTags, setSelectedSubTags] = useState([]);
+  const [mediaType, setMediaType] = useState("");
 
   // 기본값 설정
   const isProfile = false;
   const username = "";
 
   const { memes, fetchNextPage, hasNextPage, isLoading } =
-    useInfiniteMemesQuery(selectedSubTags);
+    useInfiniteMemesQuery(selectedSubTags, isProfile, username, mediaType);
 
   const observerRef = useRef(null);
 
@@ -49,12 +50,36 @@ function Home() {
         selectedSubTags={selectedSubTags}
         setSelectedSubTags={setSelectedSubTags}
       />
+      <div className="mediaTypeSelect">
+        <button
+          type="button"
+          onClick={() => setMediaType("")}
+          className={mediaType == "" ? "active" : ""}
+        >
+          전체
+        </button>
+        <button
+          type="button"
+          onClick={() => setMediaType("ANIMATED")}
+          className={mediaType == "ANIMATED" ? "active" : ""}
+        >
+          GIF
+        </button>
+        <button
+          type="button"
+          onClick={() => setMediaType("STATIC")}
+          className={mediaType == "STATIC" ? "active" : ""}
+        >
+          사진
+        </button>
+      </div>
       <MemeGrid
         memes={memes}
         fileBaseUrl={fileBaseUrl}
         selectedSubTags={selectedSubTags}
         isProfile={isProfile}
         username={username}
+        mediaType={mediaType}
       />
 
       {isLoading && <p>Loading...</p>}
