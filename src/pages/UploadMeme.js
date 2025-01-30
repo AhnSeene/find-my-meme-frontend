@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import api from "../contexts/api";
 import "./UploadMeme.css";
-import { replace, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { RiFolderUploadFill } from "react-icons/ri";
 
 function UploadMeme() {
   const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
@@ -17,6 +18,7 @@ function UploadMeme() {
   const [tagIdToNameMap, setTagIdToNameMap] = useState({}); // 태그 ID와 이름 간의 매핑
 
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchTags = async () => {
       try {
@@ -104,7 +106,6 @@ function UploadMeme() {
   };
 
   const deselectAll = () => {
-    setFileTags({});
     setSelectedFileIndices([]);
   };
 
@@ -121,6 +122,11 @@ function UploadMeme() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (selectedFileIndices.length === 0) {
+      alert("선택된 파일이 없습니다.");
+      return;
+    }
+
     // 상대 경로를 추출하는 함수
     const getRelativeUrl = (url) => {
       try {
@@ -133,7 +139,7 @@ function UploadMeme() {
     };
     try {
       // 모든 파일을 비동기로 업로드
-      const uploadPromises = files.map(async (file, index) => {
+      const uploadPromises = selectedFileIndices.map(async (file, index) => {
         // 파일을 서버에 업로드하고 URL을 얻기
         const relativeUrl = getRelativeUrl(previewUrls[index]).slice(1);
         console.log("relate", relativeUrl);
@@ -207,26 +213,48 @@ function UploadMeme() {
 
   return (
     <div className="uploadmeme">
-      <h1>짤 등록</h1>
       <form onSubmit={handleSubmit}>
-        <input
-          type="file"
-          multiple
-          onChange={handleFileChange}
-          style={{ display: "none" }}
-          id="fileInput"
-          required
-        />
-        <label htmlFor="fileInput">
-          <button type="button" onClick={triggerFileInput}>
-            파일 선택
-          </button>
-        </label>
-        <span>
-          {files.length === 0 ? "선택된 파일 없음" : `파일 ${files.length}개`}
-        </span>
-        <button onClick={selectAll}>전체 선택</button>
-        <button onClick={deselectAll}>전체 취소</button>
+        <div className="upload-area">
+          <input
+            type="file"
+            multiple
+            onChange={handleFileChange}
+            style={{ display: "none" }}
+            id="fileInput"
+            required
+          />
+          <label htmlFor="fileInput">
+            <button
+              type="button"
+              onClick={triggerFileInput}
+              className="fileUpload-button"
+            >
+              <RiFolderUploadFill size={50} />
+            </button>
+            <span>
+              {files.length === 0
+                ? "선택된 파일 없음"
+                : `파일 ${files.length}개`}
+            </span>
+          </label>
+
+          {files.length > 0 && (
+            <>
+              <div className="notice">
+                이미지를 클릭시 전체 사진을 볼 수 있습니다
+              </div>
+              <div className="upload-controls">
+                <button type="button" onClick={selectAll}>
+                  전체 선택
+                </button>
+                <button type="button" onClick={deselectAll}>
+                  전체 취소
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+
         <div className="previews">
           {previewUrls.map((url, index) => (
             <div key={index} className="preview-item">
@@ -242,22 +270,25 @@ function UploadMeme() {
                 className="file-checkbox"
               />
               <button
+                type="button"
                 className="delete-button"
                 onClick={() => removeImage(index)}
               >
                 &times;
               </button>
               <div className="tags">
-                {fileTags[index] &&
-                  fileTags[index].map((tagId, tagIndex) => (
-                    <span key={tagIndex} className="tag">
-                      {tagIdToNameMap[tagId] || `Unknown Tag (${tagId})`}
-                      <button onClick={() => removeTagFromFile(index, tagId)}>
-                        {" "}
-                        &times;
-                      </button>
-                    </span>
-                  ))}
+                {fileTags[index]?.map((tagId, tagIndex) => (
+                  <span key={tagIndex} className="tag">
+                    {tagIdToNameMap[tagId]}
+                    <button
+                      type="button"
+                      onClick={() => removeTagFromFile(index, tagId)}
+                    >
+                      {" "}
+                      &times;
+                    </button>
+                  </span>
+                ))}
               </div>
             </div>
           ))}
@@ -273,6 +304,7 @@ function UploadMeme() {
           </div>
         )}
         <div className="show-tags">
+          <span>태그</span>
           <select
             onChange={handleCategoryChange}
             value={selectedCategory}
