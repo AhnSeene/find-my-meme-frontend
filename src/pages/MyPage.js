@@ -24,7 +24,8 @@ function MyPage() {
     useInfiniteMemesQuery(
       [],
       true, //isProfile이 true일 때 해당 계정이 올린 밈을 가져옴
-      username
+      username,
+      ""
     );
 
   useEffect(() => {
@@ -62,14 +63,14 @@ function MyPage() {
     }
   };
 
-  const follow = () => {
-    console.log("팔로우하기");
-  };
+  // const follow = () => {
+  //   console.log("팔로우하기");
+  // };
 
   return (
     <div className="mypage">
       <Profile username={username} isOwnProfile={isOwnProfile} />
-      {username === authState.username ? (
+      {isOwnProfile && (
         <>
           {/* 로그인된 사용자의 경우 탭 표시 */}
           <div className="nav-tabs">
@@ -93,11 +94,8 @@ function MyPage() {
             </button>
           </div>
         </>
-      ) : (
-        <div>
-          <Button text={"팔로우하기"} onClick={follow()} />
-        </div>
       )}
+
       <div className="tab-content">{renderContent()}</div>
     </div>
   );
