@@ -22,6 +22,7 @@
   height: auto;
   position: absolute; /* 절대 위치 */
   z-index: 1001; /* 헤더와 네비게이션 바보다 더 위에 위치 */
+  cursor: pointer;
 }
 
 .Header .nav-buttons {
