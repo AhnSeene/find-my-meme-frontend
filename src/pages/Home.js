@@ -1,118 +1,91 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { AiFillLike } from "react-icons/ai";
-import { GrFormView } from "react-icons/gr";
-import { GoHeart, GoHeartFill } from "react-icons/go";
-import { useAuth } from '../contexts/AuthContext';
-import api from '../contexts/api';
-import './home.css';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useAuth } from "../contexts/AuthContext";
+import TagSelector from "../components/TagSelector";
+import MemeGrid from "../components/MemeGrid";
+import useInfiniteMemesQuery from "../hooks/useInfiniteMemesQuery";
+import "./home.css";
 
 function Home() {
-    const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
-    const { authState } = useAuth();
-    const [memes, setMemes] = useState([]);
-    const [page, setPage] = useState(0);
-    const [loading, setLoading] = useState(false);
-    const [hasNext, setHasNext] = useState(true);
+  const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
+  const [selectedSubTags, setSelectedSubTags] = useState([]);
+  const [mediaType, setMediaType] = useState("");
 
-    useEffect(() => {
-        loadMemes();
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, [page]);
+  // 기본값 설정
+  const isProfile = false;
+  const username = "";
 
-    const loadMemes = async () => {
-        if (loading || !hasNext) return;
-    
-        setLoading(true);
-        try {
-            const response = await api.get(`/meme-posts?page=${page}&size=5`);
-            const newMemes = response.data.data.content;
-            setMemes(prevMemes => [...prevMemes, ...newMemes]);
-            setHasNext(response.data.data.hasNext);
-        } catch (error) {
-            console.error('Failed to load memes:', error);
-        } finally {
-            setLoading(false);
-        }
+  const { memes, fetchNextPage, hasNextPage, isLoading } =
+    useInfiniteMemesQuery(selectedSubTags, isProfile, username, mediaType);
+
+  const observerRef = useRef(null);
+
+  const handleObserver = useCallback(
+    (entries) => {
+      const [entry] = entries;
+      if (entry.isIntersecting && hasNextPage && !isLoading) {
+        fetchNextPage();
+      }
+    },
+    [fetchNextPage, hasNextPage, isLoading]
+  );
+
+  useEffect(() => {
+    console.log("Infinite Memes Query Data:", memes);
+
+    const observer = new IntersectionObserver(handleObserver, {
+      root: null, //뷰포트 기준
+      rootMargin: "100px", // 트리거를 뷰포트보다 약간 일찍 실행
+      threshold: 0.1, //요소가 10%이상 보이면 트리거
+    });
+    if (observerRef.current) observer.observe(observerRef.current);
+
+    return () => {
+      if (observerRef.current) observer.unobserve(observerRef.current);
     };
-    
-    
-    const handleScroll = () => {
-        if (window.innerHeight + document.documentElement.scrollTop + 50 >= document.documentElement.offsetHeight && hasNext) {
-            setPage(prevPage => prevPage + 1);
-        }
-    };
+  }, [handleObserver]);
 
-    const toggleLike = async (event, memeId) => {
-        event.stopPropagation();
-        
-        // 먼저 UI에 반영
-        const updatedMemes = memes.map(meme => {
-            if (meme.id === memeId) {
-                const isLiked = !meme.isLiked;
-                const likeCount = isLiked ? meme.likeCount + 1 : meme.likeCount - 1;
-                return { ...meme, isLiked, likeCount };
-            }
-            return meme;
-        });
+  return (
+    <div className="home">
+      <TagSelector
+        selectedSubTags={selectedSubTags}
+        setSelectedSubTags={setSelectedSubTags}
+      />
+      <div className="mediaTypeSelect">
+        <button
+          type="button"
+          onClick={() => setMediaType("")}
+          className={mediaType == "" ? "active" : ""}
+        >
+          전체
+        </button>
+        <button
+          type="button"
+          onClick={() => setMediaType("ANIMATED")}
+          className={mediaType == "ANIMATED" ? "active" : ""}
+        >
+          GIF
+        </button>
+        <button
+          type="button"
+          onClick={() => setMediaType("STATIC")}
+          className={mediaType == "STATIC" ? "active" : ""}
+        >
+          사진
+        </button>
+      </div>
+      <MemeGrid
+        memes={memes}
+        fileBaseUrl={fileBaseUrl}
+        selectedSubTags={selectedSubTags}
+        isProfile={isProfile}
+        username={username}
+        mediaType={mediaType}
+      />
 
-        setMemes(updatedMemes);
-
-        try {
-            const response = await api.post(`/meme-posts/${memeId}/toggleLike`, {}, {
-                headers: {
-                    Authorization: `Bearer ${authState.token}`
-                }
-            });
-
-            const { isLiked } = response.data.data;
-            // 서버 응답에 따라 likeCount를 조정하지 않고 상태만 동기화
-            setMemes(prevMemes =>
-                prevMemes.map(meme =>
-                    meme.id === memeId
-                        ? { ...meme, isLiked }
-                        : meme
-                )
-            );
-
-        } catch (error) {
-            console.error('Failed to toggle like:', error);
-            // 에러 발생 시 상태 원복
-            setMemes(prevMemes => memes);
-        }
-    };
-
-    return (
-        <div className='home'>
-            <div className='meme-list'>
-                {memes.map((meme, index) => (
-                    <div key={meme.id} className="meme-item">
-                        <div className="meme-image-container">
-                            <Link to={`/meme/${meme.id}`}>
-                                <img src={`${fileBaseUrl}${meme.imageUrl}`} alt={`Meme ${index}`} />
-                                <div className="overlay">
-                                    <div className="meme-info">
-                                        <AiFillLike style={{ fontSize: '24px' }} /> {meme.likeCount}
-                                        <GrFormView style={{ fontSize: '36px' }} /> {meme.viewCount}
-                                    </div>
-                                </div>
-                            </Link>
-                            <button onClick={(e) => toggleLike(e, meme.id)}>
-                                {meme.isLiked ? (
-                                    <GoHeartFill style={{ fontSize: '30px', color: 'red' }} />
-                                ) : (
-                                    <GoHeart style={{ fontSize: '30px' }} />
-                                )}
-                            </button>
-                        </div>
-                    </div>
-                ))}
-            </div>
-            {loading && <p>Loading...</p>}
-            {!hasNext && <p>No more memes</p>}
-        </div>
-    );
+      {isLoading && <p>Loading...</p>}
+      <div ref={observerRef} style={{ height: "1px" }} />
+    </div>
+  );
 }
 
 export default Home;

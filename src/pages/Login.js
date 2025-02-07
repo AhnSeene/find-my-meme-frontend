@@ -1,67 +1,162 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { BiShow } from "react-icons/bi";
+import { BiHide } from "react-icons/bi";
+import { IoMdCloseCircle } from "react-icons/io";
+import Button from "../components/Button";
 import api from "../contexts/api";
-import './Login.css';
+import Modal from "react-modal";
+import "./Login.css";
 
-function Login () {
-    const [id, setId] = useState('');
-    const [password, setPassword] = useState('');
-    const { login } = useAuth();  // login 함수 가져오기
-    const navigate = useNavigate();
+function Login() {
+  const [id, setId] = useState("");
+  const [rememberId, setRememberId] = useState(false);
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const { login } = useAuth(); // login 함수 가져오기
+  const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+  useEffect(() => {
+    // 로컬 스토리지에서 아이디와 체크박스 상태를 로드
+    const savedId = localStorage.getItem("savedId");
+    const isRemembered = localStorage.getItem("rememberId") === "true"; // 'true' 문자열을 불러옴
 
-        try {
-            const response = await api.post('/login', {
-                username: id,
-                password: password,
-            });
+    if (savedId) {
+      setId(savedId);
+    }
+    setRememberId(isRemembered);
+  }, []);
 
-            console.log(response.data.data); 
+  const resetId = () => setId("");
+  const togglePwShow = () => setShowPassword((prevState) => !prevState);
+  const handleRememberId = () => setRememberId((prevState) => !prevState);
+  const handleSignUp = () => navigate("/signup");
 
-            if (response.status === 200) {
-                const token = response.data.data.accessToken;
-                const username = response.data.data.username;  // 서버 응답에서 username 가져오기
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-                // login 함수를 사용해 AuthContext에 token과 username을 저장
-                login(token, username);
+    try {
+      const response = await api.post("/login", {
+        username: id,
+        password: password,
+      });
 
-                navigate('/', { replace: true });
-            } else {
-                console.error('로그인 실패:', response.status);
-            }
-        } catch (error) {
-            console.error('로그인 오류:', error);
+      if (response.status === 200) {
+        const token = response.data.data.accessToken;
+        const username = response.data.data.username; // 서버 응답에서 username 가져오기
+
+        // login 함수를 사용해 AuthContext에 token과 username을 저장
+        login(token, username);
+
+        if (rememberId) {
+          localStorage.setItem("savedId", id); // 아이디 저장
+        } else {
+          localStorage.removeItem("savedId"); // 아이디 제거
         }
-    };
+        localStorage.setItem("rememberId", JSON.stringify(rememberId)); // 체크박스 상태 저장
 
-    return (
-        <div className="Login">
-            <form className="LoginForm" onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="id">아이디</label>
-                    <input
-                        id="id"
-                        type="text"
-                        value={id}
-                        onChange={(e) => setId(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="password">비밀번호</label>
-                    <input
-                        id="password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </div>
-                <button type="submit">로그인</button>
-            </form>
+        navigate("/", { replace: true });
+      } else {
+        setErrorMessage("로그인 중 문제가 발생되었습니다.");
+        console.error("로그인 실패:", response.status);
+      }
+    } catch (error) {
+      if (error.rsesponse && error.response.status === 401) {
+        setErrorMessage("사용자 이름 또는 비밀번호가 잘못되었습니다.");
+      } else {
+        setErrorMessage("로그인 중 문제가 발생했습니다. 다시 시도해주세요.");
+      }
+
+      setIsModalOpen(true);
+
+      console.error("로그인 오류:", error);
+    }
+  };
+
+  return (
+    <div className="Login">
+      <form className="LoginForm" onSubmit={handleSubmit}>
+        <div style={{ position: "relative" }}>
+          <input
+            id="id"
+            type="text"
+            value={id}
+            onChange={(e) => setId(e.target.value)}
+            placeholder="아이디"
+          />
+          <span
+            onClick={resetId}
+            style={{
+              position: "absolute",
+              right: "10px",
+              top: "54%",
+              transform: "translateY(-50%)",
+              cursor: "pointer",
+            }}
+          >
+            <IoMdCloseCircle />
+          </span>
         </div>
-    );
+        <div style={{ position: "relative" }}>
+          <input
+            id="password"
+            type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="비밀번호"
+          />
+          <span
+            onClick={togglePwShow}
+            style={{
+              position: "absolute",
+              right: "10px",
+              top: "52%",
+              transform: "translateY(-50%)",
+              cursor: "pointer",
+            }}
+          >
+            {showPassword ? <BiShow /> : <BiHide />}
+          </span>
+        </div>
+        <div className="remember-me">
+          <label htmlFor="rememberId">아이디 저장</label>
+          <input
+            type="checkbox"
+            className="rememberId-checkbox"
+            checked={rememberId}
+            onChange={handleRememberId}
+          />
+        </div>
+
+        <div className="signup-container">
+          계정이 없으신가요?
+          <button
+            type="button"
+            className="signup-button"
+            onClick={handleSignUp}
+          >
+            회원가입
+          </button>
+        </div>
+        <Button text="로그인" type="submit" className="login-button" />
+      </form>
+
+      <Modal
+        isOpen={isModalOpen}
+        // onRequestClose={() => setIsModalOpen(false)}
+        contentLabel="로그인 오류"
+        className="Modal"
+        overlayClassName="Overlay"
+        appElement={document.getElementById("root")}
+      >
+        <p>{errorMessage}</p>
+        <Button text={"확인"} onClick={() => setIsModalOpen(false)} />
+      </Modal>
+    </div>
+  );
 }
 
 export default Login;

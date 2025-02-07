@@ -1,0 +1,15 @@
+.Button {
+  background-color: #219c90;
+  color: white;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+.Button_RIGHT {
+  display: block;
+  margin-left: auto;
+}

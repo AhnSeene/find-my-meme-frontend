@@ -1,33 +1,98 @@
-.navbar{
-    position: fixed; /* 헤더 아래에 고정 */
-    top: 70px; /* 헤더 높이 바로 아래에 위치하도록 설정 */
-    left: 0;
-    width: 100%;
-    height: 50px; /* 네비게이션 바의 높이 */
-    background-color: rgb(255, 255, 255);
-    display: flex;
-    align-items: center;
-    padding-left: 80px;
-    box-sizing: border-box; /* 패딩을 포함하여 너비 계산 */
-    z-index: 999; /* 헤더 아래지만 다른 콘텐츠 위에 표시되도록 설정 */
-    border-bottom: 1px solid #D9D9D9;
-}
-.navbar ul{
-    display: flex;
-    align-items: center;
-    height: 50px;
-    background-color:none;
-    padding: 0px;
-    margin: 0;
-    padding-left: 400px;
-    list-style-type: none; /* 기본 점 제거 */
-    gap: 60px;
-}
-.navbar ul li a{
-    text-decoration: none;
-    color: black;
+ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
 
-.navbar ul li a:hover{
-   color: #219C90;
+.navbar {
+  position: fixed; /* 헤더 아래에 고정 */
+  top: 70px; /* 헤더 높이 바로 아래에 위치하도록 설정 */
+  left: 0;
+  width: 100%;
+  height: 50px; /* 네비게이션 바의 높이 */
+  display: flex;
+  align-items: center;
+  box-sizing: border-box; /* 패딩을 포함하여 너비 계산 */
+  z-index: 999; /* 헤더 아래지만 다른 콘텐츠 위에 표시되도록 설정 */
+  border-bottom: 1px solid #d9d9d9;
+  padding: 0 20px;
+  gap: 30px;
+  background-color: #fff;
+}
+.navbar ul {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  gap: 70px;
+  padding-left: 200px;
+}
+
+.navbar ul li {
+  position: relative;
+}
+
+.navbar ul li.menu-all.active-menu::after {
+  background-color: #fc3c76;
+}
+
+.navbar ul li.menu-top.active-menu::after {
+  background-color: #f5d02b;
+}
+.navbar ul li.menu-find.active-menu::after {
+  background-color: #219c90;
+}
+.navbar ul li.active-menu::after {
+  content: "";
+  position: absolute;
+  bottom: -15px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+}
+
+.navbar ul li a {
+  text-decoration: none;
+  color: black;
+  white-space: nowrap; /* 텍스트 줄 바꿈 방지 */
+}
+
+.navbar ul li a:hover {
+  color: #219c90;
+}
+
+.navbar .navbar-search {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 10px;
+}
+.navbar .navbar-search .navbar-input {
+  width: 300px;
+  height: 30px;
+}
+@media (max-width: 480px) {
+  .navbar ul {
+    gap: 20px;
+  }
+}
+@media (max-width: 600px) {
+  .navbar {
+    top: 60px;
+    justify-content: center;
+  }
+  .navbar ul {
+    gap: 40px; /* 더 작은 화면에서 간격 줄이기 */
+    justify-content: center;
+    padding: 0;
+  }
+
+  .navbar .navbar-search {
+    display: none;
+  }
+}
+
+@media (max-width: 1000px) {
+  .navbar .navbar-search {
+    display: none;
+  }
 }
