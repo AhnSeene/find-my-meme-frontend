@@ -14,7 +14,7 @@ const useInfiniteMemesQuery = (
     const mediaTypeQuery = mediaType ? `&mediaType=${mediaType}` : "";
     const url = isProfile
       ? `/meme-posts/users/${username}?page=${pageParam}&size=10`
-      : `/meme-posts/search?page=${pageParam}&size=10${mediaTypeQuery}${tagsQuery}`;
+      : `/meme-posts?page=${pageParam}&size=10${mediaTypeQuery}${tagsQuery}`;
 
     const response = await api.get(url);
     const data = isProfile ? response.data.data.memePosts : response.data.data;
