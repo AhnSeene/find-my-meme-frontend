@@ -73,7 +73,7 @@ function UploadMeme() {
 
         const fileMeta = {
           originalFilename: file.name,
-          presignedUrl: presignedUrl.split("?")[0], // 🔥 URL에서 쿼리스트링 제거
+          presignedUrl: presignedUrl.split("?")[0],
           width,
           height,
           size: file.size,
@@ -108,7 +108,7 @@ function UploadMeme() {
         {}
       );
 
-      return response.data.data.presignedUrl; // 🔥 Presigned URL 반환
+      return response.data.data.presignedUrl;
     } catch (error) {
       console.error("Error fetching presigned URL:", error);
       return null;
@@ -120,8 +120,8 @@ function UploadMeme() {
       const response = await axios.put(presignedUrl, file, {
         headers: {
           "Content-Type": file.type,
-          "x-amz-acl": "public-read", // 🔥 S3에 업로드된 파일이 보이도록 설정
         },
+        withCredentials: true,
       });
 
       return response.status === 200;
