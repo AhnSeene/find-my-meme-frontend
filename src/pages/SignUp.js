@@ -29,6 +29,7 @@ function SignUp() {
   const [modalMessage, setModalMessage] = useState("");
   const [isSignupModal, setIsSignupModal] = useState(false);
   const [isIdChecked, setIsIdChecked] = useState(false); //아이디 중복검사
+  const [isEmailChecked, setIsEmailChecked] = useState(false);
   const [showPassword, setShowPassword] = useState(false); // 비밀번호 보기 상태 관리
   const [showPwConfirm, setShowPwConfirm] = useState(false);
 
@@ -141,6 +142,35 @@ function SignUp() {
     }
   };
 
+  // const handleEmailCheck = async (e) => {
+  //   e.preventDefault();
+  //   const { email } = formData;
+
+  //   try {
+  //     const response = await api.post("/users/check-email", {
+  //       email: email,
+  //     });
+  //     if (response.data.success) {
+  //       setModalMessage("이메일이 확인되었습니다.");
+  //       setIsModalOpen(true);
+  //       setIsEmailChecked(true);
+  //     } else {
+  //       setModalMessage("이미 사용중인 이메일입니다.");
+  //       setIsModalOpen(true);
+  //       setIsEmailChecked(false);
+  //     }
+  //   } catch (error) {
+  //     console.error("이메일 중복검사 실패", error);
+  //     if (error.response && error.response.status == 400) {
+  //       setModalMessage("이미 사용중인 이메일입니다.");
+  //     } else {
+  //       setModalMessage("중복 검사 중 오류가 발생했습니다.");
+  //     }
+  //     setIsModalOpen(true);
+  //     setIsEmailChecked(false);
+  //   }
+  // };
+
   const closeModal = () => {
     setIsModalOpen(false); // 모달창 닫기
   };
@@ -159,13 +189,22 @@ function SignUp() {
       return;
     }
 
+    // if(!isEmailChecked) {
+    //   setModalMessage("이메일 중복검사를 통과해야 합니다.");
+    //   setIsModalOpen(true);
+    //   return;
+    // }
+
     //전체 폼 데이터 유효성 검사
     const newErrors = {
       id: validate("id", formData.id),
       password: validate("password", formData.password),
-      confirmPassword: validate("confirmPassword", formData.confirmPassword),
       email: validate("email", formData.email),
     };
+
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "비밀번호가 일치하지 않습니다";
+    }
 
     if (Object.values(newErrors).some((error) => error)) {
       setErrors(newErrors);
@@ -319,6 +358,13 @@ function SignUp() {
               <IoMdCloseCircle />
             </span>
           </div>
+          {/* <button
+            type="button"
+            onClick={handleEmailCheck}
+            disabled={isEmailChecked}
+          >
+            중복검사
+          </button> */}
           {errors.email && <p className="error">{errors.email}</p>}
         </div>
 
