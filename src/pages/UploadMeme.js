@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../contexts/api";
+import axios from "axios";
 import "./UploadMeme.css";
 import { useNavigate } from "react-router-dom";
 import { RiFolderUploadFill } from "react-icons/ri";
@@ -56,13 +57,35 @@ function UploadMeme() {
       formData.append("file", file);
 
       try {
-        const response = await api.post("/files/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        const presignedUrl = await getPresignedUrl(file.name);
+        if (!presignedUrl) {
+          console.error("Failed to get presigned URL");
+          continue;
+        }
+        console.log(presignedUrl);
+        const uploadSuccess = await uploadFileToS3(file, presignedUrl);
+        if (!uploadSuccess) {
+          console.error("Failed to upload file to S3");
+          continue;
+        }
 
-        const fileUrl = `${fileBaseUrl}${response.data.data.fileUrl}`;
+        const { width, height } = await getImageDimensions(file);
+
+        const fileMeta = {
+          originalFilename: file.name,
+          presignedUrl: presignedUrl.split("?")[0], // 🔥 URL에서 쿼리스트링 제거
+          width,
+          height,
+          size: file.size,
+        };
+
+        const uploadResponse = await completeUpload(fileMeta);
+        if (!uploadResponse) {
+          console.error("Failed to complete file upload");
+          continue;
+        }
+
+        const fileUrl = `${fileBaseUrl}${uploadResponse.fileUrl}`;
         console.log("Full file URL:", fileUrl); // 최종 URL 확인
         updatedPreviewUrls.push(fileUrl);
 
@@ -76,7 +99,64 @@ function UploadMeme() {
     setPreviewUrls(updatedPreviewUrls);
     setFileTags(updatedTags);
   };
-  console.log(previewUrls);
+
+  const getPresignedUrl = async (filename) => {
+    try {
+      const response = await api.post(
+        `/files/presigned-upload?filename=${encodeURIComponent(filename)}`,
+        {},
+        {}
+      );
+
+      return response.data.data.presignedUrl; // 🔥 Presigned URL 반환
+    } catch (error) {
+      console.error("Error fetching presigned URL:", error);
+      return null;
+    }
+  };
+
+  const uploadFileToS3 = async (file, presignedUrl) => {
+    try {
+      const response = await axios.put(presignedUrl, file, {
+        headers: {
+          "Content-Type": file.type,
+          "x-amz-acl": "public-read", // 🔥 S3에 업로드된 파일이 보이도록 설정
+        },
+      });
+
+      return response.status === 200;
+    } catch (error) {
+      console.error("Error uploading file to S3:", error);
+      return false;
+    }
+  };
+
+  const getImageDimensions = (file) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+
+      img.onload = () => {
+        resolve({ width: img.width, height: img.height });
+      };
+    });
+  };
+
+  const completeUpload = async (fileMeta) => {
+    try {
+      const response = await api.post("/files/upload-complete", fileMeta, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      return response.data.data;
+    } catch (error) {
+      console.error("Error completing upload:", error);
+      return null;
+    }
+  };
+
   const handleCategoryChange = (e) => {
     const category = e.target.value;
     setSelectedCategory(category);
