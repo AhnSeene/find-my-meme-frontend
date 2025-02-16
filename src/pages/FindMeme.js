@@ -25,16 +25,19 @@ function FindMeme() {
   const [foundPost, setFoundPost] = useState([]);
   const [isFindActive, setIsFindActive] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 상태
-  const [totalPages, setTotalPages] = useState(0); // 총 페이지 상태
+
+  const [findPage, setFindPage] = useState(0); // "찾아줘" 페이지네이션 상태
+  const [foundPage, setFoundPage] = useState(0); // "찾았다" 페이지네이션 상태
+  const [findTotalPages, setFindTotalPages] = useState(0); // "찾아줘" 총 페이지 수
+  const [foundTotalPages, setFoundTotalPages] = useState(0); // "찾았다" 총 페이지 수
 
   // 공통 데이터 로딩 함수
-  const fetchData = async (url, setData) => {
+  const fetchData = async (url, setData, setPageCount) => {
     setLoading(true);
     try {
       const response = await api.get(url);
       setData(response.data.data.content);
-      setTotalPages(response.data.data.totalPages);
+      setPageCount(response.data.data.totalPages);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -43,35 +46,51 @@ function FindMeme() {
   };
 
   useEffect(() => {
-    fetchData(`/find-posts?page=${currentPage}&size=3`, setFindPost);
-  }, [currentPage]);
+    fetchData(
+      `/find-posts?page=${findPage}&size=8&status=FIND`,
+      setFindPost,
+      setFindTotalPages
+    );
+  }, [findPage]);
+
+  useEffect(() => {
+    fetchData(
+      `/find-posts?page=${foundPage}&size=8&status=FOUND`,
+      setFoundPost,
+      setFoundTotalPages
+    );
+  }, [foundPage]);
 
   const handleFind = () => {
+    setFindPage(0);
     fetchData(
-      `/find-posts?page=${currentPage}&size=3&status=FIND`,
-      setFindPost
+      `/find-posts?page=${findPage}&size=8&status=FIND`,
+      setFindPost,
+      setFindTotalPages
     );
-
     setIsFindActive(true);
   };
 
   const handleFound = () => {
+    setFoundPage(0);
     fetchData(
-      `/find-posts?page=${currentPage}&size=3&status=FOUND`,
-      setFoundPost
+      `/find-posts?page=${foundPage}&size=8&status=FOUND`,
+      setFoundPost,
+      setFoundTotalPages
     );
-
     setIsFindActive(false);
+  };
+
+  const handlePageChange = (page) => {
+    if (isFindActive) {
+      if (page >= 0 && page < findTotalPages) setFindPage(page);
+    } else {
+      if (page >= 0 && page < foundTotalPages) setFoundPage(page);
+    }
   };
 
   const handlePost = () => {
     navigate("/findmemepost", { replace: true });
-  };
-
-  const handlePageChange = (page) => {
-    if (page >= 0 && page < totalPages) {
-      setCurrentPage(page);
-    }
   };
 
   return (
@@ -127,17 +146,25 @@ function FindMeme() {
           )}
         </div>
       )}
-      {totalPages > 1 && !loading && (
+      {/* 🟢 페이지네이션을 각 상태에 맞게 변경 */}
+      {(isFindActive ? findTotalPages : foundTotalPages) > 1 && !loading && (
         <div className="pagination">
-          {Array.from({ length: totalPages }, (_, index) => (
-            <button
-              key={index}
-              onClick={() => handlePageChange(index)}
-              className={index === currentPage ? "active" : ""}
-            >
-              {index + 1}
-            </button>
-          ))}
+          {Array.from(
+            { length: isFindActive ? findTotalPages : foundTotalPages },
+            (_, index) => (
+              <button
+                key={index}
+                onClick={() => handlePageChange(index)}
+                className={
+                  index === (isFindActive ? findPage : foundPage)
+                    ? "active"
+                    : ""
+                }
+              >
+                {index + 1}
+              </button>
+            )
+          )}
         </div>
       )}
     </div>
