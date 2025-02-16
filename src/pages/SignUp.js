@@ -142,34 +142,34 @@ function SignUp() {
     }
   };
 
-  // const handleEmailCheck = async (e) => {
-  //   e.preventDefault();
-  //   const { email } = formData;
+  const handleEmailCheck = async (e) => {
+    e.preventDefault();
+    const { email } = formData;
 
-  //   try {
-  //     const response = await api.post("/users/check-email", {
-  //       email: email,
-  //     });
-  //     if (response.data.success) {
-  //       setModalMessage("이메일이 확인되었습니다.");
-  //       setIsModalOpen(true);
-  //       setIsEmailChecked(true);
-  //     } else {
-  //       setModalMessage("이미 사용중인 이메일입니다.");
-  //       setIsModalOpen(true);
-  //       setIsEmailChecked(false);
-  //     }
-  //   } catch (error) {
-  //     console.error("이메일 중복검사 실패", error);
-  //     if (error.response && error.response.status == 400) {
-  //       setModalMessage("이미 사용중인 이메일입니다.");
-  //     } else {
-  //       setModalMessage("중복 검사 중 오류가 발생했습니다.");
-  //     }
-  //     setIsModalOpen(true);
-  //     setIsEmailChecked(false);
-  //   }
-  // };
+    try {
+      const response = await api.post("/users/check-email", {
+        email: email,
+      });
+      if (response.data.success) {
+        setModalMessage("이메일이 확인되었습니다.");
+        setIsModalOpen(true);
+        setIsEmailChecked(true);
+      } else {
+        setModalMessage("이미 사용중인 이메일입니다.");
+        setIsModalOpen(true);
+        setIsEmailChecked(false);
+      }
+    } catch (error) {
+      console.error("이메일 중복검사 실패", error);
+      if (error.response && error.response.status == 400) {
+        setModalMessage("이미 사용중인 이메일입니다.");
+      } else {
+        setModalMessage("중복 검사 중 오류가 발생했습니다.");
+      }
+      setIsModalOpen(true);
+      setIsEmailChecked(false);
+    }
+  };
 
   const closeModal = () => {
     setIsModalOpen(false); // 모달창 닫기
@@ -189,11 +189,11 @@ function SignUp() {
       return;
     }
 
-    // if(!isEmailChecked) {
-    //   setModalMessage("이메일 중복검사를 통과해야 합니다.");
-    //   setIsModalOpen(true);
-    //   return;
-    // }
+    if (!isEmailChecked) {
+      setModalMessage("이메일 중복검사를 통과해야 합니다.");
+      setIsModalOpen(true);
+      return;
+    }
 
     //전체 폼 데이터 유효성 검사
     const newErrors = {
@@ -358,13 +358,13 @@ function SignUp() {
               <IoMdCloseCircle />
             </span>
           </div>
-          {/* <button
+          <button
             type="button"
             onClick={handleEmailCheck}
             disabled={isEmailChecked}
           >
             중복검사
-          </button> */}
+          </button>
           {errors.email && <p className="error">{errors.email}</p>}
         </div>
 
