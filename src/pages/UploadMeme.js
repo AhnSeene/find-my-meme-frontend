@@ -174,7 +174,10 @@ function UploadMeme() {
       }
 
       // 서브카테고리 태그 ID 추가 (최대 3개)
-      if (!newTags[index].includes(subcategory) && newTags[index].length < 3) {
+      if (
+        !newTags[index].some((tagId) => tagId === subcategory.id) &&
+        newTags[index].length < 3
+      ) {
         newTags[index].push(subcategory.id);
       }
     });
