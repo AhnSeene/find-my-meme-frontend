@@ -1,5 +1,5 @@
 .memedetail {
-  width: 80%;
+  width: 70%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -13,9 +13,11 @@
   width: 100%; /* 부모의 너비를 100%로 설정하여 수평 가운데 정렬 */
   margin-bottom: 60px;
   align-items: center;
+  gap: 30px;
 }
 
 .memedetail .memedetail-info .memedetail-left {
+  border: 1px solid red;
   flex: 1; /* 비율을 1로 설정 (필요에 따라 조정 가능) */
 }
 .memedetail .memedetail-info .memedetail-left > img {
@@ -71,6 +73,7 @@
   padding: 20px;
   background-color: #f5f5f5; /* 배경색 설정 */
   border-radius: 10px; /* 둥근 모서리 */
+  border: 1px solid blue;
 }
 .memedetail .memedetail-info .memedetail-right .download-btn {
   border: none;
