@@ -26,11 +26,18 @@ function MemeGrid({
     mediaType,
   });
 
+  const getResizedImageUrl = (originalUrl, width) => {
+    return originalUrl
+      .replace("images/", "resized/")
+      .replace(/.(jpg|jpeg|png|gif)$/, `_${width}w.$1`);
+  };
+
   console.log("Memes data:", memes);
+
   const breakpointColumnsObj = {
-    default: 5,
-    1024: 5,
-    768: 4,
+    default: 4,
+    1024: 4,
+    768: 3,
     500: 2,
   };
   const handleLikeClick = (memeId, isLiked) => {
@@ -53,9 +60,16 @@ function MemeGrid({
             <div className="meme-image-container">
               <Link to={`/meme/${meme.id}`}>
                 <img
-                  src={`${fileBaseUrl}${meme.imageUrl}`}
+                  src={`${fileBaseUrl}${getResizedImageUrl(
+                    meme.imageUrl,
+                    288
+                  )}`}
                   alt={`Meme ${index}`}
                 />
+                {/* <img
+                  src={`${fileBaseUrl}${meme.imageUrl}`}
+                  alt={`Meme ${index}`}
+                /> */}
                 <div className="overlay">
                   <div className="meme-info">
                     <GoHeartFill style={{ fontSize: "20px" }} />{" "}
