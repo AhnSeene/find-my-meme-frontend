@@ -48,6 +48,28 @@ function MemeDetail() {
   if (loading) return <div>Loadding...</div>;
   if (error) return <div>{Error}</div>;
 
+  const getResizedImageUrl = (originalUrl, width) => {
+    // 원본: images/memes/2024/02/uuid.jpg
+    // 변환: resized/memes/2024/02/uuid-288w.jpg
+    return originalUrl
+      .replace("images/", "resized/")
+      .replace(/.(jpg|jpeg|png|gif)$/, `_${width}w.$1`);
+  };
+
+  const ResponsiveImage = ({ src, alt }) => {
+    return (
+      <img
+        srcSet={`
+          ${getResizedImageUrl(src, 288)} 288w,
+          ${getResizedImageUrl(src, 657)} 657w
+        `}
+        sizes="(max-width: 500px) 288px, 657px"
+        src={getResizedImageUrl(src, 657)} // 기본 이미지
+        alt={alt}
+      />
+    );
+  };
+
   const handleDownload = async () => {
     try {
       const response = await api.get(`/meme-posts/${meme.id}/download`, {
@@ -150,7 +172,12 @@ function MemeDetail() {
     <div className="memedetail">
       <div className="memedetail-info">
         <div className="memedetail-left">
-          <img src={`${fileBaseUrl}${meme.imageUrl}`} alt={`Meme ${meme.id}`} />
+          <ResponsiveImage
+            src={`${fileBaseUrl}${meme.imageUrl}`}
+            alt={`Meme ${meme.id}`}
+          />
+
+          {/* <img src={`${fileBaseUrl}${meme.imageUrl}`} alt={`Meme ${meme.id}`} /> */}
           <div className="memedetail-left-info">
             <Link to={`/users/${meme.username}`} className="memedetail-link">
               <img

@@ -1,13 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import logo from "../assets/logo.png";
+import { triggerLogout } from "../contexts/api";
 import "./Header.css";
 
 // 맨 위 Header
 // 로그인 전에 회원가입/로그인 버튼, 로그인 후 짤등록/마이페이지 버튼
 function Header() {
   const navigate = useNavigate();
-  const { authState, logout } = useAuth();
+  const { authState } = useAuth();
 
   const handleSignUp = () => {
     navigate("/signup", { replace: true });
@@ -28,7 +29,7 @@ function Header() {
   };
 
   const handleLogout = () => {
-    logout();
+    triggerLogout();
     navigate("/", { replace: true });
   };
 
