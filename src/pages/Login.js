@@ -53,10 +53,11 @@ function Login() {
 
         if (rememberId) {
           localStorage.setItem("savedId", id); // 아이디 저장
+          localStorage.setItem("rememberId", JSON.stringify(rememberId));
         } else {
           localStorage.removeItem("savedId"); // 아이디 제거
+          localStorage.removeItem("rememberId");
         }
-        localStorage.setItem("rememberId", JSON.stringify(rememberId)); // 체크박스 상태 저장
 
         navigate("/", { replace: true });
       }
