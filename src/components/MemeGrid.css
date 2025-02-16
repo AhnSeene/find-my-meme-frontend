@@ -5,7 +5,7 @@
 }
 
 .masonry-column {
-  padding-left: 10px; /* 각 열 간 간격 */
+  padding-left: 20px; /* 각 열 간 간격 */
   background-clip: padding-box;
 }
 .meme-item {
@@ -14,7 +14,6 @@
 
 .meme-item .meme-image-container {
   position: relative;
-  overflow: hidden; /* 이미지가 넘칠 경우 숨김 */
   width: 100%; /* 부모가 이미지의 가로 크기와 같도록 설정 */
 }
 
@@ -39,6 +38,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  pointer-events: none;
 }
 
 /* 마우스 오버 시 오버레이와 이미지 확대 효과 */
