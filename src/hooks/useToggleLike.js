@@ -3,14 +3,17 @@ import api from "../contexts/api";
 const useToggleLike = ({
   selectedSubTags = [],
   isProfile = false,
-  username = "",
+  username ,
   authState,
   mediaType = "",
 }) => {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: ({ memeId, isLiked }) => {
+      if (!authState.isLoggedIn) {
+        alert("로그인해야 사용할 수 있습니다.");
+        throw new Error("로그인이 필요합니다."); // 요청 중단
+      }
       return api.post(
         `/meme-posts/${memeId}/toggleLike`,
         {},
