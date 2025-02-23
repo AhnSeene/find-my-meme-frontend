@@ -22,7 +22,7 @@ jobs:
         run: |
           npm ci
           REACT_APP_FILE_BASEURL=${{ secrets.REACT_APP_FILE_BASEURL }}
-          REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }} npm run build
+          REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }} CI=false npm run build
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
