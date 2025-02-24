@@ -26,12 +26,24 @@ function MemeGrid({
     mediaType,
   });
 
-  const getResizedImageUrl = (originalUrl, width) => {
-    return originalUrl
-      .replace("images/", "resized/")
-      .replace(/.(jpg|jpeg|png|gif)$/, `_${width}w.$1`);
+  // 이미지 또는 GIF URL 변환 함수
+  const getMediaElement = (fileUrl, width) => {
+    if (fileUrl.endsWith(".gif")) {
+      const mp4Url = fileUrl
+        .replace("images/", "resized/")
+        .replace(".gif", `_${width}w.mp4`);
+      return (
+        <video autoPlay loop muted playsInline>
+          <source src={`${fileBaseUrl}${mp4Url}`} type="video/mp4" />
+        </video>
+      );
+    } else {
+      const resizedUrl = fileUrl
+        .replace("images/", "resized/")
+        .replace(/\.(jpg|jpeg|png)$/, `_${width}w.$1`);
+      return <img src={`${fileBaseUrl}${resizedUrl}`} alt={ "Meme"} />;
+    }
   };
-
   console.log("Memes data:", memes);
 
   const breakpointColumnsObj = {
@@ -59,17 +71,7 @@ function MemeGrid({
           <div key={meme.id} className="meme-item">
             <div className="meme-image-container">
               <Link to={`/meme/${meme.id}`}>
-                <img
-                  src={`${fileBaseUrl}${getResizedImageUrl(
-                    meme.imageUrl,
-                    288
-                  )}`}
-                  alt={`Meme ${index}`}
-                />
-                {/* <img
-                  src={`${fileBaseUrl}${meme.imageUrl}`}
-                  alt={`Meme ${index}`}
-                /> */}
+              {getMediaElement(meme.imageUrl, 288)}
                 <div className="overlay">
                   <div className="meme-info">
                     <GoHeartFill style={{ fontSize: "20px" }} />{" "}
