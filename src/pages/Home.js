@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { useAuth } from "../contexts/AuthContext";
 import TagSelector from "../components/TagSelector";
 import MemeGrid from "../components/MemeGrid";
 import useInfiniteMemesQuery from "../hooks/useInfiniteMemesQuery";
 import "./home.css";
 
 function Home() {
-  const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
   const [selectedSubTags, setSelectedSubTags] = useState([]);
   const [mediaType, setMediaType] = useState("");
 
@@ -30,8 +28,6 @@ function Home() {
   );
 
   useEffect(() => {
-    console.log("Infinite Memes Query Data:", memes);
-
     const observer = new IntersectionObserver(handleObserver, {
       root: null, //뷰포트 기준
       rootMargin: "100px", // 트리거를 뷰포트보다 약간 일찍 실행
@@ -75,7 +71,6 @@ function Home() {
       </div>
       <MemeGrid
         memes={memes}
-        fileBaseUrl={fileBaseUrl}
         selectedSubTags={selectedSubTags}
         isProfile={isProfile}
         username={username}
