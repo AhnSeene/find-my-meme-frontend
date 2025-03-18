@@ -38,7 +38,8 @@ function TagSelector({ selectedSubTags, setSelectedSubTags }) {
   return (
     <div className="findMemePost-tag">
       <div className="findMemePost-tag-top">
-        <select onChange={handleParentTagChange}>
+        <label htmlFor="tag-category"/>
+        <select id="tag-category" onChange={handleParentTagChange}>
           <option value="">태그 카테고리를 선택하세요</option>
           {tags.map((tag) => (
             <option key={tag.id} value={tag.parentTag}>
