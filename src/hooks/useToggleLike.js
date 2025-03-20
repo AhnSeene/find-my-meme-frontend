@@ -1,35 +1,37 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../contexts/api";
-const useToggleLike = ({
-  selectedSubTags = [],
-  isProfile = false,
-  username ,
-  authState,
-  mediaType = "",
-}) => {
+import { useAuth } from "../contexts/AuthContext";
+const useToggleLike = () => {
+  const {authState}=useAuth()
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ memeId, isLiked }) => {
+    mutationFn: async ({ memeId, isLiked }) => {
       if (!authState.isLoggedIn) {
         alert("로그인해야 사용할 수 있습니다.");
         throw new Error("로그인이 필요합니다."); // 요청 중단
       }
-      return api.post(
-        `/meme-posts/${memeId}/toggleLike`,
-        {},
-        { headers: { Authorization: `Bearer ${authState.token}` } }
-      );
+      try {
+        const response = await api.post(
+          `/meme-posts/${memeId}/toggleLike`,
+          {},
+          { headers: { Authorization: `Bearer ${authState.token}` } }
+        );
+        console.log("Response:", response); // 응답 확인
+        return response;
+      } catch (error) {
+        console.error("API error:", error); // 에러 확인
+        throw error;
+      }
     },
     onMutate: async ({ memeId, isLiked }) => {
-      const queryKey = [
-        "memes",
-        { selectedSubTags, isProfile, username, mediaType },
-      ];
+      const queryKey = ["memes"];
+      console.log(queryKey);
 
       // 이전 데이터 가져오기
       const previousData = queryClient.getQueryData(queryKey);
-
+console.log(previousData)
       queryClient.setQueryData(queryKey, (oldData) => {
+        console.log("oldData.pages:", oldData.pages);
         if (!oldData) return oldData;
 
         return {
@@ -37,7 +39,9 @@ const useToggleLike = ({
           pages: oldData.pages.map((page) => ({
             ...page,
             content: page.content.map((meme) => {
+              console.log("meme.id :",meme.id, "memeId :", memeId)
               if (meme.id === memeId) {
+                console.log("좋아요 찍혀야됨..")
                 return {
                   ...meme,
                   isLiked: !isLiked, // 반전된 isLiked 상태

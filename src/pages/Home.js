@@ -26,6 +26,9 @@ function Home() {
     },
     [fetchNextPage, hasNextPage, isLoading]
   );
+  useEffect(()=>{
+    console.log("memes:",memes)
+  })
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleObserver, {
@@ -71,10 +74,6 @@ function Home() {
       </div>
       <MemeGrid
         memes={memes}
-        selectedSubTags={selectedSubTags}
-        isProfile={isProfile}
-        username={username}
-        mediaType={mediaType}
       />
 
       {isLoading && <p>Loading...</p>}
