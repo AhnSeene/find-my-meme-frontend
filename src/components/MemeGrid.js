@@ -1,4 +1,3 @@
-// MemeGrid.js
 import React, { useEffect, useState } from "react";
 import Masonry from "react-masonry-css";
 import { Link } from "react-router-dom";
@@ -6,28 +5,16 @@ import { GoHeartFill, GoHeart } from "react-icons/go";
 import { GrFormView } from "react-icons/gr";
 import { IoMdDownload } from "react-icons/io";
 import useToggleLike from "../hooks/useToggleLike";
-import { useAuth } from "../contexts/AuthContext";
 import "./MemeGrid.css";
 
-function MemeGrid({
-  memes,
-  selectedSubTags = [],
-  isProfile,
-  username,
-  mediaType,
-}) {
-  const { authState } = useAuth();
+function MemeGrid({memes}) {
   const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
-  const { mutate } = useToggleLike({
-    selectedSubTags,
-    isProfile,
-    username,
-    authState,
-    mediaType,
-  });
+  const { mutate } = useToggleLike();
 
   const [useMp4Map, setUseMp4Map] = useState({}); // 각 밈의 MP4 사용 여부 관리
-
+  useEffect(() => {
+    console.log("MP4 사용 여부 업데이트:", useMp4Map);
+  }, [useMp4Map]);
   const handleVideoLoad = (memeId) => {
     setUseMp4Map((prev) => ({ ...prev, [memeId]: true }));
   };
@@ -68,9 +55,6 @@ function MemeGrid({
   
     return <img src={`${fileBaseUrl}${gifUrl}`} alt="Meme" />;
   };
-  useEffect(() => {
-    console.log("MP4 사용 여부 업데이트:", useMp4Map);
-  }, [useMp4Map]);
 
   const breakpointColumnsObj = {
     default: 4,
@@ -80,8 +64,6 @@ function MemeGrid({
   };
 
   const handleLikeClick = (memeId, isLiked) => {
-    console.log(" handleLikeClick");
-    // 서버 요청 및 캐시 업데이트
     mutate({ memeId, isLiked });
   };
 
