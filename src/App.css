@@ -1,7 +1,8 @@
 .App {
   text-align: center;
-  padding-top: 120px; /* 헤더와 네비게이션 바 높이의 총합 */
-  box-sizing: border-box;
+}
+.App .main-content {
+  padding-top: 110px; /* Navbar 높이만큼 여백 추가 */
 }
 
 .App-logo {
