@@ -1,0 +1,37 @@
+.bottomnavbar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+  padding: 10px 0;
+}
+
+.bottomnavbar ul {
+  display: flex;
+  justify-content: space-around;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bottomnavbar li {
+  text-align: center;
+}
+.bottomnavbar .icon {
+  font-size: 24px;
+}
+
+.bottomnavbar span {
+  display: block;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+@media (max-width: 600px) {
+  .bottomnavbar {
+    display: block;
+  }
+}
