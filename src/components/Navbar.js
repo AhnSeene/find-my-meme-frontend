@@ -1,28 +1,65 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import Button from "./Button";
+import { useAuth } from "../contexts/AuthContext";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import logo from "../assets/logo.png";
+import { IoCloudUploadOutline } from "react-icons/io5";
+import { GoPerson } from "react-icons/go";
+import { triggerLogout } from "../contexts/api";
 import "./Navbar.css";
 
 function Navbar() {
-  const [search, setSearch] = useState("");
+  const navigate=useNavigate();
   const location = useLocation(); // 현재 경로 가져오기
-
-  // activeMenu 상태는 useLocation으로 대체할 수 있음
+  const { authState } = useAuth();
+  const [isDropdownVisible,setIsDropdownVisible]=useState(false);
   const getActiveClass = (path) => {
     return location.pathname === path ? "active-menu" : "";
   };
 
-  const handleSearch = () => {
-    if (search.trim()) {
-      console.log("검색어:", search);
-    } else {
-      console.log("검색어를 입력하세요");
-    }
+  const handleLogoClick = () => {
+    window.location.href = "/"; //새로고침하면서 홈으로 이동
   };
+
+  const handleUpload=()=>{
+    navigate("/uploadmeme",{ replace: true })
+  }
+
+  const handleMyPageClick=()=>{
+    if(authState.isLoggedIn){
+      navigate(`/users/${authState.username}`, { replace: true });
+    } else {
+      navigate('/login')
+    }
+  }
+
+  const handleMouseEnter=()=>{
+    if (authState.isLoggedIn) {
+      setIsDropdownVisible(true); 
+    }
+  }
+
+  const handleMouseLeave=()=>{
+    if (authState.isLoggedIn) {
+      setIsDropdownVisible(false); // 마우스가 나가면 드롭다운 숨기기
+    }
+  }
+
+  const handleLogout=()=>{
+    triggerLogout();
+    navigate("/", { replace: true });
+  }
 
   return (
     <div className="navbar">
-      <ul>
+      <h1 className="logo">
+        <img
+          src={logo}
+          alt="Find My Meme 로고"
+          className="logo-image"
+          onClick={handleLogoClick}
+        />
+      </h1>
+      <ul className="navbar-menu">
         <li className={`menu-all ${getActiveClass("/")}`}>
           <Link to="/">모든 표현</Link>
         </li>
@@ -33,16 +70,28 @@ function Navbar() {
           <Link to="/findmeme">내 표현을 찾아줘</Link>
         </li>
       </ul>
-      <div className="navbar-search">
-        <input
-          className="navbar-input"
-          type="text"
-          placeholder="검색어 입력"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <Button onClick={handleSearch} text="검색" />
-      </div>
+      <ul className="navbar-sidemenu">
+        <li onClick={handleUpload}>
+          <IoCloudUploadOutline style={{fontSize:'24px'}}/>
+        </li>
+        <li className="mypage"
+            onClick={handleMyPageClick}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+        >
+          <GoPerson style={{fontSize:'24px'}} />
+          {authState.isLoggedIn && isDropdownVisible && (
+            <div className="dropdown-menu">
+              <ul>
+                <li onClick={handleMyPageClick}>나의 밈</li>
+                <li onClick={handleMyPageClick}>내 정보</li>
+                <li onClick={handleMyPageClick}>게시글 관리</li>
+                <li onClick={handleLogout}>로그아웃</li>
+              </ul>
+            </div>
+          )}
+        </li>
+      </ul>
     </div>
   );
 }
