@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import api from "../contexts/api";
-import "../styles/common.css";
 
 function TagSelector({ selectedSubTags, setSelectedSubTags }) {
   const [tags, setTags] = useState([]);
-  const [currentSubTags,setCurrentSubTags]=useState([]);
+  const [currentSubTags, setCurrentSubTags] = useState([]);
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -19,8 +18,8 @@ function TagSelector({ selectedSubTags, setSelectedSubTags }) {
   }, []);
 
   const handleParentTagChange = (e) => {
-    const categoryTag=tags.find((tag)=>tag.parentTag===e.target.value)
-    setCurrentSubTags(categoryTag? categoryTag.subTags:[]);
+    const categoryTag = tags.find((tag) => tag.parentTag === e.target.value);
+    setCurrentSubTags(categoryTag ? categoryTag.subTags : []);
   };
 
   const handleSubTagClick = (subTagId) => {
@@ -36,9 +35,9 @@ function TagSelector({ selectedSubTags, setSelectedSubTags }) {
   };
 
   return (
-    <div className="findMemePost-tag">
-      <div className="findMemePost-tag-top">
-        <label htmlFor="tag-category"/>
+    <div className="tagselector">
+      <div className="tagselector-top">
+        <label htmlFor="tag-category" />
         <select id="tag-category" onChange={handleParentTagChange}>
           <option value="">태그 카테고리를 선택하세요</option>
           {tags.map((tag) => (
@@ -68,7 +67,7 @@ function TagSelector({ selectedSubTags, setSelectedSubTags }) {
           </div>
         )}
       </div>
-      {currentSubTags.length>0 && (
+      {currentSubTags.length > 0 && (
         <div className="tag-buttons">
           {currentSubTags.map((subTag) => (
             <button

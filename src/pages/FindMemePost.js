@@ -5,7 +5,6 @@ import "react-quill/dist/quill.snow.css";
 import TagSelector from "../components/TagSelector";
 import api from "../contexts/api";
 import axios from "axios";
-import "../styles/common.css";
 
 function FindMemePost() {
   const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
