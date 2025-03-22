@@ -42,12 +42,12 @@ function MemeGrid({
     const mp4Url = imageUrl
       .replace("images/", "resized/")
       .replace(".gif", `_${width}w.mp4`);
-      console.log("mp4" + " " + mp4Url);
+    console.log("mp4" + " " + mp4Url);
 
     const resizedUrl = imageUrl
       .replace("images/", "resized/")
       .replace(/\.(jpg|jpeg|png)$/, `_${width}w.$1`);
-      console.log("images " + resizedUrl);
+    console.log("images " + resizedUrl);
 
     const gifUrl = imageUrl.replace("resized/", "images/");
 
@@ -65,7 +65,7 @@ function MemeGrid({
         </video>
       );
     }
-  
+
     return <img src={`${fileBaseUrl}${gifUrl}`} alt="Meme" />;
   };
   useEffect(() => {
@@ -96,7 +96,7 @@ function MemeGrid({
           <div key={meme.id} className="meme-item">
             <div className="meme-image-container">
               <Link to={`/meme/${meme.id}`}>
-              {getMediaElement(meme,288)}
+                {getMediaElement(meme, 288)}
                 <div className="overlay">
                   <div className="meme-info">
                     <GoHeartFill style={{ fontSize: "20px" }} />{" "}

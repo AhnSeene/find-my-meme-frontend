@@ -4,57 +4,68 @@ import api from "../contexts/api";
 import "./TopMeme.css";
 
 function TopMeme() {
-  const [topView, setTopView] = useState([]);
-  const [topLike, setTopLike] = useState([]);
-  const [topWeek, setTopWeek] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [memes, setMemes] = useState({
+    topView: [],
+    topLike: [],
+    topWeek: [],
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const fetchTopView = async () => {
+    const fetchMemes = async () => {
+      setIsLoading(true);
       try {
-        const response = await api.get(
-          "/meme-posts/ranks/all?sort=VIEW&page=0&size=20"
-        );
-        setTopView(response.data.data);
+        const [viewRes, likeRes, weekRes] = await Promise.all([
+          api.get("/meme-posts/ranks/all?sort=VIEW&page=0&size=20"),
+          api.get("/meme-posts/ranks/all?sort=LIKE&page=0&size=20"),
+          api.get("/meme-posts/ranks/period?period=WEEK&page=0&size=20"),
+        ]);
+
+        setMemes({
+          topView: viewRes.data.data,
+          topLike: likeRes.data.data,
+          topWeek: weekRes.data.data,
+        });
       } catch (error) {
-        console.log("topView 불러오기 실패", error);
+        console.error("TopMeme 데이터 불러오기 실패", error);
+      } finally {
+        setIsLoading(false);
       }
     };
-    fetchTopView();
+    fetchMemes();
   }, []);
 
-  useEffect(() => {
-    const fetchTopLike = async () => {
-      try {
-        const response = await api.get(
-          "/meme-posts/ranks/all?sort=LIKE&page=0&size=20"
-        );
-        setTopLike(response.data.data);
-      } catch (error) {
-        console.log("topLike 불러오기 실패", error);
-      }
-    };
-    fetchTopLike();
-  }, []);
+  const categories = [
+    { label: "조회수 높은 순", data: memes.topView },
+    { label: "좋아요 높은 순", data: memes.topLike },
+    { label: "이번주 인기", data: memes.topWeek },
+  ];
 
-  useEffect(() => {
-    const fetchTopWeek = async () => {
-      try {
-        const response = await api.get(
-          "/meme-posts/ranks/period?period=WEEK&page=0&size=20"
-        );
-        setTopWeek(response.data.data);
-      } catch (error) {
-        console.log("topWeek 불러오기 실패", error);
-      }
-    };
-    fetchTopWeek();
-  }, []);
+  const activeCategory = categories[activeIndex];
 
   return (
     <div className="topmeme">
-      <MemeSlider title="Top Viewed Memes" memes={topView} />
-      <MemeSlider title="Top Liked Memes" memes={topLike} />
-      <MemeSlider title="Top Memes This Week" memes={topWeek} />
+      <div className="topmeme-categories">
+        <ul>
+          {categories.map((category, index) => (
+            <li
+              key={index}
+              onClick={() => setActiveIndex(index)}
+              className={activeIndex === index ? "active" : ""}
+            >
+              {category.label}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="slider-container">
+        {isLoading ? (
+          <div className="loading">로딩중...</div>
+        ) : (
+          <MemeSlider memes={activeCategory.data} />
+        )}
+      </div>
     </div>
   );
 }
