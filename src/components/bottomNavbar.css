@@ -20,7 +20,13 @@
 .bottomnavbar li {
   text-align: center;
 }
-.bottomnavbar .icon {
+
+.bottomnavbar a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.bottomnavbar .bottomnavbar .icon {
   font-size: 24px;
 }
 
