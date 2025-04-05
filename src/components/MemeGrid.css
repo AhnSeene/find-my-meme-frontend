@@ -25,6 +25,13 @@
   transition: transform 0.3s ease-in-out;
 }
 
+.meme-item .meme-image-container video{
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+
 /* 어두운 투명색 오버레이 */
 .meme-item .meme-image-container .overlay {
   position: absolute;

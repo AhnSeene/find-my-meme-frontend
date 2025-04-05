@@ -1,38 +1,60 @@
-// MemeGrid.js
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Masonry from "react-masonry-css";
 import { Link } from "react-router-dom";
 import { GoHeartFill, GoHeart } from "react-icons/go";
 import { GrFormView } from "react-icons/gr";
 import { IoMdDownload } from "react-icons/io";
 import useToggleLike from "../hooks/useToggleLike";
-import { useAuth } from "../contexts/AuthContext";
 import "./MemeGrid.css";
 
-function MemeGrid({
-  memes,
-  fileBaseUrl,
-  selectedSubTags = [],
-  isProfile,
-  username,
-  mediaType,
-}) {
-  const { authState } = useAuth();
-  const { mutate } = useToggleLike({
-    selectedSubTags,
-    isProfile,
-    username,
-    authState,
-    mediaType,
-  });
+function MemeGrid({memes}) {
+  const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
+  const { mutate } = useToggleLike();
 
-  const getResizedImageUrl = (originalUrl, width) => {
-    return originalUrl
-      .replace("images/", "resized/")
-      .replace(/.(jpg|jpeg|png|gif)$/, `_${width}w.$1`);
+  const [useMp4Map, setUseMp4Map] = useState({}); // 각 밈의 MP4 사용 여부 관리
+  useEffect(() => {
+    console.log("MP4 사용 여부 업데이트:", useMp4Map);
+  }, [useMp4Map]);
+  const handleVideoLoad = (memeId) => {
+    setUseMp4Map((prev) => ({ ...prev, [memeId]: true }));
   };
 
-  console.log("Memes data:", memes);
+  const handleVideoError = (memeId) => {
+    setUseMp4Map((prev) => ({ ...prev, [memeId]: false }));
+  };
+
+  const getMediaElement = (meme, width) => {
+    const { imageUrl, id } = meme;
+
+    const mp4Url = imageUrl
+      .replace("images/", "resized/")
+      .replace(".gif", `_${width}w.mp4`);
+    console.log("mp4" + " " + mp4Url);
+
+    const resizedUrl = imageUrl
+      .replace("images/", "resized/")
+      .replace(/\.(jpg|jpeg|png)$/, `_${width}w.$1`);
+    console.log("images " + resizedUrl);
+
+    const gifUrl = imageUrl.replace("resized/", "images/");
+
+    if (useMp4Map[id] === true) {
+      return (
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          onLoadedData={() => handleVideoLoad(id)}
+          onError={() => handleVideoError(id)}
+        >
+          <source src={`${fileBaseUrl}${mp4Url}`} type="video/mp4" />
+        </video>
+      );
+    }
+
+    return <img src={`${fileBaseUrl}${gifUrl}`} alt="Meme" />;
+  };
 
   const breakpointColumnsObj = {
     default: 4,
@@ -40,14 +62,11 @@ function MemeGrid({
     768: 3,
     500: 2,
   };
+
   const handleLikeClick = (memeId, isLiked) => {
-    console.log(" handleLikeClick");
-    // 서버 요청 및 캐시 업데이트
     mutate({ memeId, isLiked });
   };
-  useEffect(() => {
-    console.log("memegrid:", memes);
-  });
+
   return (
     <div className="MemeGrid">
       <Masonry
@@ -59,17 +78,7 @@ function MemeGrid({
           <div key={meme.id} className="meme-item">
             <div className="meme-image-container">
               <Link to={`/meme/${meme.id}`}>
-                <img
-                  src={`${fileBaseUrl}${getResizedImageUrl(
-                    meme.imageUrl,
-                    288
-                  )}`}
-                  alt={`Meme ${index}`}
-                />
-                {/* <img
-                  src={`${fileBaseUrl}${meme.imageUrl}`}
-                  alt={`Meme ${index}`}
-                /> */}
+                {getMediaElement(meme, 288)}
                 <div className="overlay">
                   <div className="meme-info">
                     <GoHeartFill style={{ fontSize: "20px" }} />{" "}

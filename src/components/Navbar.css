@@ -6,93 +6,106 @@ ul {
 
 .navbar {
   position: fixed; /* 헤더 아래에 고정 */
-  top: 70px; /* 헤더 높이 바로 아래에 위치하도록 설정 */
   left: 0;
   width: 100%;
-  height: 50px; /* 네비게이션 바의 높이 */
+  height: 80px;
   display: flex;
   align-items: center;
   box-sizing: border-box; /* 패딩을 포함하여 너비 계산 */
-  z-index: 999; /* 헤더 아래지만 다른 콘텐츠 위에 표시되도록 설정 */
   border-bottom: 1px solid #d9d9d9;
   padding: 0 20px;
   gap: 30px;
   background-color: #fff;
+  justify-content: space-between;
+  z-index: 100;
 }
-.navbar ul {
+.navbar .logo {
+  position: relative;
+  height: 100%;
+  top: 10px;
+}
+.navbar .logo .logo-image {
+  width: 150px; /* 원하는 크기로 조정 */
+  height: auto;
+  position: absolute; /* 절대 위치 */
+  z-index: 1001; /* 헤더와 네비게이션 바보다 더 위에 위치 */
+  cursor: pointer;
+}
+
+.navbar .navbar-menu {
   display: flex;
   align-items: center;
   height: 100%;
   gap: 70px;
-  padding-left: 200px;
+  margin-top: 30px;
 }
 
-.navbar ul li {
+.navbar .navbar-menu li {
   position: relative;
 }
 
-.navbar ul li.menu-all.active-menu::after {
-  background-color: #fc3c76;
-}
-
-.navbar ul li.menu-top.active-menu::after {
-  background-color: #f5d02b;
-}
-.navbar ul li.menu-find.active-menu::after {
-  background-color: #219c90;
-}
-.navbar ul li.active-menu::after {
+/* 기본 상태: 밑줄 없음 */
+.navbar .navbar-menu li::after {
   content: "";
   position: absolute;
   bottom: -15px;
   left: 0;
-  width: 100%;
+  width: 0; /* 초기 width 0 */
   height: 3px;
+  background-color: transparent; /* 초기에는 색 없음 */
+  transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
 }
 
-.navbar ul li a {
+/* 활성화된 메뉴 밑줄 */
+.navbar .navbar-menu li.menu-all.active-menu::after {
+  width: 100%;
+  background-color: #fc3c76;
+}
+.navbar .navbar-menu li.menu-top.active-menu::after {
+  width: 100%;
+  background-color: #f5d02b;
+}
+.navbar .navbar-menu li.menu-find.active-menu::after {
+  width: 100%;
+  background-color: #219c90;
+}
+
+/* 호버 시 밑줄 왼쪽 → 오른쪽 확장 */
+.navbar .navbar-menu li:hover::after {
+  width: 100%; /* 왼쪽에서 오른쪽으로 확장 */
+}
+
+.navbar .navbar-menu li.menu-all:hover::after {
+  background-color: #fc3c76;
+}
+.navbar .navbar-menu li.menu-top:hover::after {
+  background-color: #f5d02b;
+}
+.navbar .navbar-menu li.menu-find:hover::after {
+  background-color: #219c90;
+}
+
+.navbar .navbar-menu li a {
   text-decoration: none;
   color: black;
   white-space: nowrap; /* 텍스트 줄 바꿈 방지 */
 }
 
-.navbar ul li a:hover {
-  color: #219c90;
-}
-
-.navbar .navbar-search {
+.navbar .navbar-sidemenu {
   display: flex;
   align-items: center;
-  margin-left: auto;
-  gap: 10px;
+  height: 100%;
+  gap: 30px;
+  margin-top: 30px;
+  cursor: pointer;
 }
-.navbar .navbar-search .navbar-input {
-  width: 300px;
-  height: 30px;
-}
-@media (max-width: 480px) {
-  .navbar ul {
-    gap: 20px;
-  }
-}
-@media (max-width: 600px) {
-  .navbar {
-    top: 60px;
-    justify-content: center;
-  }
-  .navbar ul {
-    gap: 40px; /* 더 작은 화면에서 간격 줄이기 */
-    justify-content: center;
-    padding: 0;
-  }
-
-  .navbar .navbar-search {
-    display: none;
-  }
+.navbar .navbar-sidemenu li:hover {
+  color: #219c90;
+  transition: color 0.3s ease-in-out;
 }
 
-@media (max-width: 1000px) {
-  .navbar .navbar-search {
+@media screen and (max-width: 1000px) {
+  .navbar .navbar-menu {
     display: none;
   }
 }

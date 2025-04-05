@@ -9,7 +9,6 @@ import Button from "../components/Button";
 import "./mypage.css";
 
 function MyPage() {
-  const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
   const [activeTab, setActiveTab] = useState("myMeme");
   const { username } = useParams();
   const { authState } = useAuth();
@@ -41,7 +40,6 @@ function MyPage() {
         return (
           <MemeGrid
             memes={memes}
-            fileBaseUrl={fileBaseUrl}
             isProfile={true}
             username={username}
           />
@@ -55,7 +53,6 @@ function MyPage() {
       return (
         <MemeGrid
           memes={memes}
-          fileBaseUrl={fileBaseUrl}
           isProfile={true}
           username={username}
         />

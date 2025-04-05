@@ -11,10 +11,9 @@ import FindMemeDetail from "./pages/FindMemeDetail";
 import FindMemeEdit from "./pages/FindMemeEdit";
 import Admin from "./pages/Admin";
 import TopMeme from "./pages/TopMeme";
-import Header from "./components/Header";
 import Navbar from "./components/Navbar";
+import BottomNavbar from "./components/BottomNavbar";
 //import PrivateRoute from "./components/PrivateRoute";
-import Profile from "./components/Profile";
 import "./App.css";
 import MyPage from "./pages/MyPage";
 
@@ -23,29 +22,31 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <div className="App">
-          <Header />
           <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/uploadmeme" element={<UploadMeme />} />
-            <Route path="/meme/:id" element={<MemeDetail />} />
-            <Route path="/findmeme" element={<FindMeme />} />
-            <Route path="/findmemepost" element={<FindMemePost />} />
-            <Route path="/findmeme/:id" element={<FindMemeDetail />} />
-            <Route path="/findmeme/edit/:id" element={<FindMemeEdit />} />
-            <Route path="/users/:username" element={<MyPage />} />
-            <Route path="/topmeme" element={<TopMeme />} />
-            {/* <Route
-              path="/admin"
-              element={
-                <PrivateRoute>
-                  <Admin />
-                </PrivateRoute>
-              }
-            /> */}
-          </Routes>
+          <div className="main-content">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/uploadmeme" element={<UploadMeme />} />
+              <Route path="/meme/:id" element={<MemeDetail />} />
+              <Route path="/findmeme" element={<FindMeme />} />
+              <Route path="/findmemepost" element={<FindMemePost />} />
+              <Route path="/findmeme/:id" element={<FindMemeDetail />} />
+              <Route path="/findmeme/edit/:id" element={<FindMemeEdit />} />
+              <Route path="/users/:username" element={<MyPage />} />
+              <Route path="/topmeme" element={<TopMeme />} />
+              {/* <Route
+                path="/admin"
+                element={
+                  <PrivateRoute>
+                    <Admin />
+                  </PrivateRoute>
+                }
+              /> */}
+            </Routes>
+            <BottomNavbar />
+          </div>
         </div>
       </BrowserRouter>
     </AuthProvider>

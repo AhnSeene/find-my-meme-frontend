@@ -96,16 +96,21 @@ function FindMeme() {
   return (
     <div className="findmeme">
       <div className="findmeme-btn">
-        <button onClick={handleFind} className={isFindActive ? "active" : ""}>
-          <CgSearch className="icon" size={32} /> 찾아줘
-        </button>
-        <button onClick={handleFound} className={!isFindActive ? "active" : ""}>
-          <CgSearchFound className="icon" size={32} /> 찾았다
+        <div className="findmeme-btn-left">
+          <button onClick={handleFind} className={isFindActive ? "active" : ""}>
+            <CgSearch className="icon" size={32} /> 찾아줘
+          </button>
+          <button
+            onClick={handleFound}
+            className={!isFindActive ? "active" : ""}
+          >
+            <CgSearchFound className="icon" size={32} /> 찾았다
+          </button>
+        </div>
+        <button className="findmeme-post-btn" onClick={handlePost}>
+          글 등록
         </button>
       </div>
-      <button className="findmeme-post-btn" onClick={handlePost}>
-        글 등록
-      </button>
       {loading && <p>Loading...</p>}
       {isFindActive ? (
         <div className="findmeme-posts">
@@ -146,7 +151,6 @@ function FindMeme() {
           )}
         </div>
       )}
-      {/* 🟢 페이지네이션을 각 상태에 맞게 변경 */}
       {(isFindActive ? findTotalPages : foundTotalPages) > 1 && !loading && (
         <div className="pagination">
           {Array.from(

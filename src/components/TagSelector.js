@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import api from "../contexts/api";
-import "../styles/common.css";
 
 function TagSelector({ selectedSubTags, setSelectedSubTags }) {
   const [tags, setTags] = useState([]);
-  const [selectedParentTag, setSelectedParentTag] = useState("");
+  const [currentSubTags, setCurrentSubTags] = useState([]);
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -18,20 +17,9 @@ function TagSelector({ selectedSubTags, setSelectedSubTags }) {
     fetchTags();
   }, []);
 
-  useEffect(() => {
-    if (tags.length > 0) {
-      const parentTag = tags.find((tag) =>
-        tag.subTags.some((subTag) => selectedSubTags.includes(subTag.id))
-      );
-      setSelectedParentTag(parentTag ? parentTag.parentTag : "");
-    }
-  }, [tags, selectedSubTags]);
-
-  const currentSubTags =
-    tags.find((tag) => tag.parentTag === selectedParentTag)?.subTags || [];
-
   const handleParentTagChange = (e) => {
-    setSelectedParentTag(e.target.value);
+    const categoryTag = tags.find((tag) => tag.parentTag === e.target.value);
+    setCurrentSubTags(categoryTag ? categoryTag.subTags : []);
   };
 
   const handleSubTagClick = (subTagId) => {
@@ -47,9 +35,10 @@ function TagSelector({ selectedSubTags, setSelectedSubTags }) {
   };
 
   return (
-    <div className="findMemePost-tag">
-      <div className="findMemePost-tag-top">
-        <select value={selectedParentTag} onChange={handleParentTagChange}>
+    <div className="tagselector">
+      <div className="tagselector-top">
+        <label htmlFor="tag-category" />
+        <select id="tag-category" onChange={handleParentTagChange}>
           <option value="">태그 카테고리를 선택하세요</option>
           {tags.map((tag) => (
             <option key={tag.id} value={tag.parentTag}>
@@ -78,7 +67,7 @@ function TagSelector({ selectedSubTags, setSelectedSubTags }) {
           </div>
         )}
       </div>
-      {selectedParentTag && (
+      {currentSubTags.length > 0 && (
         <div className="tag-buttons">
           {currentSubTags.map((subTag) => (
             <button
