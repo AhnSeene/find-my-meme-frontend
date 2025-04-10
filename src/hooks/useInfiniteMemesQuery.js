@@ -27,7 +27,7 @@ const useInfiniteMemesQuery = (
 
   const { data, fetchNextPage, hasNextPage, isLoading, isFetching, error } =
     useInfiniteQuery({
-      queryKey: ["memes"],
+      queryKey: ["memes", { selectedSubTags, mediaType, isProfile, username }],
       queryFn: fetchMemes,
       getNextPageParam: (lastPage) => lastPage.nextPage,
     });
