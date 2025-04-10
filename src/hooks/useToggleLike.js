@@ -1,8 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../contexts/api";
 import { useAuth } from "../contexts/AuthContext";
-const useToggleLike = () => {
-  const {authState}=useAuth()
+const useToggleLike = ({
+  selectedSubTags = [],
+  mediaType = "",
+  isProfile = false,
+  username,
+}) => {
+  const { authState } = useAuth();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ memeId, isLiked }) => {
@@ -24,12 +29,15 @@ const useToggleLike = () => {
       }
     },
     onMutate: async ({ memeId, isLiked }) => {
-      const queryKey = ["memes"];
+      const queryKey = [
+        "memes",
+        { selectedSubTags, mediaType, isProfile, username },
+      ];
       console.log(queryKey);
 
       // 이전 데이터 가져오기
       const previousData = queryClient.getQueryData(queryKey);
-console.log(previousData)
+      console.log(previousData);
       queryClient.setQueryData(queryKey, (oldData) => {
         console.log("oldData.pages:", oldData.pages);
         if (!oldData) return oldData;
@@ -39,9 +47,9 @@ console.log(previousData)
           pages: oldData.pages.map((page) => ({
             ...page,
             content: page.content.map((meme) => {
-              console.log("meme.id :",meme.id, "memeId :", memeId)
+              console.log("meme.id :", meme.id, "memeId :", memeId);
               if (meme.id === memeId) {
-                console.log("좋아요 찍혀야됨..")
+                console.log("좋아요 찍혀야됨..");
                 return {
                   ...meme,
                   isLiked: !isLiked, // 반전된 isLiked 상태
