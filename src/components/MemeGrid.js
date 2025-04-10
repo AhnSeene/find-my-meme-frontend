@@ -7,9 +7,14 @@ import { IoMdDownload } from "react-icons/io";
 import useToggleLike from "../hooks/useToggleLike";
 import "./MemeGrid.css";
 
-function MemeGrid({memes}) {
+function MemeGrid({ memes, selectedSubTags, mediaType, isProfile, username }) {
   const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
-  const { mutate } = useToggleLike();
+  const { mutate } = useToggleLike({
+    selectedSubTags,
+    mediaType,
+    isProfile,
+    username,
+  });
 
   const [useMp4Map, setUseMp4Map] = useState({}); // 각 밈의 MP4 사용 여부 관리
   useEffect(() => {
