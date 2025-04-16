@@ -9,6 +9,7 @@ import { AiFillLike } from "react-icons/ai";
 import { GoHeart, GoHeartFill } from "react-icons/go";
 import MemeSwiper from "../components/MemeSwiper";
 import { useAuth } from "../contexts/AuthContext";
+import { toast } from "react-toastify";
 import api from "../contexts/api";
 import "./memedetail.css";
 
@@ -164,7 +165,7 @@ function MemeDetail() {
     const currentUrl = window.location.href;
     navigator.clipboard
       .writeText(currentUrl)
-      .then(() => alert("Link copied to clipboard!"))
+      .then(() => toast.success("링크가 복사되었습니다!"))
       .catch((err) => console.error("Failed to copy link: ", err));
   }
 
