@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import logo from "../assets/logo.png";
+import { toast } from "react-toastify";
 import { triggerLogout } from "../contexts/api";
 import "./Header.css";
 
@@ -19,6 +20,10 @@ function Header() {
   };
 
   const handleUpload = () => {
+    if (!authState.isLoggedIn) {
+      toast.warning("로그인이 필요합니다!");
+      return;
+    }
     navigate("/uploadmeme", { replace: true });
   };
 
