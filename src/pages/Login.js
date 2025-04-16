@@ -62,16 +62,13 @@ function Login() {
         navigate("/", { replace: true });
       }
     } catch (error) {
-      if (error.response) {
-        if (error.response.status === 401) {
-          setErrorMessage("사용자 이름 또는 비밀번호가 잘못되었습니다.");
-        } else {
-          setErrorMessage("로그인 중 문제가 발생했습니다. 다시 시도해주세요.");
-        }
+      if (
+        error.response?.status == 401 &&
+        error.response?.data?.code === "AUTH_INVALID_ID_CREDENTIALS"
+      ) {
+        setErrorMessage(error.response?.data?.message);
       } else {
-        setErrorMessage(
-          "네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요."
-        );
+        setErrorMessage(error.response?.data?.message);
       }
       setIsModalOpen(true);
 
