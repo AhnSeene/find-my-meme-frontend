@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "../contexts/api";
+import { toast } from "react-toastify";
+import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./findmeme.css";
@@ -20,6 +22,7 @@ const formatDate = (dateString) => {
 };
 
 function FindMeme() {
+  const { authState } = useAuth();
   const navigate = useNavigate();
   const [findPost, setFindPost] = useState([]);
   const [foundPost, setFoundPost] = useState([]);
@@ -90,6 +93,10 @@ function FindMeme() {
   };
 
   const handlePost = () => {
+    if (!authState.isLoggedIn) {
+      toast.warning("로그인이 필요합니다!");
+      return;
+    }
     navigate("/findmemepost", { replace: true });
   };
 

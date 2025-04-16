@@ -1,5 +1,6 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
+import { ToastContainer } from "react-toastify";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Home from "./pages/Home";
@@ -15,6 +16,7 @@ import Navbar from "./components/Navbar";
 import BottomNavbar from "./components/BottomNavbar";
 //import PrivateRoute from "./components/PrivateRoute";
 import "./App.css";
+import "react-toastify/dist/ReactToastify.css";
 import MyPage from "./pages/MyPage";
 
 function App() {
@@ -24,6 +26,7 @@ function App() {
         <div className="App">
           <Navbar />
           <div className="main-content">
+            <ToastContainer autoClose={3000} />
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/signup" element={<SignUp />} />

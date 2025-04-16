@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { toast } from "react-toastify";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { IoCloudUploadOutline } from "react-icons/io5";
@@ -8,10 +9,10 @@ import { triggerLogout } from "../contexts/api";
 import "./Navbar.css";
 
 function Navbar() {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const location = useLocation(); // 현재 경로 가져오기
   const { authState } = useAuth();
-  const [isDropdownVisible,setIsDropdownVisible]=useState(false);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const getActiveClass = (path) => {
     return location.pathname === path ? "active-menu" : "";
   };
@@ -20,34 +21,38 @@ function Navbar() {
     window.location.href = "/"; //새로고침하면서 홈으로 이동
   };
 
-  const handleUpload=()=>{
-    navigate("/uploadmeme",{ replace: true })
-  }
+  const handleUpload = () => {
+    if (!authState.isLoggedIn) {
+      toast.warning("로그인이 필요합니다!");
+      return;
+    }
+    navigate("/uploadmeme", { replace: true });
+  };
 
-  const handleMyPageClick=()=>{
-    if(authState.isLoggedIn){
+  const handleMyPageClick = () => {
+    if (authState.isLoggedIn) {
       navigate(`/users/${authState.username}`, { replace: true });
     } else {
-      navigate('/login')
+      navigate("/login");
     }
-  }
+  };
 
-  const handleMouseEnter=()=>{
+  const handleMouseEnter = () => {
     if (authState.isLoggedIn) {
-      setIsDropdownVisible(true); 
+      setIsDropdownVisible(true);
     }
-  }
+  };
 
-  const handleMouseLeave=()=>{
+  const handleMouseLeave = () => {
     if (authState.isLoggedIn) {
       setIsDropdownVisible(false); // 마우스가 나가면 드롭다운 숨기기
     }
-  }
+  };
 
-  const handleLogout=()=>{
+  const handleLogout = () => {
     triggerLogout();
     navigate("/", { replace: true });
-  }
+  };
 
   return (
     <div className="navbar">
@@ -72,14 +77,15 @@ function Navbar() {
       </ul>
       <ul className="navbar-sidemenu">
         <li onClick={handleUpload}>
-          <IoCloudUploadOutline style={{fontSize:'24px'}}/>
+          <IoCloudUploadOutline style={{ fontSize: "24px" }} />
         </li>
-        <li className="mypage"
-            onClick={handleMyPageClick}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
+        <li
+          className="mypage"
+          onClick={handleMyPageClick}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
-          <GoPerson style={{fontSize:'24px'}} />
+          <GoPerson style={{ fontSize: "24px" }} />
           {authState.isLoggedIn && isDropdownVisible && (
             <div className="dropdown-menu">
               <ul>
