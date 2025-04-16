@@ -10,7 +10,12 @@ import "./memeSlider.css";
 
 const MemeSlider = ({ memes }) => {
   const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
-  const { mutate } = useToggleLike();
+  const { mutate } = useToggleLike({
+    selectedSubTags: [],
+    mediaType: "memeSlider",
+    isProfile: false,
+    username: "",
+  });
   const handleLikeClick = (memeId, isLiked) => {
     mutate({ memeId, isLiked });
     console.log("하트 눌림");
