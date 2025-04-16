@@ -14,6 +14,7 @@ import "./memedetail.css";
 
 function MemeDetail() {
   const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
+  const apiUrl = process.env.REACT_APP_API_URL;
   const { authState } = useAuth();
   const { id } = useParams();
   const [meme, setMeme] = useState(null);
@@ -71,32 +72,7 @@ function MemeDetail() {
   };
 
   const handleDownload = async () => {
-    try {
-      const response = await api.get(`/meme-posts/${meme.id}/download`, {
-        responseType: "blob",
-      });
-
-      if (response.status !== 200) {
-        throw new Error("Network response was not ok");
-      }
-      const disposition = response.headers["content-disposition"];
-      const filename =
-        disposition && disposition.match(/filename="(.+)"/)
-          ? disposition.match(/filename="(.+)"/)[1]
-          : "downloaded-file";
-
-      const blob = response.data;
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "findmymeme-" + filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Image download failed:", error);
-    }
+    window.location.href = `${apiUrl}/v1/meme-posts/${meme.id}/download`;
   };
 
   const handleLikeToggle = async () => {
