@@ -21,25 +21,24 @@ import MyPage from "./pages/MyPage";
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <div className="App">
-          <Navbar />
-          <div className="main-content">
-            <ToastContainer autoClose={3000} />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/uploadmeme" element={<UploadMeme />} />
-              <Route path="/meme/:id" element={<MemeDetail />} />
-              <Route path="/findmeme" element={<FindMeme />} />
-              <Route path="/findmemepost" element={<FindMemePost />} />
-              <Route path="/findmeme/:id" element={<FindMemeDetail />} />
-              <Route path="/findmeme/edit/:id" element={<FindMemeEdit />} />
-              <Route path="/users/:username" element={<MyPage />} />
-              <Route path="/topmeme" element={<TopMeme />} />
-              {/* <Route
+    <BrowserRouter>
+      <div className="App">
+        <Navbar />
+        <div className="main-content">
+          <ToastContainer autoClose={3000} />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/uploadmeme" element={<UploadMeme />} />
+            <Route path="/meme/:id" element={<MemeDetail />} />
+            <Route path="/findmeme" element={<FindMeme />} />
+            <Route path="/findmemepost" element={<FindMemePost />} />
+            <Route path="/findmeme/:id" element={<FindMemeDetail />} />
+            <Route path="/findmeme/edit/:id" element={<FindMemeEdit />} />
+            <Route path="/users/:username" element={<MyPage />} />
+            <Route path="/topmeme" element={<TopMeme />} />
+            {/* <Route
                 path="/admin"
                 element={
                   <PrivateRoute>
@@ -47,12 +46,11 @@ function App() {
                   </PrivateRoute>
                 }
               /> */}
-            </Routes>
-            <BottomNavbar />
-          </div>
+          </Routes>
+          <BottomNavbar />
         </div>
-      </BrowserRouter>
-    </AuthProvider>
+      </div>
+    </BrowserRouter>
   );
 }
 
