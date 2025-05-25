@@ -1,13 +1,15 @@
 .topmeme {
   display: flex;
-  width: 100%;
+  width: 80%;
+  margin: 0 auto;
   padding: 20px;
   box-sizing: border-box;
-  gap: 20px;
+  gap: 40px;
   margin-top: 50px;
 }
 .topmeme .topmeme-categories {
-  flex: 1;
+  flex: 0.8;
+  min-width: 180px;
 }
 .topmeme .topmeme-categories ul {
   display: flex;
@@ -55,4 +57,11 @@
   height: 300px;
   font-size: 16px;
   color: #777;
+}
+
+@media (max-width: 1000px) {
+  .topmeme {
+    display: flex;
+    flex-direction: column;
+  }
 }
