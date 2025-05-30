@@ -1,5 +1,5 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import { AuthProvider } from "./contexts/AuthContext";
+//import { AuthProvider } from "./contexts/AuthContext";
 import { ToastContainer } from "react-toastify";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";

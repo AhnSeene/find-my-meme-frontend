@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { BiShow } from "react-icons/bi";
 import { BiHide } from "react-icons/bi";
@@ -7,6 +6,7 @@ import { IoMdCloseCircle } from "react-icons/io";
 import Button from "../components/Button";
 import api from "../contexts/api";
 import Modal from "react-modal";
+import useAuthStore from "../store/useAuthStore";
 import "./Login.css";
 
 function Login() {
@@ -16,7 +16,7 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const { login } = useAuth(); // login 함수 가져오기
+  const { login } = useAuthStore(); // login 함수 가져오기
   const navigate = useNavigate();
 
   useEffect(() => {

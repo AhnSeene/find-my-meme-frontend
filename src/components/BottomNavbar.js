@@ -4,10 +4,10 @@ import { IoSearch } from "react-icons/io5";
 import { AiFillHome } from "react-icons/ai";
 import { FiThumbsUp } from "react-icons/fi";
 import "./bottomNavbar.css";
-import { useAuth } from "../contexts/AuthContext";
+import useAuthStore from "../store/useAuthStore";
 
 function BottomNavbar() {
-  const { authState } = useAuth();
+  const usernameFromStore = useAuthStore((state) => state.username);
   return (
     <div className="bottomnavbar">
       <ul>
@@ -30,7 +30,7 @@ function BottomNavbar() {
           </Link>
         </li>
         <li>
-          <Link to={`/users/${authState.username}`}>
+          <Link to={`/users/${usernameFromStore}`}>
             <CgProfile className="icon" />
             <span>마이페이지</span>
           </Link>

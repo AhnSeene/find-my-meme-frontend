@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { AuthProvider } from "./contexts/AuthContext";
 
 // React Query
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -14,9 +13,7 @@ const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
+    <App />
     {/* React Query Devtools: 개발 중에만 사용 */}
     <ReactQueryDevtools initialIsOpen={false} />
   </QueryClientProvider>

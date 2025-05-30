@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import useAuthStore from "../store/useAuthStore";
 import Profile from "../components/Profile";
 import MyInfo from "../components/MyInfo";
 import MemeGrid from "../components/MemeGrid";
@@ -11,12 +11,15 @@ import "./mypage.css";
 function MyPage() {
   const [activeTab, setActiveTab] = useState("myMeme");
   const { username } = useParams();
-  const { authState } = useAuth();
+
   const navigate = useNavigate();
 
   // 현재 페이지가 내 프로필인지 다른 사람의 프로필인지 확인
-  const isOwnProfile = authState.username === username;
-  console.log("로그인된 계정", authState.username);
+  const usernameFromStore = useAuthStore((state) => state.username);
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+
+  const isOwnProfile = usernameFromStore === username;
+  console.log("로그인된 계정", usernameFromStore);
   console.log("지금 user", username);
   console.log(isOwnProfile);
   const { memes, fetchNextPage, hasNextPage, isLoading } =
@@ -28,35 +31,23 @@ function MyPage() {
     );
 
   useEffect(() => {
-    if (!username && authState.isLoggedIn) {
+    if (!isLoggedIn) {
       navigate("/login");
     }
-  }, [username, authState.isLoggedIn, navigate]);
+  }, [isLoggedIn, navigate]);
 
   const renderContent = () => {
     // 로그인된 사용자의 경우 탭에 따라 콘텐츠 렌더링
     if (isOwnProfile) {
       if (activeTab === "myMeme") {
-        return (
-          <MemeGrid
-            memes={memes}
-            isProfile={true}
-            username={username}
-          />
-        );
+        return <MemeGrid memes={memes} isProfile={true} username={username} />;
       } else if (activeTab === "myInfo") {
         return <MyInfo />;
       } else if (activeTab === "postManagement") {
         return <div>게시글 관리 컴포넌트</div>;
       }
     } else {
-      return (
-        <MemeGrid
-          memes={memes}
-          isProfile={true}
-          username={username}
-        />
-      );
+      return <MemeGrid memes={memes} isProfile={true} username={username} />;
     }
   };
 

@@ -1,17 +1,19 @@
 import { useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-toastify";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { GoPerson } from "react-icons/go";
 import { triggerLogout } from "../contexts/api";
+import useAuthStore from "../store/useAuthStore";
 import "./Navbar.css";
 
 function Navbar() {
   const navigate = useNavigate();
   const location = useLocation(); // 현재 경로 가져오기
-  const { authState } = useAuth();
+  const usernameFromStore = useAuthStore((state) => state.username);
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const getActiveClass = (path) => {
     return location.pathname === path ? "active-menu" : "";
@@ -22,7 +24,7 @@ function Navbar() {
   };
 
   const handleUpload = () => {
-    if (!authState.isLoggedIn) {
+    if (!isLoggedIn) {
       toast.warning("로그인이 필요합니다!");
       return;
     }
@@ -30,21 +32,22 @@ function Navbar() {
   };
 
   const handleMyPageClick = () => {
-    if (authState.isLoggedIn) {
-      navigate(`/users/${authState.username}`, { replace: true });
+    if (isLoggedIn) {
+      navigate(`/users/${usernameFromStore}`, { replace: true });
     } else {
+      console.log("로그인안됐는데?");
       navigate("/login");
     }
   };
 
   const handleMouseEnter = () => {
-    if (authState.isLoggedIn) {
+    if (isLoggedIn) {
       setIsDropdownVisible(true);
     }
   };
 
   const handleMouseLeave = () => {
-    if (authState.isLoggedIn) {
+    if (isLoggedIn) {
       setIsDropdownVisible(false); // 마우스가 나가면 드롭다운 숨기기
     }
   };
@@ -86,7 +89,7 @@ function Navbar() {
           onMouseLeave={handleMouseLeave}
         >
           <GoPerson style={{ fontSize: "24px" }} />
-          {authState.isLoggedIn && isDropdownVisible && (
+          {isLoggedIn && isDropdownVisible && (
             <div className="dropdown-menu">
               <ul>
                 <li onClick={handleMyPageClick}>나의 밈</li>
