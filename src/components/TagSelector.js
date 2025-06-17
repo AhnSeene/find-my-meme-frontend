@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
 import api from "../contexts/api";
+import useMemesFilterStore from "../store/useMemesFilterStore";
+import "./tagSelector.css";
 
-function TagSelector({ selectedSubTags, setSelectedSubTags }) {
+function TagSelector() {
   const [tags, setTags] = useState([]);
-  const [currentSubTags, setCurrentSubTags] = useState([]);
-
+  const [subTags, setSubTags] = useState([]);
+  const { selectedSubTags, setSelectedSubTags } = useMemesFilterStore();
   useEffect(() => {
     const fetchTags = async () => {
       try {
         const response = await api.get("/tags");
         setTags(response.data.data);
+        console.log(tags);
       } catch (error) {
         console.error("Failed to load tags:", error);
       }
@@ -19,19 +22,17 @@ function TagSelector({ selectedSubTags, setSelectedSubTags }) {
 
   const handleParentTagChange = (e) => {
     const categoryTag = tags.find((tag) => tag.parentTag === e.target.value);
-    setCurrentSubTags(categoryTag ? categoryTag.subTags : []);
+    setSubTags(categoryTag ? categoryTag.subTags : []);
   };
 
   const handleSubTagClick = (subTagId) => {
     if (!selectedSubTags.includes(subTagId) && selectedSubTags.length < 3) {
-      setSelectedSubTags((prevSelected) => [...prevSelected, subTagId]);
+      setSelectedSubTags([...selectedSubTags, subTagId]);
     }
   };
 
   const handleSubTagRemove = (subTagId) => {
-    setSelectedSubTags((prevSelected) =>
-      prevSelected.filter((id) => id !== subTagId)
-    );
+    setSelectedSubTags(selectedSubTags.filter((id) => id !== subTagId));
   };
 
   return (
@@ -67,9 +68,9 @@ function TagSelector({ selectedSubTags, setSelectedSubTags }) {
           </div>
         )}
       </div>
-      {currentSubTags.length > 0 && (
+      {subTags.length > 0 && (
         <div className="tag-buttons">
-          {currentSubTags.map((subTag) => (
+          {subTags.map((subTag) => (
             <button
               key={subTag.id}
               type="button"

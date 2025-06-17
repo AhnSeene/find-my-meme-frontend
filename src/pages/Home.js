@@ -1,23 +1,17 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import TagSelector from "../components/TagSelector";
 import MemeGrid from "../components/MemeGrid";
-import useInfiniteMemesQuery from "../hooks/useInfiniteMemesQuery";
 import "./home.css";
+import useHomeMemesQuery from "../hooks/useHomeMemesQuery";
+import useMemesFilterStore from "../store/useMemesFilterStore";
 
 function Home() {
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [selectedSubTags, setSelectedSubTags] = useState([]);
-  const [mediaType, setMediaType] = useState("");
-
-  // 기본값 설정
-  const isProfile = false;
-  const username = "";
-
-  const { memes, fetchNextPage, hasNextPage, isLoading } =
-    useInfiniteMemesQuery(selectedSubTags, isProfile, username, mediaType);
+  const { selectedSubTags, setSelectedSubTags, mediaType, setMediaType } =
+    useMemesFilterStore();
+  const { memes, fetchNextPage, hasNextPage, isLoading } = useHomeMemesQuery();
 
   const observerRef = useRef(null);
-
+  console.log("selectedSubTags:", selectedSubTags);
   const handleObserver = useCallback(
     (entries) => {
       const [entry] = entries;
@@ -44,57 +38,36 @@ function Home() {
     };
   }, [handleObserver]);
 
-  const toggleFilter = () => {
-    setIsFilterOpen((prev) => !prev);
-  };
-
   return (
     <div className="home">
-      <button
-        className={`filter-button ${isFilterOpen ? "active" : ""}`}
-        onClick={toggleFilter}
-      >
-        필터 <span className="arrow">▼</span>
-      </button>
-      {isFilterOpen && (
-        <div className={`filter-pannel ${isFilterOpen ? "active" : ""}`}>
-          <TagSelector
-            selectedSubTags={selectedSubTags}
-            setSelectedSubTags={setSelectedSubTags}
-          />
-          <div className="mediaTypeSelect">
-            <button
-              type="button"
-              onClick={() => setMediaType("")}
-              className={mediaType == "" ? "active" : ""}
-            >
-              전체
-            </button>
-            <button
-              type="button"
-              onClick={() => setMediaType("ANIMATED")}
-              className={mediaType == "ANIMATED" ? "active" : ""}
-            >
-              GIF
-            </button>
-            <button
-              type="button"
-              onClick={() => setMediaType("STATIC")}
-              className={mediaType == "STATIC" ? "active" : ""}
-            >
-              사진
-            </button>
-          </div>
+      <div className="filter">
+        <TagSelector />
+        <div className="mediaTypeSelect">
+          <button
+            type="button"
+            onClick={() => setMediaType("")}
+            className={mediaType == "" ? "active" : ""}
+          >
+            전체
+          </button>
+          <button
+            type="button"
+            onClick={() => setMediaType("ANIMATED")}
+            className={mediaType == "ANIMATED" ? "active" : ""}
+          >
+            GIF
+          </button>
+          <button
+            type="button"
+            onClick={() => setMediaType("STATIC")}
+            className={mediaType == "STATIC" ? "active" : ""}
+          >
+            사진
+          </button>
         </div>
-      )}
+      </div>
 
-      <MemeGrid
-        memes={memes}
-        selectedSubTags={selectedSubTags}
-        isProfile={isProfile}
-        username={username}
-        mediaType={mediaType}
-      />
+      <MemeGrid memes={memes} isProfile={false} />
 
       {isLoading && <p>Loading...</p>}
       <div ref={observerRef} style={{ height: "1px" }} />
