@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { GoHeartFill, GoHeart } from "react-icons/go";
 import { GrFormView } from "react-icons/gr";
 import { IoMdDownload } from "react-icons/io";
-import useToggleLike from "../hooks/useToggleLike";
+import useToggleLike from "../../hooks/useToggleLike";
 import "./MemeGrid.css";
 
 function MemeGrid({ memes, isProfile, username }) {

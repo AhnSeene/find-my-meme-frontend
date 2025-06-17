@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/useAuthStore";
-import Profile from "../../components/Profile";
-import MyInfo from "../../components/MyInfo";
-import MemeGrid from "../../components/MemeGrid";
-import Button from "../../components/Button";
+import Profile from "../../components/myPage/Profile";
+import MyInfo from "../../components/myPage/MyInfo";
+import MemeGrid from "../../components/meme/MemeGrid";
+import Button from "../../components/common/Button";
 import "./mypage.css";
 import useProfileMemesQuery from "../../hooks/useProfileMemesQuery";
 

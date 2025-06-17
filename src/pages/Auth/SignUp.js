@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { BiShow } from "react-icons/bi";
 import { BiHide } from "react-icons/bi";
 import { IoMdCloseCircle } from "react-icons/io";
-import Button from "../../components/Button";
+import Button from "../../components/common/Button";
 import Modal from "react-modal";
 import api from "../../contexts/api";
 import "./signup.css";

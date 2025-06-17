@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import TagSelector from "../../components/TagSelector";
+import TagSelector from "../../components/tag/TagSelector";
 import api from "../../contexts/api";
 
 function FindMemeEdit() {

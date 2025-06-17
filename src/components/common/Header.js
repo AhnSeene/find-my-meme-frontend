@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import logo from "../assets/logo.png";
 import { toast } from "react-toastify";
-import { triggerLogout } from "../contexts/api";
+import { triggerLogout } from "../../contexts/api";
 import "./Header.css";
 
 // 맨 위 Header

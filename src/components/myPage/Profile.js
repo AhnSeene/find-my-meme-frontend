@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./profile.css"; // 프로필 스타일
-import api from "../contexts/api";
+import api from "../../contexts/api";
 import { FiPlusCircle } from "react-icons/fi";
 
 function Profile({ username, isOwnProfile }) {

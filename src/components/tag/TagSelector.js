@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import api from "../contexts/api";
-import useMemesFilterStore from "../store/useMemesFilterStore";
+import api from "../../contexts/api";
+import useMemesFilterStore from "../../store/useMemesFilterStore";
 import "./tagSelector.css";
 
 function TagSelector() {

@@ -4,7 +4,7 @@ import { IoSearch } from "react-icons/io5";
 import { AiFillHome } from "react-icons/ai";
 import { FiThumbsUp } from "react-icons/fi";
 import "./bottomNavbar.css";
-import useAuthStore from "../store/useAuthStore";
+import useAuthStore from "../../store/useAuthStore";
 
 function BottomNavbar() {
   const usernameFromStore = useAuthStore((state) => state.username);

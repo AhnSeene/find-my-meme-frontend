@@ -7,7 +7,7 @@ import { FaFacebookSquare } from "react-icons/fa";
 import { FaLink } from "react-icons/fa";
 import { AiFillLike } from "react-icons/ai";
 import { GoHeart, GoHeartFill } from "react-icons/go";
-import MemeSwiper from "../../components/MemeSwiper";
+import MemeSwiper from "../../components/meme/MemeSwiper";
 import { toast } from "react-toastify";
 import api from "../../contexts/api";
 import "./memedetail.css";

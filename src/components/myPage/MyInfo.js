@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import api from "../contexts/api";
+import api from "../../contexts/api";
 
 function MyInfo() {
   const [username, setUsername] = useState("");

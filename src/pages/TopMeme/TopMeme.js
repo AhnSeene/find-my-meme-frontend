@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import MemeSlider from "../../components/MemeSlider";
+import MemeSlider from "../../components/meme/MemeSlider";
 import api from "../../contexts/api";
 import "./TopMeme.css";
 
