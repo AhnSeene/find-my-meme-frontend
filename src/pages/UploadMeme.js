@@ -25,7 +25,7 @@ function UploadMeme() {
       try {
         const response = await api.get("/tags");
         const tagsData = response.data.data;
-
+        console.log("태그응답:", tagsData);
         // 태그 ID와 이름 매핑 생성
         const idToNameMap = tagsData.reduce((acc, tag) => {
           tag.subTags.forEach((subTag) => {
@@ -33,7 +33,7 @@ function UploadMeme() {
           });
           return acc;
         }, {});
-
+        console.log("태그맵:", idToNameMap);
         setTags(tagsData);
         setTagIdToNameMap(idToNameMap);
       } catch (error) {

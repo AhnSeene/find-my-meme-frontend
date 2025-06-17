@@ -1,5 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
+import useAuthStore from "../store/useAuthStore";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -22,7 +23,7 @@ const api = axios.create({
 // 요청 인터셉터
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("jwtToken");
+    const { token } = useAuthStore.getState();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -57,10 +58,13 @@ api.interceptors.response.use(
           originalRequest._retry = true;
           try {
             const res = await api.post("/reissue");
-            localStorage.setItem("jwtToken", res.data.data.accessToken);
+            const newAccessToken = res.data.data.accessToken;
+            useAuthStore
+              .getState()
+              .login(newAccessToken, useAuthStore.getState().username);
             api.defaults.headers.common[
               "Authorization"
-            ] = `Bearer ${res.data.data.accessToken}`;
+            ] = `Bearer ${newAccessToken}`;
             return api(originalRequest);
           } catch (error) {
             toast.error(
