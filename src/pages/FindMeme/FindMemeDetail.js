@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
-import CommentList from "../components/CommentList";
-import CommentForm from "../components/CommentForm";
-import useAuthStore from "../store/useAuthStore";
-import api from "../contexts/api";
+import CommentList from "../../components/CommentList";
+import CommentForm from "../../components/CommentForm";
+import useAuthStore from "../../store/useAuthStore";
+import api from "../../contexts/api";
 import "./findmemedetail.css";
 
 function FindMemeDetail() {

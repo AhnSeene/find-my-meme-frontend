@@ -1,9 +1,9 @@
 import { useEffect, useRef, useCallback } from "react";
-import TagSelector from "../components/TagSelector";
-import MemeGrid from "../components/MemeGrid";
+import TagSelector from "../../components/TagSelector";
+import MemeGrid from "../../components/MemeGrid";
 import "./home.css";
-import useHomeMemesQuery from "../hooks/useHomeMemesQuery";
-import useMemesFilterStore from "../store/useMemesFilterStore";
+import useHomeMemesQuery from "../../hooks/useHomeMemesQuery";
+import useMemesFilterStore from "../../store/useMemesFilterStore";
 
 function Home() {
   const { selectedSubTags, setSelectedSubTags, mediaType, setMediaType } =

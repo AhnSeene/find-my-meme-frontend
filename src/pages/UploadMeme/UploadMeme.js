@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "../contexts/api";
+import api from "../../contexts/api";
 import axios from "axios";
 import "./UploadMeme.css";
 import { useNavigate } from "react-router-dom";

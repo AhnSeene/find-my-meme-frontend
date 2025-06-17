@@ -2,8 +2,8 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import TagSelector from "../components/TagSelector";
-import api from "../contexts/api";
+import TagSelector from "../../components/TagSelector";
+import api from "../../contexts/api";
 
 function FindMemeEdit() {
   const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;

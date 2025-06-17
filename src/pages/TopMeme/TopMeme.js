@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import MemeSlider from "../components/MemeSlider";
-import api from "../contexts/api";
+import MemeSlider from "../../components/MemeSlider";
+import api from "../../contexts/api";
 import "./TopMeme.css";
 
 function TopMeme() {

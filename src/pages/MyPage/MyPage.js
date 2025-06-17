@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import useAuthStore from "../store/useAuthStore";
-import Profile from "../components/Profile";
-import MyInfo from "../components/MyInfo";
-import MemeGrid from "../components/MemeGrid";
-import Button from "../components/Button";
+import useAuthStore from "../../store/useAuthStore";
+import Profile from "../../components/Profile";
+import MyInfo from "../../components/MyInfo";
+import MemeGrid from "../../components/MemeGrid";
+import Button from "../../components/Button";
 import "./mypage.css";
-import useProfileMemesQuery from "../hooks/useProfileMemesQuery";
+import useProfileMemesQuery from "../../hooks/useProfileMemesQuery";
 
 function MyPage() {
   const [activeTab, setActiveTab] = useState("myMeme");
