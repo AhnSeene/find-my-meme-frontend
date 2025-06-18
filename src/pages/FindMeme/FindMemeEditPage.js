@@ -5,7 +5,7 @@ import "react-quill/dist/quill.snow.css";
 import TagSelector from "../../components/tag/TagSelector";
 import api from "../../contexts/api";
 
-function FindMemeEdit() {
+function FindMemeEditPage() {
   const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
   const { state } = useLocation();
   const navigate = useNavigate();
@@ -162,4 +162,4 @@ function FindMemeEdit() {
   );
 }
 
-export default FindMemeEdit;
+export default FindMemeEditPage;

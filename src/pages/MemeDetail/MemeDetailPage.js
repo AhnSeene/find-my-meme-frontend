@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import api from "../../contexts/api";
 import "./MemeDetailPage.css";
 
-function MemeDetail() {
+function MemeDetailPage() {
   const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
   const apiUrl = process.env.REACT_APP_API_URL;
   const { id } = useParams();
@@ -209,4 +209,4 @@ function MemeDetail() {
     </div>
   );
 }
-export default MemeDetail;
+export default MemeDetailPage;

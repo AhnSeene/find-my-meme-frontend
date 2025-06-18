@@ -5,7 +5,7 @@ import "./HomePage.css";
 import useHomeMemesQuery from "../../hooks/useHomeMemesQuery";
 import useMemesFilterStore from "../../store/useMemesFilterStore";
 
-function Home() {
+function HomePage() {
   const { selectedSubTags, setSelectedSubTags, mediaType, setMediaType } =
     useMemesFilterStore();
   const { memes, fetchNextPage, hasNextPage, isLoading } = useHomeMemesQuery();
@@ -75,4 +75,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default HomePage;

@@ -8,7 +8,7 @@ import Modal from "react-modal";
 import api from "../../contexts/api";
 import "./SignUpPage.css";
 
-function SignUp() {
+function SignUpPage() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -390,4 +390,4 @@ function SignUp() {
     </div>
   );
 }
-export default SignUp;
+export default SignUpPage;

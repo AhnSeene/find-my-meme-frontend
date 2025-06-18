@@ -5,7 +5,7 @@ import "./UploadMemePage.css";
 import { useNavigate } from "react-router-dom";
 import { RiFolderUploadFill } from "react-icons/ri";
 
-function UploadMeme() {
+function UploadMemePage() {
   const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
   const [tags, setTags] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -423,4 +423,4 @@ function UploadMeme() {
   );
 }
 
-export default UploadMeme;
+export default UploadMemePage;

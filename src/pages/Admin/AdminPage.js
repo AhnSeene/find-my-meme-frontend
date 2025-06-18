@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import api from "../../contexts/api";
-import "./admin.css";
+import "./AdminPage.css";
 
-function Admin() {
+function AdminPage() {
   const [tags, setTags] = useState([]);
   const [newParentTagName, setNewParentTagName] = useState("");
   const [newSubTags, setNewSubTags] = useState([""]); // 소분류 태그 초기값 빈 문자열 배열
@@ -160,4 +160,4 @@ function Admin() {
   );
 }
 
-export default Admin;
+export default AdminPage;
