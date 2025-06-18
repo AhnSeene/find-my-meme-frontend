@@ -7,7 +7,7 @@ import Button from "../../components/common/Button";
 import api from "../../contexts/api";
 import Modal from "react-modal";
 import useAuthStore from "../../store/useAuthStore";
-import "./Login.css";
+import "./LoginPage.css";
 
 function Login() {
   const [id, setId] = useState("");

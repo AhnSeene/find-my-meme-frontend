@@ -6,7 +6,7 @@ import { IoMdCloseCircle } from "react-icons/io";
 import Button from "../../components/common/Button";
 import Modal from "react-modal";
 import api from "../../contexts/api";
-import "./signup.css";
+import "./SignUpPage.css";
 
 function SignUp() {
   const navigate = useNavigate();

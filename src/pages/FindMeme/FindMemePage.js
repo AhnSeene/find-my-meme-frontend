@@ -3,7 +3,7 @@ import api from "../../contexts/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import "./findmeme.css";
+import "./FindMemePage.css";
 import { CgSearch } from "react-icons/cg";
 import { CgSearchFound } from "react-icons/cg";
 import useAuthStore from "../../store/useAuthStore";
