@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import logo from "../assets/logo.png";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { GoPerson } from "react-icons/go";
-import { triggerLogout } from "../contexts/api";
-import useAuthStore from "../store/useAuthStore";
+import { triggerLogout } from "../../contexts/api";
+import useAuthStore from "../../store/useAuthStore";
+import logo from "../../assets/logo.png";
 import "./Navbar.css";
 
 function Navbar() {

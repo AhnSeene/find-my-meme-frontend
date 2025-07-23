@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import useAuthStore from "../store/useAuthStore";
-import Profile from "../components/Profile";
-import MyInfo from "../components/MyInfo";
-import MemeGrid from "../components/MemeGrid";
-import useInfiniteMemesQuery from "../hooks/useInfiniteMemesQuery";
-import Button from "../components/Button";
+import useAuthStore from "../../store/useAuthStore";
+import Profile from "../../components/myPage/Profile";
+import MyInfo from "../../components/myPage/MyInfo";
+import MemeGrid from "../../components/meme/MemeGrid";
+import Button from "../../components/common/Button";
 import "./mypage.css";
+import useProfileMemesQuery from "../../hooks/useProfileMemesQuery";
 
 function MyPage() {
   const [activeTab, setActiveTab] = useState("myMeme");
@@ -23,13 +23,8 @@ function MyPage() {
   console.log("지금 user", username);
   console.log(isOwnProfile);
   const { memes, fetchNextPage, hasNextPage, isLoading } =
-    useInfiniteMemesQuery(
-      [],
-      true, //isProfile이 true일 때 해당 계정이 올린 밈을 가져옴
-      username,
-      ""
-    );
-
+    useProfileMemesQuery(username);
+  console.log("프로필 밈 :", memes);
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/login");

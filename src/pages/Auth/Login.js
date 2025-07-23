@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { BiShow } from "react-icons/bi";
 import { BiHide } from "react-icons/bi";
 import { IoMdCloseCircle } from "react-icons/io";
-import Button from "../components/Button";
-import api from "../contexts/api";
+import Button from "../../components/common/Button";
+import api from "../../contexts/api";
 import Modal from "react-modal";
-import useAuthStore from "../store/useAuthStore";
+import useAuthStore from "../../store/useAuthStore";
 import "./Login.css";
 
 function Login() {

@@ -1,23 +1,23 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 //import { AuthProvider } from "./contexts/AuthContext";
 import { ToastContainer } from "react-toastify";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
-import Home from "./pages/Home";
-import FindMeme from "./pages/FindMeme";
-import UploadMeme from "./pages/UploadMeme";
-import MemeDetail from "./pages/MemeDetail";
-import FindMemePost from "./pages/FindMemePost";
-import FindMemeDetail from "./pages/FindMemeDetail";
-import FindMemeEdit from "./pages/FindMemeEdit";
-import Admin from "./pages/Admin";
-import TopMeme from "./pages/TopMeme";
-import Navbar from "./components/Navbar";
-import BottomNavbar from "./components/BottomNavbar";
+import Login from "./pages/Auth/Login";
+import SignUp from "./pages/Auth/SignUp";
+import Home from "./pages/Home/Home";
+import FindMeme from "./pages/FindMeme/FindMeme";
+import UploadMeme from "./pages/UploadMeme/UploadMeme";
+import MemeDetail from "./pages/MemeDetail/MemeDetail";
+import FindMemePost from "./pages/FindMeme/FindMemePost";
+import FindMemeDetail from "./pages/FindMeme/FindMemeDetail";
+import FindMemeEdit from "./pages/FindMeme/FindMemeEdit";
+import Admin from "./pages/Admin/Admin";
+import TopMeme from "./pages/TopMeme/TopMeme";
+import MyPage from "./pages/MyPage/MyPage";
+import Navbar from "./components/common/Navbar";
+import BottomNavbar from "./components/common/BottomNavbar";
 //import PrivateRoute from "./components/PrivateRoute";
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
-import MyPage from "./pages/MyPage";
 
 function App() {
   return (

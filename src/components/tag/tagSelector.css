@@ -1,0 +1,35 @@
+.tagselector {
+  width: 100%;
+}
+.tagselector-top {
+  display: flex;
+  margin: 0 auto;
+}
+.selected-tags {
+  display: flex;
+  align-items: center;
+  background-color: #e3f3f1;
+  color: #219c90;
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 14px;
+}
+.selected-tag {
+  display: flex;
+}
+.selected-tag button {
+  background: none;
+  border: none;
+  margin-left: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #666;
+  transition: color 0.2s;
+}
+.tag-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px;
+  background: white;
+}

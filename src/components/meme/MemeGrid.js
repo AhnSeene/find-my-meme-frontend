@@ -4,14 +4,12 @@ import { Link } from "react-router-dom";
 import { GoHeartFill, GoHeart } from "react-icons/go";
 import { GrFormView } from "react-icons/gr";
 import { IoMdDownload } from "react-icons/io";
-import useToggleLike from "../hooks/useToggleLike";
+import useToggleLike from "../../hooks/useToggleLike";
 import "./MemeGrid.css";
 
-function MemeGrid({ memes, selectedSubTags, mediaType, isProfile, username }) {
+function MemeGrid({ memes, isProfile, username }) {
   const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
   const { mutate } = useToggleLike({
-    selectedSubTags,
-    mediaType,
     isProfile,
     username,
   });
