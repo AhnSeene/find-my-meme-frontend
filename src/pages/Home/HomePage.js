@@ -1,7 +1,7 @@
 import { useEffect, useRef, useCallback } from "react";
 import TagSelector from "../../components/tag/TagSelector";
 import MemeGrid from "../../components/meme/MemeGrid";
-import "./home.css";
+import "./HomePage.css";
 import useHomeMemesQuery from "../../hooks/useHomeMemesQuery";
 import useMemesFilterStore from "../../store/useMemesFilterStore";
 

@@ -5,7 +5,7 @@ import CommentList from "../../components/comment/CommentList";
 import CommentForm from "../../components/comment/CommentForm";
 import useAuthStore from "../../store/useAuthStore";
 import api from "../../contexts/api";
-import "./findmemedetail.css";
+import "./FindMemeDetailPage.css";
 
 function FindMemeDetail() {
   const usernameFromStore = useAuthStore((state) => state.username);

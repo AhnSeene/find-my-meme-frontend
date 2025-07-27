@@ -10,7 +10,7 @@ import { GoHeart, GoHeartFill } from "react-icons/go";
 import MemeSwiper from "../../components/meme/MemeSwiper";
 import { toast } from "react-toastify";
 import api from "../../contexts/api";
-import "./memedetail.css";
+import "./MemeDetailPage.css";
 
 function MemeDetail() {
   const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;

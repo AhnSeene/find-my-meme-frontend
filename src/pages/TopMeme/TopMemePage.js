@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import MemeSlider from "../../components/meme/MemeSlider";
 import api from "../../contexts/api";
-import "./TopMeme.css";
+import "./TopMemePage.css";
 
 function TopMeme() {
   const [activeIndex, setActiveIndex] = useState(0);

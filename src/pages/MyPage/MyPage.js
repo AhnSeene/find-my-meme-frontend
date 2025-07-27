@@ -5,7 +5,7 @@ import Profile from "../../components/myPage/Profile";
 import MyInfo from "../../components/myPage/MyInfo";
 import MemeGrid from "../../components/meme/MemeGrid";
 import Button from "../../components/common/Button";
-import "./mypage.css";
+import "./MyPage.css";
 import useProfileMemesQuery from "../../hooks/useProfileMemesQuery";
 
 function MyPage() {
