@@ -8,7 +8,6 @@ import useToggleLike from "../../hooks/useToggleLike";
 import "./MemeGrid.css";
 
 function MemeGrid({ memes, isProfile, username }) {
-  const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
   const { mutate } = useToggleLike({
     isProfile,
     username,
@@ -51,12 +50,12 @@ function MemeGrid({ memes, isProfile, username }) {
           onLoadedData={() => handleVideoLoad(id)}
           onError={() => handleVideoError(id)}
         >
-          <source src={`${fileBaseUrl}${mp4Url}`} type="video/mp4" />
+          <source src={`${mp4Url}`} type="video/mp4" />
         </video>
       );
     }
 
-    return <img src={`${fileBaseUrl}${gifUrl}`} alt="Meme" />;
+    return <img src={`${gifUrl}`} alt="Meme" />;
   };
 
   const breakpointColumnsObj = {

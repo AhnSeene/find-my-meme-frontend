@@ -9,7 +9,6 @@ import "swiper/css/navigation";
 import "./memeSlider.css";
 
 const MemeSlider = ({ memes }) => {
-  const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
   const { mutate } = useToggleLike({
     selectedSubTags: [],
     mediaType: "memeSlider",
@@ -44,7 +43,7 @@ const MemeSlider = ({ memes }) => {
           <SwiperSlide key={index} className="meme-slide">
             <Link to={`/meme/${meme.id}`}>
               <img
-                src={`${fileBaseUrl}${meme.imageUrl}`}
+                src={`${meme.imageUrl}`}
                 alt={`Meme ${index + 1}`}
                 className="meme-image"
               />

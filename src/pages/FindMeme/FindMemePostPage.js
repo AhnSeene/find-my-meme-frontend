@@ -7,7 +7,6 @@ import api from "../../contexts/api";
 import axios from "axios";
 
 function FindMemePostPage() {
-  const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
   const [selectedSubTags, setSelectedSubTags] = useState([]);
   const [editorValue, setEditorValue] = useState("");
   const [title, setTitle] = useState("");
@@ -57,7 +56,7 @@ function FindMemePostPage() {
           console.error("Failed to complete file upload");
         }
 
-        const imageUrl = `${fileBaseUrl}${uploadResponse.fileUrl}`;
+        const imageUrl = `${uploadResponse.fileUrl}`;
         const quill = quillRef.current.getEditor();
         const range = quill.getSelection();
         quill.insertEmbed(range.index, "image", imageUrl);

@@ -6,7 +6,6 @@ import "react-quill/dist/quill.snow.css";
 import "./commentform.css";
 
 function CommentForm({ postId, onCommentAdded, replyingTo, onCancel }) {
-  const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
   const [editorValue, setEditorValue] = useState("");
   const quillRef = useRef(null);
 
@@ -49,7 +48,7 @@ function CommentForm({ postId, onCommentAdded, replyingTo, onCancel }) {
           console.error("Failed to complete file upload");
         }
 
-        const imageUrl = `${fileBaseUrl}${uploadResponse.fileUrl}`;
+        const imageUrl = `${uploadResponse.fileUrl}`;
         const quill = quillRef.current.getEditor();
         const range = quill.getSelection();
         quill.insertEmbed(range.index, "image", imageUrl);

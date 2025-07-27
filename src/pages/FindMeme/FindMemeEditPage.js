@@ -6,7 +6,6 @@ import TagSelector from "../../components/tag/TagSelector";
 import api from "../../contexts/api";
 
 function FindMemeEditPage() {
-  const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
   const { state } = useLocation();
   const navigate = useNavigate();
   const [editorValue, setEditorValue] = useState("");
@@ -48,7 +47,7 @@ function FindMemeEditPage() {
           },
         });
 
-        const imageUrl = `${fileBaseUrl}${response.data.data.fileUrl}`;
+        const imageUrl = `${response.data.data.fileUrl}`;
         const quill = quillRef.current.getEditor();
         const range = quill.getSelection();
         quill.insertEmbed(range.index, "image", imageUrl);
