@@ -9,7 +9,7 @@ import Modal from "react-modal";
 import useAuthStore from "../../store/useAuthStore";
 import "./LoginPage.css";
 
-function Login() {
+function LoginPage() {
   const [id, setId] = useState("");
   const [rememberId, setRememberId] = useState(false);
   const [password, setPassword] = useState("");
@@ -159,4 +159,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginPage;

@@ -3,7 +3,7 @@ import MemeSlider from "../../components/meme/MemeSlider";
 import api from "../../contexts/api";
 import "./TopMemePage.css";
 
-function TopMeme() {
+function TopMemePage() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [memes, setMemes] = useState({
     topView: [],
@@ -70,4 +70,4 @@ function TopMeme() {
   );
 }
 
-export default TopMeme;
+export default TopMemePage;

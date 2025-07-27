@@ -7,7 +7,7 @@ import useAuthStore from "../../store/useAuthStore";
 import api from "../../contexts/api";
 import "./FindMemeDetailPage.css";
 
-function FindMemeDetail() {
+function FindMemeDetailPage() {
   const usernameFromStore = useAuthStore((state) => state.username);
   const { id } = useParams();
   const [post, setPost] = useState(null);
@@ -221,4 +221,4 @@ function FindMemeDetail() {
   );
 }
 
-export default FindMemeDetail;
+export default FindMemeDetailPage;

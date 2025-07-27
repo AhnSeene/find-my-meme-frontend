@@ -10,7 +10,7 @@ import MemeDetail from "./pages/MemeDetail/MemeDetailPage";
 import FindMemePost from "./pages/FindMeme/FindMemePostPage";
 import FindMemeDetail from "./pages/FindMeme/FindMemeDetailPage";
 import FindMemeEdit from "./pages/FindMeme/FindMemeEditPage";
-import Admin from "./pages/Admin/Admin";
+import Admin from "./pages/Admin/AdminPage";
 import TopMeme from "./pages/TopMeme/TopMemePage";
 import MyPage from "./pages/MyPage/MyPage";
 import Navbar from "./components/common/Navbar";

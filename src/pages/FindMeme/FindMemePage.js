@@ -21,7 +21,7 @@ const formatDate = (dateString) => {
   return `${year}.${month}.${day} ${hours}:${minutes}`;
 };
 
-function FindMeme() {
+function FindMemePage() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const navigate = useNavigate();
   const [findPost, setFindPost] = useState([]);
@@ -182,4 +182,4 @@ function FindMeme() {
   );
 }
 
-export default FindMeme;
+export default FindMemePage;

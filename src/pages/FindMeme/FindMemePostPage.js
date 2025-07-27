@@ -6,7 +6,7 @@ import TagSelector from "../../components/tag/TagSelector";
 import api from "../../contexts/api";
 import axios from "axios";
 
-function FindMemePost() {
+function FindMemePostPage() {
   const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
   const [selectedSubTags, setSelectedSubTags] = useState([]);
   const [editorValue, setEditorValue] = useState("");
@@ -229,4 +229,4 @@ function FindMemePost() {
   );
 }
 
-export default FindMemePost;
+export default FindMemePostPage;
