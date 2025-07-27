@@ -9,7 +9,6 @@ import PreviewItem from "../../components/upload/PreviewItem";
 import ImageModal from "../../components/modal/ImageModal";
 
 function UploadMemePage() {
-  const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
   const [tags, setTags] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [subcategories, setSubcategories] = useState([]);
@@ -91,7 +90,7 @@ function UploadMemePage() {
           continue;
         }
 
-        const fileUrl = `${fileBaseUrl}${uploadResponse.fileUrl}`;
+        const fileUrl = `${uploadResponse.fileUrl}`;
         console.log("Full file URL:", fileUrl); // 최종 URL 확인
         updatedPreviewUrls.push(fileUrl);
 

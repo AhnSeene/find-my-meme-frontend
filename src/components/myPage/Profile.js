@@ -4,7 +4,6 @@ import api from "../../contexts/api";
 import { FiPlusCircle } from "react-icons/fi";
 
 function Profile({ username, isOwnProfile }) {
-  const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
   const [profileImage, setProfileImage] = useState(""); //서버에서 가져온 프로필 사진
   const [previewImage, setPreviewImage] = useState(null); // 미리보기 URL
   const [isEditing, setIsEditing] = useState(false);
@@ -61,7 +60,7 @@ function Profile({ username, isOwnProfile }) {
         {isEditing ? (
           <div>
             <img
-              src={previewImage || `${fileBaseUrl}${profileImage}`} // 미리보기 URL 우선 표시, 없으면 서버 URL 표시
+              src={previewImage || `${profileImage}`} // 미리보기 URL 우선 표시, 없으면 서버 URL 표시
               alt="Profile Preview"
             />
             <button onClick={handleUpload}>저장</button>
@@ -77,7 +76,7 @@ function Profile({ username, isOwnProfile }) {
           </div>
         ) : (
           <>
-            <img src={`${fileBaseUrl}${profileImage}`} alt="Profile" />
+            <img src={`${profileImage}`} alt="Profile" />
             {isOwnProfile && (
               <>
                 <input

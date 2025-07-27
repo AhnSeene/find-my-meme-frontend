@@ -13,7 +13,6 @@ import api from "../../contexts/api";
 import "./MemeDetailPage.css";
 
 function MemeDetailPage() {
-  const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
   const apiUrl = process.env.REACT_APP_API_URL;
   const { id } = useParams();
   const [meme, setMeme] = useState(null);
@@ -110,7 +109,7 @@ function MemeDetailPage() {
   };
 
   function shareOnKakao() {
-    const imageUrl = `${fileBaseUrl}${meme.imageUrl}`;
+    const imageUrl = `${meme.imageUrl}`;
     // 카카오톡 공유 API를 사용하여 이미지 공유 (사전 설정 필요)
     window.Kakao.Link.sendDefault({
       objectType: "feed",
@@ -127,7 +126,7 @@ function MemeDetailPage() {
   }
 
   function shareOnTwitter() {
-    const imageUrl = `${fileBaseUrl}${meme.imageUrl}`;
+    const imageUrl = `${meme.imageUrl}`;
     const shareText = `Check out this meme!`;
     const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
       shareText
@@ -147,16 +146,13 @@ function MemeDetailPage() {
     <div className="memedetail">
       <div className="memedetail-info">
         <div className="memedetail-left">
-          <ResponsiveImage
-            src={`${fileBaseUrl}${meme.imageUrl}`}
-            alt={`Meme ${meme.id}`}
-          />
+          <ResponsiveImage src={`${meme.imageUrl}`} alt={`Meme ${meme.id}`} />
 
           {/* <img src={`${fileBaseUrl}${meme.imageUrl}`} alt={`Meme ${meme.id}`} /> */}
           <div className="memedetail-left-info">
             <Link to={`/users/${meme.username}`} className="memedetail-link">
               <img
-                src={`${fileBaseUrl}${meme.userProfileImageUrl}`}
+                src={`${meme.userProfileImageUrl}`}
                 alt={`${meme.id}img`}
               ></img>
               <span>{meme.username} </span>
