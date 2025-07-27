@@ -4,12 +4,15 @@ import axios from "axios";
 import "./UploadMemePage.css";
 import { useNavigate } from "react-router-dom";
 import { RiFolderUploadFill } from "react-icons/ri";
+import UploadTagSelector from "../../components/tag/UploadTagSelector";
+import PreviewItem from "../../components/upload/PreviewItem";
+import ImageModal from "../../components/modal/ImageModal";
 
 function UploadMemePage() {
   const fileBaseUrl = process.env.REACT_APP_FILE_BASEURL;
   const [tags, setTags] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [Subcategories, setSubcategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
   const [files, setFiles] = useState([]);
   const [fileTags, setFileTags] = useState({});
   const [previewUrls, setPreviewUrls] = useState([]);
@@ -17,6 +20,7 @@ function UploadMemePage() {
   const [currentImage, setCurrentImage] = useState(null);
   const [selectedFileIndices, setSelectedFileIndices] = useState([]);
   const [tagIdToNameMap, setTagIdToNameMap] = useState({}); // 태그 ID와 이름 간의 매핑
+  const [updateProgress, setUpdateProgress] = useState({});
 
   const navigate = useNavigate();
 
@@ -25,15 +29,12 @@ function UploadMemePage() {
       try {
         const response = await api.get("/tags");
         const tagsData = response.data.data;
-        console.log("태그응답:", tagsData);
-        // 태그 ID와 이름 매핑 생성
         const idToNameMap = tagsData.reduce((acc, tag) => {
           tag.subTags.forEach((subTag) => {
             acc[subTag.id] = subTag.name;
           });
           return acc;
         }, {});
-        console.log("태그맵:", idToNameMap);
         setTags(tagsData);
         setTagIdToNameMap(idToNameMap);
       } catch (error) {
@@ -42,7 +43,12 @@ function UploadMemePage() {
     };
     fetchTags();
   }, []);
-
+  const updateUploadProgress = (index, percent) => {
+    setUpdateProgress((prev) => ({
+      ...prev,
+      [index]: percent,
+    }));
+  };
   // 파일 선택 시 처리
   const handleFileChange = async (e) => {
     const selectedFiles = Array.from(e.target.files);
@@ -63,7 +69,7 @@ function UploadMemePage() {
           continue;
         }
         console.log(presignedUrl);
-        const uploadSuccess = await uploadFileToS3(file, presignedUrl);
+        const uploadSuccess = await uploadFileToS3(file, presignedUrl, index);
         if (!uploadSuccess) {
           console.error("Failed to upload file to S3");
           continue;
@@ -115,11 +121,15 @@ function UploadMemePage() {
     }
   };
 
-  const uploadFileToS3 = async (file, presignedUrl) => {
+  const uploadFileToS3 = async (file, presignedUrl, index) => {
     try {
       const response = await axios.put(presignedUrl, file, {
         headers: {
           "Content-Type": file.type,
+        },
+        onUploadProgress: (event) => {
+          const percent = Math.round((event.loaded * 100) / event.total);
+          updateUploadProgress(index, percent);
         },
         withCredentials: true,
       });
@@ -267,9 +277,6 @@ function UploadMemePage() {
       (_, index) => index !== removeIndex
     );
 
-    // Blob URL 해제
-    previewUrls[removeIndex] && URL.revokeObjectURL(previewUrls[removeIndex]);
-
     setFiles(updatedFiles);
     setPreviewUrls(updatedPreviewUrls);
 
@@ -340,83 +347,33 @@ function UploadMemePage() {
 
         <div className="previews">
           {previewUrls.map((url, index) => (
-            <div key={index} className="preview-item">
-              <img
-                src={url}
-                alt={`Preview ${index}`}
-                onClick={() => openModal(url)}
-              />
-              <input
-                type="checkbox"
-                checked={selectedFileIndices.includes(index)}
-                onChange={() => handleCheckboxChange(index)}
-                className="file-checkbox"
-              />
-              <button
-                type="button"
-                className="delete-button"
-                onClick={() => removeImage(index)}
-              >
-                &times;
-              </button>
-              <div className="tags">
-                {fileTags[index]?.map((tagId, tagIndex) => (
-                  <span key={tagIndex} className="tag">
-                    {tagIdToNameMap[tagId]}
-                    <button
-                      type="button"
-                      onClick={() => removeTagFromFile(index, tagId)}
-                    >
-                      {" "}
-                      &times;
-                    </button>
-                  </span>
-                ))}
-              </div>
-            </div>
+            <PreviewItem
+              key={index}
+              url={url}
+              index={index}
+              isSelected={selectedFileIndices.includes(index)}
+              onCheckboxChange={handleCheckboxChange}
+              onDelete={removeImage}
+              tags={fileTags[index] || []}
+              tagIdToNameMap={tagIdToNameMap}
+              onTagRemove={removeTagFromFile}
+              onImageClick={openModal}
+              uploadProgress={updateProgress[index]}
+            />
           ))}
         </div>
-        {isModalOpen && (
-          <div className="modal" onClick={closeModal}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <span className="close" onClick={closeModal}>
-                &times;
-              </span>
-              <img src={currentImage} alt="Full Preview" />
-            </div>
-          </div>
-        )}
-        <div className="show-tags">
-          <span>태그</span>
-          <select
-            onChange={handleCategoryChange}
-            value={selectedCategory}
-            required
-          >
-            <option value="">대분류 선택</option>
-            {tags.map((tag) => (
-              <option key={tag.id} value={tag.parentTag}>
-                {tag.parentTag}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {selectedCategory && (
-          <div className="subcategories">
-            {Subcategories.map((subcategory) => (
-              <div
-                key={subcategory.id}
-                className={`subcategory ${
-                  Subcategories.includes(subcategory) ? "selected" : ""
-                }`}
-                onClick={() => handleSubcategoryChange(subcategory)}
-              >
-                {subcategory.name}
-              </div>
-            ))}
-          </div>
-        )}
+        <ImageModal
+          isOpen={isModalOpen}
+          imageUrl={currentImage}
+          onClose={closeModal}
+        />
+        <UploadTagSelector
+          tags={tags}
+          selectedCategory={selectedCategory}
+          subcategories={subcategories}
+          handleCategoryChange={handleCategoryChange}
+          handleSubcategoryChange={handleSubcategoryChange}
+        />
         <button type="submit">등록</button>
       </form>
     </div>
