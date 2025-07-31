@@ -1,0 +1,93 @@
+.uploadmeme {
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 파일 업로드 영역 */
+.upload-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  border: 2px dashed #e0e0e0;
+  border-radius: 8px;
+  background-color: #f8f8f8;
+  margin-bottom: 20px;
+}
+
+.upload-area label {
+  cursor: pointer;
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+
+.upload-area .fileUpload-button {
+  width: auto;
+  background: none;
+  border: none;
+  color: #666;
+  transition: color 0.2s;
+}
+
+.upload-area .fileUpload-button:hover {
+  color: #333;
+}
+.notice {
+  font-size: 12px;
+  color: #666;
+}
+.upload-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.upload-controls button {
+  padding: 8px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.upload-controls button:hover {
+  background-color: #f0f0f0;
+}
+.notice {
+  left: 0;
+  font-size: 14px;
+}
+
+/* 미리보기 영역 */
+.previews {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  margin: 20px 0;
+}
+
+/* 제출 버튼 */
+form button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  background-color: #219c90;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s;
+}
+
+form button[type="submit"]:hover {
+  background-color: #1a796f;
+}

@@ -1,8 +1,0 @@
-.tag-list{
-    display: flex;
-    gap: 40px;
-}
-
-.tag-item ul {
-    list-style: none;
-}

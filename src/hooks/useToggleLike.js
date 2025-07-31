@@ -1,17 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../contexts/api";
-import { useAuth } from "../contexts/AuthContext";
-const useToggleLike = ({
-  selectedSubTags = [],
-  mediaType = "",
-  isProfile = false,
-  username,
-}) => {
-  const { authState } = useAuth();
+import useAuthStore from "../store/useAuthStore";
+import useMemesFilterStore from "../store/useMemesFilterStore";
+
+const useToggleLike = ({ isProfile, username }) => {
+  const { selectedSubTags, mediaType } = useMemesFilterStore();
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const token = useAuthStore((state) => state.token);
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ memeId, isLiked }) => {
-      if (!authState.isLoggedIn) {
+      if (!isLoggedIn) {
         alert("로그인해야 사용할 수 있습니다.");
         throw new Error("로그인이 필요합니다."); // 요청 중단
       }
@@ -19,7 +18,7 @@ const useToggleLike = ({
         const response = await api.post(
           `/meme-posts/${memeId}/toggleLike`,
           {},
-          { headers: { Authorization: `Bearer ${authState.token}` } }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         console.log("Response:", response); // 응답 확인
         return response;
@@ -29,11 +28,9 @@ const useToggleLike = ({
       }
     },
     onMutate: async ({ memeId, isLiked }) => {
-      const queryKey = [
-        "memes",
-        { selectedSubTags, mediaType, isProfile, username },
-      ];
-      console.log(queryKey);
+      const queryKey = isProfile
+        ? ["profileMemes", username]
+        : ["memes", { selectedSubTags, mediaType }];
 
       // 이전 데이터 가져오기
       const previousData = queryClient.getQueryData(queryKey);

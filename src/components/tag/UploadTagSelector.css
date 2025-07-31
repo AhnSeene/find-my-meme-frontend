@@ -1,0 +1,44 @@
+.show-tags {
+  display: flex;
+}
+.show-tags span {
+  display: inline-block;
+  padding: 6px 12px;
+  background-color: #f3f4f6;
+  border-radius: 4px;
+  color: #4b5563;
+  font-weight: 500;
+  margin-right: 12px;
+  min-width: 80px;
+  text-align: center;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+/* 태그 선택 영역 */
+.show-tags select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.subcategories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.subcategory {
+  padding: 6px 12px;
+  background-color: #f0f0f0;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.subcategory:hover {
+  background-color: #e0e0e0;
+}
