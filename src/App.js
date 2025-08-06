@@ -1,6 +1,7 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 //import { AuthProvider } from "./contexts/AuthContext";
 import { ToastContainer } from "react-toastify";
+import Layout from "./layout/Layout";
 import Login from "./pages/Auth/LoginPage";
 import SignUp from "./pages/Auth/SignUpPage";
 import Home from "./pages/Home/HomePage";
@@ -14,7 +15,6 @@ import Admin from "./pages/Admin/AdminPage";
 import TopMeme from "./pages/TopMeme/TopMemePage";
 import MyPage from "./pages/MyPage/MyPage";
 import Navbar from "./components/common/Navbar";
-import BottomNavbar from "./components/common/BottomNavbar";
 //import PrivateRoute from "./components/PrivateRoute";
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -24,9 +24,9 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <Navbar />
-        <div className="main-content">
-          <ToastContainer autoClose={3000} />
-          <Routes>
+        <ToastContainer autoClose={3000} />
+        <Routes>
+          <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
@@ -46,9 +46,8 @@ function App() {
                   </PrivateRoute>
                 }
               /> */}
-          </Routes>
-          <BottomNavbar />
-        </div>
+          </Route>
+        </Routes>
       </div>
     </BrowserRouter>
   );
