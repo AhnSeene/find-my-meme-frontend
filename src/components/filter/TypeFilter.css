@@ -1,0 +1,21 @@
+.type-filter {
+  display: flex;
+}
+
+.type-filter button {
+  background-color: transparent;
+  border: none;
+  padding: 4px 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.type-filter button:hover {
+  background-color: rgba(221, 221, 221, 0.452);
+}
+
+.type-filter button.active {
+  color: #219c90;
+  font-weight: bold;
+  background-color: #f5d95c9d;
+}

@@ -1,13 +1,12 @@
 import { useEffect, useRef, useCallback } from "react";
-import TagSelector from "../../components/tag/TagSelector";
 import MemeGrid from "../../components/meme/MemeGrid";
 import "./HomePage.css";
 import useHomeMemesQuery from "../../hooks/useHomeMemesQuery";
 import useMemesFilterStore from "../../store/useMemesFilterStore";
+import FilterBar from "../../components/filter/FilterBar";
 
 function HomePage() {
-  const { selectedSubTags, setSelectedSubTags, mediaType, setMediaType } =
-    useMemesFilterStore();
+  const { selectedSubTags, setSelectedSubTags } = useMemesFilterStore();
   const { memes, fetchNextPage, hasNextPage, isLoading } = useHomeMemesQuery();
 
   const observerRef = useRef(null);
@@ -40,32 +39,7 @@ function HomePage() {
 
   return (
     <div className="home">
-      <div className="filter">
-        <TagSelector />
-        <div className="mediaTypeSelect">
-          <button
-            type="button"
-            onClick={() => setMediaType("")}
-            className={mediaType == "" ? "active" : ""}
-          >
-            전체
-          </button>
-          <button
-            type="button"
-            onClick={() => setMediaType("ANIMATED")}
-            className={mediaType == "ANIMATED" ? "active" : ""}
-          >
-            GIF
-          </button>
-          <button
-            type="button"
-            onClick={() => setMediaType("STATIC")}
-            className={mediaType == "STATIC" ? "active" : ""}
-          >
-            사진
-          </button>
-        </div>
-      </div>
+      <FilterBar />
 
       <MemeGrid memes={memes} isProfile={false} />
 
