@@ -1,23 +1,25 @@
 import { useState, useEffect } from "react";
 import api from "../../contexts/api";
 import useMemesFilterStore from "../../store/useMemesFilterStore";
-import "./tagSelector.css";
+import "./TagSelector.css";
+import useTagsStore from "../../store/useTagsStore";
 
 function TagSelector() {
-  const [tags, setTags] = useState([]);
-  const [subTags, setSubTags] = useState([]);
+  const { tags, subTags, setTags, setSubTags } = useTagsStore();
   const { selectedSubTags, setSelectedSubTags } = useMemesFilterStore();
+
   useEffect(() => {
     const fetchTags = async () => {
       try {
         const response = await api.get("/tags");
         setTags(response.data.data);
-        console.log(tags);
       } catch (error) {
         console.error("Failed to load tags:", error);
       }
     };
-    fetchTags();
+    if (tags.length === 0) {
+      fetchTags();
+    }
   }, []);
 
   const handleParentTagChange = (e) => {
@@ -38,9 +40,8 @@ function TagSelector() {
   return (
     <div className="tagselector">
       <div className="tagselector-top">
-        <label htmlFor="tag-category" />
         <select id="tag-category" onChange={handleParentTagChange}>
-          <option value="">태그 카테고리를 선택하세요</option>
+          <option value="">태그</option>
           {tags.map((tag) => (
             <option key={tag.id} value={tag.parentTag}>
               {tag.parentTag}
@@ -55,7 +56,7 @@ function TagSelector() {
                 .find((subTag) => subTag.id === tagId);
               return tag ? (
                 <div key={tag.id} className="selected-tag">
-                  {tag.name}
+                  # {tag.name}
                   <button
                     type="button"
                     onClick={() => handleSubTagRemove(tag.id)}
@@ -74,10 +75,14 @@ function TagSelector() {
             <button
               key={subTag.id}
               type="button"
-              className={selectedSubTags.includes(subTag.id) ? "selected" : ""}
+              className={`tag-button ${
+                selectedSubTags.includes(subTag.id)
+                  ? "tag-button--selected"
+                  : ""
+              }`}
               onClick={() => handleSubTagClick(subTag.id)}
             >
-              {subTag.name}
+              # {subTag.name}
             </button>
           ))}
         </div>
