@@ -1,0 +1,11 @@
+.filter-bar {
+  display: flex;
+  gap: 10px;
+}
+.filter-bar .tag-selector {
+  flex: 6; /* 6배 공간 차지 */
+}
+
+.filter-bar .type-filter {
+  flex: 1; /* 1배 공간 차지 */
+}

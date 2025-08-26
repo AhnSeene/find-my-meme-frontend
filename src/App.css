@@ -1,9 +1,6 @@
 .App {
   text-align: center;
 }
-.App .main-content {
-  padding-top: 110px; /* Navbar 높이만큼 여백 추가 */
-}
 
 .App-logo {
   height: 40vmin;
