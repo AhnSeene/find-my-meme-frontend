@@ -1,5 +1,6 @@
 .type-filter {
   display: flex;
+  align-items: center;
 }
 
 .type-filter button {
@@ -8,6 +9,10 @@
   padding: 4px 8px;
   font-size: 16px;
   cursor: pointer;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  vertical-align: middle; /* 세로 정렬 */
 }
 
 .type-filter button:hover {
