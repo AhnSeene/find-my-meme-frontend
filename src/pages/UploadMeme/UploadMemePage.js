@@ -1,25 +1,32 @@
 import { useEffect, useState } from "react";
 import api from "../../contexts/api";
-import axios from "axios";
-import "./UploadMemePage.css";
 import { useNavigate } from "react-router-dom";
 import { RiFolderUploadFill } from "react-icons/ri";
 import UploadTagSelector from "../../components/tag/UploadTagSelector";
 import PreviewItem from "../../components/upload/PreviewItem";
 import ImageModal from "../../components/modal/ImageModal";
+import useFileUpload from "../../hooks/useFileUpload";
+import "./UploadMemePage.css";
 
 function UploadMemePage() {
+  const {
+    files,
+    previewUrls,
+    fileTags,
+    updateProgress,
+    handleFileChange,
+    removeImage,
+    setFileTags,
+    selectedFileIndices,
+    setSelectedFileIndices,
+  } = useFileUpload();
+
   const [tags, setTags] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [subcategories, setSubcategories] = useState([]);
-  const [files, setFiles] = useState([]);
-  const [fileTags, setFileTags] = useState({});
-  const [previewUrls, setPreviewUrls] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState(null);
-  const [selectedFileIndices, setSelectedFileIndices] = useState([]);
   const [tagIdToNameMap, setTagIdToNameMap] = useState({}); // 태그 ID와 이름 간의 매핑
-  const [updateProgress, setUpdateProgress] = useState({});
 
   const navigate = useNavigate();
 
@@ -42,129 +49,6 @@ function UploadMemePage() {
     };
     fetchTags();
   }, []);
-  const updateUploadProgress = (index, percent) => {
-    setUpdateProgress((prev) => ({
-      ...prev,
-      [index]: percent,
-    }));
-  };
-  // 파일 선택 시 처리
-  const handleFileChange = async (e) => {
-    const selectedFiles = Array.from(e.target.files);
-    setFiles(selectedFiles);
-
-    const updatedPreviewUrls = [];
-    const updatedTags = {};
-
-    // 파일을 서버에 업로드하고 URL을 수신
-    for (const [index, file] of selectedFiles.entries()) {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      try {
-        const presignedUrl = await getPresignedUrl(file.name);
-        if (!presignedUrl) {
-          console.error("Failed to get presigned URL");
-          continue;
-        }
-        console.log(presignedUrl);
-        const uploadSuccess = await uploadFileToS3(file, presignedUrl, index);
-        if (!uploadSuccess) {
-          console.error("Failed to upload file to S3");
-          continue;
-        }
-
-        const { width, height } = await getImageDimensions(file);
-
-        const fileMeta = {
-          originalFilename: file.name,
-          presignedUrl: presignedUrl.split("?")[0],
-          width,
-          height,
-          size: file.size,
-        };
-
-        const uploadResponse = await completeUpload(fileMeta);
-        if (!uploadResponse) {
-          console.error("Failed to complete file upload");
-          continue;
-        }
-
-        const fileUrl = `${uploadResponse.fileUrl}`;
-        console.log("Full file URL:", fileUrl); // 최종 URL 확인
-        updatedPreviewUrls.push(fileUrl);
-
-        // 초기 태그 설정
-        updatedTags[index] = [];
-      } catch (error) {
-        console.error("Failed to upload file:", error);
-      }
-    }
-
-    setPreviewUrls(updatedPreviewUrls);
-    setFileTags(updatedTags);
-  };
-
-  const getPresignedUrl = async (filename) => {
-    try {
-      const response = await api.post(
-        `/files/presigned-upload?filename=${encodeURIComponent(filename)}`,
-        {},
-        {}
-      );
-
-      return response.data.data.presignedUrl;
-    } catch (error) {
-      console.error("Error fetching presigned URL:", error);
-      return null;
-    }
-  };
-
-  const uploadFileToS3 = async (file, presignedUrl, index) => {
-    try {
-      const response = await axios.put(presignedUrl, file, {
-        headers: {
-          "Content-Type": file.type,
-        },
-        onUploadProgress: (event) => {
-          const percent = Math.round((event.loaded * 100) / event.total);
-          updateUploadProgress(index, percent);
-        },
-        withCredentials: true,
-      });
-
-      return response.status === 200;
-    } catch (error) {
-      console.error("Error uploading file to S3:", error);
-      return false;
-    }
-  };
-
-  const getImageDimensions = (file) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.src = URL.createObjectURL(file);
-
-      img.onload = () => {
-        resolve({ width: img.width, height: img.height });
-      };
-    });
-  };
-
-  const completeUpload = async (fileMeta) => {
-    try {
-      const response = await api.post("/files/upload-complete", fileMeta, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      return response.data.data;
-    } catch (error) {
-      console.error("Error completing upload:", error);
-      return null;
-    }
-  };
 
   const handleCategoryChange = (e) => {
     const category = e.target.value;
@@ -234,7 +118,7 @@ function UploadMemePage() {
       const uploadPromises = selectedFileIndices.map(async (file, index) => {
         // 파일을 서버에 업로드하고 URL을 얻기
         const relativeUrl = getRelativeUrl(previewUrls[index]).slice(1);
-        console.log("relate", relativeUrl);
+        console.log("relate:", relativeUrl);
 
         // URL과 태그를 서버에 전송
         await api.post(
@@ -268,24 +152,6 @@ function UploadMemePage() {
   const closeModal = () => {
     setIsModalOpen(false);
     setCurrentImage(null);
-  };
-
-  const removeImage = (removeIndex) => {
-    const updatedFiles = files.filter((_, index) => index !== removeIndex);
-    const updatedPreviewUrls = previewUrls.filter(
-      (_, index) => index !== removeIndex
-    );
-
-    setFiles(updatedFiles);
-    setPreviewUrls(updatedPreviewUrls);
-
-    const updatedTags = { ...fileTags };
-    delete updatedTags[removeIndex];
-    setFileTags(updatedTags);
-
-    setSelectedFileIndices((prevIndices) =>
-      prevIndices.filter((i) => i !== removeIndex)
-    );
   };
 
   const removeTagFromFile = (fileIndex, tag) => {
