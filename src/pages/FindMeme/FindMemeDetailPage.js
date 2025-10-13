@@ -10,6 +10,7 @@ import "./FindMemeDetailPage.css";
 function FindMemeDetailPage() {
   const usernameFromStore = useAuthStore((state) => state.username);
   const { id } = useParams();
+  const [isFind, setisFind] = useState("");
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [replyingTo, setReplyingTo] = useState(null);
@@ -28,6 +29,7 @@ function FindMemeDetailPage() {
         const response = await api.get(`/find-posts/${id}`);
         setPost(response.data);
         setCommentCount(response.data.data.commentCount);
+        setisFind(response.data.data.status);
       } catch (error) {
         console.error("게시글 불러오기 오류:", error);
       }
@@ -146,7 +148,11 @@ function FindMemeDetailPage() {
   return (
     <div className="findMemeDetail">
       <div className="findMemeDetail-title">
-        <FaSearch />
+        {isFind === "FIND" ? (
+          <img src="/question.svg" alt="찾아줘게시글" />
+        ) : (
+          <img src="/exclamation.svg" alt="찾았다게시글" />
+        )}
         <div>{post.data.title}</div>
       </div>
       <div className="findMemeDetail-dates">

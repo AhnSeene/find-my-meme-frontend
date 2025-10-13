@@ -1,70 +1,59 @@
-# Getting Started with Create React App
+# Find My Meme
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+사용자들이 밈을 업로드하고, 태그 기반 검색으로 상황에 맞는 밈을 빠르게 찾을 수 있는 서비스입니다.
 
-## Available Scripts
+🔗 웹 사이트 https://findmymeme.online/
 
-In the project directory, you can run:
+## 미리보기
 
-### `npm start`
+## 주요기능
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 🔍 밈 검색 & 탐색
+- **모든 표현**: 무한스크롤 + 태그 검색으로 밈 탐색
+- **인기 표현**: 인기도 기반 밈 추천
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 🤝 커뮤니티
+- **내 표현을 찾아줘**: 질문 & 답변 게시판
+- 댓글 & 채택 시스템으로 소통
 
-### `npm test`
+### 📤 콘텐츠 관리
+- **이미지 업로드**: 태그 추가하여 밈 등록
+- **마이페이지**: 업로드한 밈 관리 & 좋아요한 밈 모아보기
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### **👥 팀원 소개**
+| 이름 | 역할 | GitHub |
+|------|------|--------|
+| 🧑‍💻 **안채연** | **Backend 개발, 배포** | [GitHub 링크](https://github.com/acycoco) |
+| 👩‍💻 **안예빈** | **Frontend 개발, UI / UX** | [GitHub 링크](https://github.com/mewmaze) |
 
-### `npm run build`
+## 👥 팀 협업
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- 프론트 1인, 백엔드 1인의 팀 프로젝트
+- Git Flow 전략 기반 협업, 커밋/이슈 템플릿 통일
+- JWT 인증, 이미지 업로드 등 **인터페이스 정의와 흐름 설계 중심으로 소통**
+- 요구사항 정의는 Notion, 실시간 소통은 Discord 활용
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 컴포넌트 구조도
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 시스템아키텍처
+![업데이트된 시스템아키텍처_화이트 drawio](https://github.com/user-attachments/assets/96fa261e-e508-418f-b196-721f43fb7896)
 
-### `npm run eject`
+## 📁 Repository
+- **Frontend**: 🔗 https://github.com/AhnSeene/find-my-meme-frontend
+- **Backend**: 🔗 https://github.com/AhnSeene/find-my-meme-backend
+  
+## 기술스택
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Frontend
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![TanStack Query](https://img.shields.io/badge/TanStack%20Query-FF4154?style=for-the-badge&logo=react-query&logoColor=white)
+![Zustand](https://img.shields.io/badge/Zustand-2D3748?style=for-the-badge&logo=react&logoColor=white)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- **React 18** - 컴포넌트 기반 UI 개발
+- **TanStack Query** - 서버 상태 관리 및 캐싱 최적화
+- **Zustand** - 경량 클라이언트 상태 관리
+### Backend
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

@@ -12,9 +12,8 @@
   box-sizing: border-box; /* 패딩과 테두리를 포함한 높이 */
   margin-bottom: 10px;
 }
-.findMemeDetail-title svg {
-  font-size: 40px; /* 원하는 크기로 설정 */
-  color: #219c90; /* 아이콘 색상 변경 (선택사항) */
+.findMemeDetail-title img {
+  width: 50px;
 }
 .findMemeDetail-title > div {
   flex-grow: 1; /* 제목이 남은 공간을 채우도록 설정 */

@@ -3,7 +3,7 @@ import api from "../contexts/api";
 
 const useProfileMemesQuery = (username) => {
   const fetchProfileMemes = async ({ pageParam = 0 }) => {
-    const url = `/meme-posts/users/${username}?page=${pageParam}&size=10`;
+    const url = `/meme-posts/me?page=${pageParam}&size=10`;
     const response = await api.get(url);
     const data = response.data.data.memePosts;
 
