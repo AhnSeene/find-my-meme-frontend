@@ -4,8 +4,6 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./FindMemePage.css";
-import { CgSearch } from "react-icons/cg";
-import { CgSearchFound } from "react-icons/cg";
 import useAuthStore from "../../store/useAuthStore";
 
 // 날짜 포맷팅 함수
@@ -105,13 +103,33 @@ function FindMemePage() {
       <div className="findmeme-btn">
         <div className="findmeme-btn-left">
           <button onClick={handleFind} className={isFindActive ? "active" : ""}>
-            <CgSearch className="icon" size={32} /> 찾아줘
+            {isFindActive ? (
+              <img
+                src="/question-on.svg"
+                alt="물음표"
+                className="question-img"
+              />
+            ) : (
+              <img src="/question.svg" alt="물음표" className="question-img" />
+            )}
           </button>
           <button
             onClick={handleFound}
             className={!isFindActive ? "active" : ""}
           >
-            <CgSearchFound className="icon" size={32} /> 찾았다
+            {!isFindActive ? (
+              <img
+                src="/exclamation-on.svg"
+                alt="느낌표"
+                className="exclamation-img"
+              />
+            ) : (
+              <img
+                src="/exclamation.svg"
+                alt="느낌표"
+                className="exclamation-img"
+              />
+            )}
           </button>
         </div>
         <button className="findmeme-post-btn" onClick={handlePost}>

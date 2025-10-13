@@ -17,15 +17,15 @@ function TopMemePage() {
       setIsLoading(true);
       try {
         const [viewRes, likeRes, weekRes] = await Promise.all([
-          api.get("/meme-posts/ranks/all?sort=VIEW&page=0&size=20"),
-          api.get("/meme-posts/ranks/all?sort=LIKE&page=0&size=20"),
-          api.get("/meme-posts/ranks/period?period=WEEK&page=0&size=20"),
+          api.get("/meme-posts/ranked?page=0&size=20&period=ALL&sort=VIEW"),
+          api.get("/meme-posts/ranked?page=0&size=20&period=ALL&sort=LIKE"),
+          api.get("/meme-posts/ranked?page=0&size=20&period=WEEK&sort=LIKE"),
         ]);
 
         setMemes({
-          topView: viewRes.data.data,
-          topLike: likeRes.data.data,
-          topWeek: weekRes.data.data,
+          topView: viewRes.data.data.content,
+          topLike: likeRes.data.data.content,
+          topWeek: weekRes.data.data.content,
         });
       } catch (error) {
         console.error("TopMeme 데이터 불러오기 실패", error);

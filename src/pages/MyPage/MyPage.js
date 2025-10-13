@@ -19,12 +19,8 @@ function MyPage() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
   const isOwnProfile = usernameFromStore === username;
-  console.log("로그인된 계정", usernameFromStore);
-  console.log("지금 user", username);
-  console.log(isOwnProfile);
   const { memes, fetchNextPage, hasNextPage, isLoading } =
     useProfileMemesQuery(username);
-  console.log("프로필 밈 :", memes);
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/login");

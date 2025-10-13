@@ -19,8 +19,7 @@
   padding: 10px 40px;
   width: 48%;
   text-align: left;
-  box-sizing: border-box; /* 패딩과 경계선의 크기를 포함 */
-  border: 1px solid black;
+  box-sizing: border-box;
   border-radius: 20px;
 }
 
@@ -93,6 +92,12 @@
 }
 .findmeme-btn .findmeme-post-btn:hover {
   background-color: #219c90cc;
+}
+.exclamation-img {
+  width: 46px;
+}
+.question-img {
+  width: 46px;
 }
 .pagination {
   margin-top: 20px; /* 페이지네이션과 게시글 목록 사이에 간격 추가 */

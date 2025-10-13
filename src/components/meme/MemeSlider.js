@@ -9,6 +9,7 @@ import "swiper/css/navigation";
 import "./memeSlider.css";
 
 const MemeSlider = ({ memes }) => {
+  console.log(memes);
   const { mutate } = useToggleLike({
     selectedSubTags: [],
     mediaType: "memeSlider",
@@ -43,7 +44,7 @@ const MemeSlider = ({ memes }) => {
           <SwiperSlide key={index} className="meme-slide">
             <Link to={`/meme/${meme.id}`}>
               <img
-                src={`${meme.imageUrl}`}
+                src={`${meme.mediaInfo.thumbnails[0].url}`}
                 alt={`Meme ${index + 1}`}
                 className="meme-image"
               />
