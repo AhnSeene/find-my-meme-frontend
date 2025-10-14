@@ -17,19 +17,18 @@
   width: 100%; /* 부모가 이미지의 가로 크기와 같도록 설정 */
 }
 
-.meme-item .meme-image-container img {
+.meme-item .meme-image-container img,
+.meme-item .meme-image-container video {
   width: 100%; /* 가로 길이를 컨테이너에 맞춤 */
   height: auto; /* 세로 길이는 원본 비율에 따라 자동 조정 */
   object-fit: cover; /* 또는 cover로 변경해 확인해보세요 */
   display: block;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.4s ease-in-out, border-radius 0.4s ease-in-out;
+  border-radius: 20px;
 }
-
-.meme-item .meme-image-container video{
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  display: block;
+.meme-item .meme-image-container:hover img,
+.meme-item .meme-image-container:hover video {
+  border-radius: 0;
 }
 
 /* 어두운 투명색 오버레이 */
@@ -46,11 +45,14 @@
   justify-content: center;
   align-items: center;
   pointer-events: none;
+  border-radius: 20px;
+  transition: transform 0.4s ease-in-out, border-radius 0.4s ease-in-out;
 }
 
 /* 마우스 오버 시 오버레이와 이미지 확대 효과 */
 .meme-image-container:hover .overlay {
   opacity: 1; /* 오버레이가 나타나도록 설정 */
+  border-radius: 0;
 }
 
 /* 하트 버튼을 오른쪽 하단에 위치시키기 위한 스타일 */
