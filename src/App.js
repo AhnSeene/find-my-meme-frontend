@@ -23,7 +23,6 @@ function App() {
   return (
     <BrowserRouter>
       <div className="App">
-        <Navbar />
         <ToastContainer autoClose={3000} />
         <Routes>
           <Route element={<Layout />}>
