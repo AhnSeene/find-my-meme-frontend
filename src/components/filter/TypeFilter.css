@@ -1,26 +1,57 @@
 .type-filter {
   display: flex;
   align-items: center;
+  background: white;
+  border-radius: 12px;
+  padding: 4px;
+  box-shadow: 0 2px 8px rgba(236, 86, 86, 0.08);
+  gap: 4px;
+  height: fit-content;
 }
 
 .type-filter button {
   background-color: transparent;
   border: none;
-  padding: 4px 8px;
-  font-size: 16px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6c757d;
   cursor: pointer;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  vertical-align: middle; /* 세로 정렬 */
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  min-width: 70px;
+  position: relative;
 }
 
 .type-filter button:hover {
-  background-color: rgba(221, 221, 221, 0.452);
+  background-color: rgba(33, 156, 144, 0.08);
+  color: #219c90;
 }
 
+/*  활성 상태 */
 .type-filter button.active {
-  color: #219c90;
-  font-weight: bold;
-  background-color: #f5d95c9d;
+  background: linear-gradient(135deg, #219c90 0%, #1a7a6f 100%);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(33, 156, 144, 0.3);
+  transform: translateY(-1px);
+}
+
+/* 클릭 효과 */
+.type-filter button:active {
+  transform: translateY(0);
+}
+
+/* 반응형 */
+@media screen and (max-width: 768px) {
+  .type-filter {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .type-filter button {
+    flex: 1;
+    min-width: auto;
+  }
 }

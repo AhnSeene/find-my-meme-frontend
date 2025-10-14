@@ -1,11 +1,29 @@
 .filter-bar {
   display: flex;
-  gap: 10px;
+  gap: 20px;
+  margin-bottom: 32px;
+  align-items: flex-start;
 }
 .filter-bar .tag-selector {
-  flex: 6; /* 6배 공간 차지 */
+  flex: 1;
+  min-width: 0;
 }
 
-.filter-bar .type-filter {
-  flex: 1; /* 1배 공간 차지 */
+.filter-bar .type-filter-wrapper {
+  flex-shrink: 0;
+}
+
+/* 반응형 */
+@media screen and (max-width: 768px) {
+  .filter-bar {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .filter-bar .tag-selector {
+    width: 100%;
+  }
+
+  .filter-bar .type-filter-wrapper {
+    width: 100%;
+  }
 }

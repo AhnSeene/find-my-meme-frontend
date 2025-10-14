@@ -8,7 +8,7 @@ export default function FilterBar() {
       <div className="tag-selector">
         <TagSelector />
       </div>
-      <div className="type-filter">
+      <div className="type-filter-wrapper">
         <TypeFilter />
       </div>
     </div>
