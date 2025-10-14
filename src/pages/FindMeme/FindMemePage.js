@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./FindMemePage.css";
 import useAuthStore from "../../store/useAuthStore";
+import { useQuery } from "@tanstack/react-query";
 
 // 날짜 포맷팅 함수
 const formatDate = (dateString) => {
@@ -19,75 +20,34 @@ const formatDate = (dateString) => {
   return `${year}.${month}.${day} ${hours}:${minutes}`;
 };
 
+const fetchPosts = async ({ queryKey }) => {
+  const [_key, { page, status }] = queryKey;
+  const res = await api.get(`/find-posts?page=${page}&size=8&status=${status}`);
+  return res.data.data;
+};
+
 function FindMemePage() {
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const navigate = useNavigate();
-  const [findPost, setFindPost] = useState([]);
-  const [foundPost, setFoundPost] = useState([]);
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const [isFindActive, setIsFindActive] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const [findPage, setFindPage] = useState(0);
+  const [foundPage, setFoundPage] = useState(0);
 
-  const [findPage, setFindPage] = useState(0); // "찾아줘" 페이지네이션 상태
-  const [foundPage, setFoundPage] = useState(0); // "찾았다" 페이지네이션 상태
-  const [findTotalPages, setFindTotalPages] = useState(0); // "찾아줘" 총 페이지 수
-  const [foundTotalPages, setFoundTotalPages] = useState(0); // "찾았다" 총 페이지 수
+  const { data: findData, isLoading: isFindLoading } = useQuery({
+    queryKey: ["findPosts", { page: findPage, status: "FIND" }],
+    queryFn: fetchPosts,
+    keepPreviousData: true, // 이전 페이지 데이터 유지
+  });
 
-  // 공통 데이터 로딩 함수
-  const fetchData = async (url, setData, setPageCount) => {
-    setLoading(true);
-    try {
-      const response = await api.get(url);
-      setData(response.data.data.content);
-      setPageCount(response.data.data.totalPages);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData(
-      `/find-posts?page=${findPage}&size=8&status=FIND`,
-      setFindPost,
-      setFindTotalPages
-    );
-  }, [findPage]);
-
-  useEffect(() => {
-    fetchData(
-      `/find-posts?page=${foundPage}&size=8&status=FOUND`,
-      setFoundPost,
-      setFoundTotalPages
-    );
-  }, [foundPage]);
-
-  const handleFind = () => {
-    setFindPage(0);
-    fetchData(
-      `/find-posts?page=${findPage}&size=8&status=FIND`,
-      setFindPost,
-      setFindTotalPages
-    );
-    setIsFindActive(true);
-  };
-
-  const handleFound = () => {
-    setFoundPage(0);
-    fetchData(
-      `/find-posts?page=${foundPage}&size=8&status=FOUND`,
-      setFoundPost,
-      setFoundTotalPages
-    );
-    setIsFindActive(false);
-  };
+  const { data: foundData, isLoading: isFoundLoading } = useQuery({
+    queryKey: ["foundPosts", { page: foundPage, status: "FOUND" }],
+    queryFn: fetchPosts,
+    keepPreviousData: true, // 이전 페이지 데이터 유지
+  });
 
   const handlePageChange = (page) => {
-    if (isFindActive) {
-      if (page >= 0 && page < findTotalPages) setFindPage(page);
-    } else {
-      if (page >= 0 && page < foundTotalPages) setFoundPage(page);
-    }
+    if (isFindActive) setFindPage(page);
+    else setFoundPage(page);
   };
 
   const handlePost = () => {
@@ -98,6 +58,10 @@ function FindMemePage() {
     navigate("/findmemepost", { replace: true });
   };
 
+  const handleFind = () => setIsFindActive(true);
+  const handleFound = () => setIsFindActive(false);
+  const activeData = isFindActive ? findData : foundData;
+  const activeLoading = isFindActive ? isFindLoading : isFoundLoading;
   return (
     <div className="findmeme">
       <div className="findmeme-btn">
@@ -136,66 +100,40 @@ function FindMemePage() {
           글 등록
         </button>
       </div>
-      {loading && <p>Loading...</p>}
-      {isFindActive ? (
+      {activeLoading && <p>Loading...</p>}
+      {activeData && activeData.content?.length > 0 ? (
         <div className="findmeme-posts">
-          {findPost.length > 0 ? (
-            findPost.map((post, index) => (
-              <div key={index} className="post-summary">
-                <Link to={`/findmeme/${post.id}`}>
-                  <div className="findmeme-posts-title">{post.title}</div>
-                  <div className="findmeme-posts-content">{post.content}</div>
-                  <div className="findmeme-posts-other">
-                    <div>{post.username}</div>
-                    <div>{formatDate(post.createdAt)}</div>
-                  </div>
-                </Link>
-              </div>
-            ))
-          ) : (
-            <p>찾아줘 게시물 없음</p>
-          )}
+          {activeData.content.map((post, index) => (
+            <div key={index} className="post-summary">
+              <Link to={`/findmeme/${post.id}`}>
+                <div className="findmeme-posts-title">{post.title}</div>
+                <div className="findmeme-posts-content">{post.content}</div>
+                <div className="findmeme-posts-other">
+                  <div>{post.username}</div>
+                  <div>{formatDate(post.createdAt)}</div>
+                </div>
+              </Link>
+            </div>
+          ))}
         </div>
       ) : (
-        <div className="findmeme-posts">
-          {foundPost.length > 0 ? (
-            foundPost.map((post, index) => (
-              <div key={index} className="post-summary">
-                <Link to={`/findmeme/${post.id}`}>
-                  <div className="findmeme-posts-title">{post.title}</div>
-                  <div className="findmeme-posts-content">{post.content}</div>
-                  <div className="findmeme-posts-other">
-                    <div>{post.username}</div>
-                    <div>{formatDate(post.createdAt)}</div>
-                  </div>
-                </Link>
-              </div>
-            ))
-          ) : (
-            <p>찾았다 게시물 없음</p>
-          )}
-        </div>
+        <p>게시물이 없습니다다</p>
       )}
-      {(isFindActive ? findTotalPages : foundTotalPages) > 1 && !loading && (
-        <div className="pagination">
-          {Array.from(
-            { length: isFindActive ? findTotalPages : foundTotalPages },
-            (_, index) => (
-              <button
-                key={index}
-                onClick={() => handlePageChange(index)}
-                className={
-                  index === (isFindActive ? findPage : foundPage)
-                    ? "active"
-                    : ""
-                }
-              >
-                {index + 1}
-              </button>
-            )
-          )}
-        </div>
-      )}
+
+      {/* 페이지네이션션 */}
+      <div className="pagination">
+        {Array.from({ length: activeData?.totalPages || 0 }, (_, index) => (
+          <button
+            key={index}
+            onClick={() => handlePageChange(index)}
+            className={
+              index === (isFindActive ? findPage : foundPage) ? "active" : ""
+            }
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
