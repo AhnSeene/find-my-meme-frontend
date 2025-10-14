@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { GoPerson } from "react-icons/go";
+import { HiOutlinePhotograph } from "react-icons/hi";
+import { FiUser, FiEdit3, FiLogOut } from "react-icons/fi";
 import { triggerLogout } from "../../contexts/api";
 import useAuthStore from "../../store/useAuthStore";
 import logo from "../../assets/logo.png";
@@ -10,17 +12,29 @@ import "./Navbar.css";
 
 function Navbar() {
   const navigate = useNavigate();
-  const location = useLocation(); // 현재 경로 가져오기
+  const location = useLocation();
   const usernameFromStore = useAuthStore((state) => state.username);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
-  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // 스크롤 감지
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const getActiveClass = (path) => {
     return location.pathname === path ? "active-menu" : "";
   };
 
   const handleLogoClick = () => {
-    window.location.href = "/"; //새로고침하면서 홈으로 이동
+    window.location.href = "/";
   };
 
   const handleUpload = () => {
@@ -40,25 +54,13 @@ function Navbar() {
     }
   };
 
-  const handleMouseEnter = () => {
-    if (isLoggedIn) {
-      setIsDropdownVisible(true);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (isLoggedIn) {
-      setIsDropdownVisible(false); // 마우스가 나가면 드롭다운 숨기기
-    }
-  };
-
   const handleLogout = () => {
     triggerLogout();
     navigate("/", { replace: true });
   };
 
   return (
-    <div className="navbar">
+    <div className={`navbar ${isScrolled ? "scrolled" : ""}`}>
       <h1 className="logo">
         <img
           src={logo}
@@ -80,22 +82,49 @@ function Navbar() {
       </ul>
       <ul className="navbar-sidemenu">
         <li onClick={handleUpload}>
-          <IoCloudUploadOutline style={{ fontSize: "24px" }} />
+          <IoCloudUploadOutline style={{ fontSize: "22px" }} />
         </li>
         <li
           className="mypage"
           onClick={handleMyPageClick}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
+          onMouseEnter={() => setShowDropdown(true)}
+          onMouseLeave={() => setShowDropdown(false)}
         >
-          <GoPerson style={{ fontSize: "24px" }} />
-          {isLoggedIn && isDropdownVisible && (
-            <div className="dropdown-menu">
+          <GoPerson style={{ fontSize: "22px" }} />
+          {isLoggedIn && showDropdown && (
+            <div
+              className="dropdown-menu"
+              onMouseEnter={() => setShowDropdown(true)}
+              onMouseLeave={() => setShowDropdown(false)}
+            >
               <ul>
-                <li onClick={handleMyPageClick}>나의 밈</li>
-                <li onClick={handleMyPageClick}>내 정보</li>
-                <li onClick={handleMyPageClick}>게시글 관리</li>
-                <li onClick={handleLogout}>로그아웃</li>
+                <li onClick={handleMyPageClick}>
+                  <span className="menu-icon">
+                    <HiOutlinePhotograph />
+                  </span>
+                  <span>나의 밈</span>
+                </li>
+
+                <li onClick={handleMyPageClick}>
+                  <span className="menu-icon">
+                    <FiUser />
+                  </span>
+                  <span>내 정보</span>
+                </li>
+
+                <li onClick={handleMyPageClick}>
+                  <span className="menu-icon">
+                    <FiEdit3 />
+                  </span>
+                  <span>게시글 관리</span>
+                </li>
+
+                <li onClick={handleLogout}>
+                  <span className="menu-icon">
+                    <FiLogOut />
+                  </span>
+                  <span>로그아웃</span>
+                </li>
               </ul>
             </div>
           )}

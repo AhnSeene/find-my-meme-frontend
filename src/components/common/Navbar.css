@@ -1,55 +1,73 @@
 .navbar {
-  position: fixed; /* 헤더 아래에 고정 */
+  position: sticky;
+  top: 0;
   left: 0;
   width: 100%;
-  height: 60px;
+  height: 70px;
   display: flex;
   align-items: center;
-  box-sizing: border-box; /* 패딩을 포함하여 너비 계산 */
-  /* border-bottom: 1px solid #d9d9d9; */
-  padding: 0 20px;
+  box-sizing: border-box;
+  padding: 0 40px;
   gap: 30px;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(8px);
   justify-content: space-between;
   z-index: 100;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.3s ease;
 }
+
+.navbar.scrolled {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
 .navbar .logo {
-  position: relative;
+  display: flex;
+  align-items: center;
   height: 100%;
-  top: 10px;
+  transition: transform 0.3s ease;
 }
+
+.navbar .logo:hover {
+  transform: scale(1.05);
+}
+
 .navbar .logo .logo-image {
-  width: 150px; /* 원하는 크기로 조정 */
+  width: 160px;
   height: auto;
-  position: absolute; /* 절대 위치 */
-  z-index: 1001; /* 헤더와 네비게이션 바보다 더 위에 위치 */
   cursor: pointer;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
 }
 
 .navbar .navbar-menu {
   display: flex;
   align-items: center;
   height: 100%;
-  gap: 70px;
+  gap: 60px;
+  flex: 1;
+  justify-content: center;
 }
 
 .navbar .navbar-menu li {
   position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 
-/* 기본 상태: 밑줄 없음 */
 .navbar .navbar-menu li::after {
   content: "";
   position: absolute;
-  bottom: -15px;
+  bottom: 0;
   left: 0;
-  width: 0; /* 초기 width 0 */
+  width: 0;
   height: 3px;
-  background-color: transparent; /* 초기에는 색 없음 */
-  transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  background-color: transparent;
+  border-radius: 3px 3px 0 0;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 활성화된 메뉴 밑줄 */
 .navbar .navbar-menu li.menu-all.active-menu::after {
   width: 100%;
   background-color: #fc3c76;
@@ -63,9 +81,8 @@
   background-color: #219c90;
 }
 
-/* 호버 시 밑줄 왼쪽 → 오른쪽 확장 */
 .navbar .navbar-menu li:hover::after {
-  width: 100%; /* 왼쪽에서 오른쪽으로 확장 */
+  width: 100%;
 }
 
 .navbar .navbar-menu li.menu-all:hover::after {
@@ -80,28 +97,214 @@
 
 .navbar .navbar-menu li a {
   text-decoration: none;
-  color: black;
-  white-space: nowrap; /* 텍스트 줄 바꿈 방지 */
+  color: #2c3e50;
+  white-space: nowrap;
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: -0.3px;
+  transition: color 0.3s ease;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+.navbar .navbar-menu li a:hover {
+  color: #219c90;
+  background-color: rgba(33, 156, 144, 0.05);
+}
+
+.navbar .navbar-menu li.menu-all.active-menu a {
+  color: #fc3c76;
+}
+.navbar .navbar-menu li.menu-top.active-menu a {
+  color: #e6b800;
+}
+.navbar .navbar-menu li.menu-find.active-menu a {
+  color: #219c90;
 }
 
 .navbar .navbar-sidemenu {
   display: flex;
   align-items: center;
   height: 100%;
-  gap: 30px;
+  gap: 16px;
+}
+
+.navbar-sidemenu li {
+  line-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 }
-.navbar-sidemenu li {
-  line-height: 0; /* 텍스트 줄 간격 여백 제거 */
+
+.navbar-sidemenu li:hover {
+  background-color: rgba(33, 156, 144, 0.1);
+  transform: translateY(-2px);
 }
 
-.navbar .navbar-sidemenu li:hover {
+.navbar-sidemenu li svg {
+  transition: color 0.3s ease;
+}
+
+.navbar-sidemenu li:hover svg {
   color: #219c90;
-  transition: color 0.3s ease-in-out;
 }
 
+.navbar-sidemenu .mypage {
+  position: relative;
+}
+
+/* ⭐ 드롭다운 메뉴 */
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 5px); /* ⭐ 12px → 5px (간격 줄임) */
+  right: 0;
+  background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
+  min-width: 200px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 10px 20px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
+  z-index: 1000;
+  padding: 8px;
+  animation: dropdownSlideIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-origin: top right;
+}
+
+/* ⭐ 투명한 다리 (마우스 이동 경로) */
+.dropdown-menu::after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: transparent;
+}
+
+/* ⭐ 말풍선 화살표 */
+.dropdown-menu::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  right: 16px;
+  width: 12px;
+  height: 12px;
+  background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
+  transform: rotate(45deg);
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+  border-left: 1px solid rgba(0, 0, 0, 0.04);
+  z-index: 1;
+}
+
+/* ⭐ 애니메이션 정의 */
+@keyframes dropdownSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ⭐ ul 스타일 */
+.dropdown-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ⭐ li 스타일 */
+.dropdown-menu ul li {
+  padding: 12px 16px; /* ⭐ 모든 li 동일한 padding */
+  color: #2c3e50;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 8px;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-left: 3px solid transparent;
+  white-space: nowrap;
+}
+
+.dropdown-menu ul li:last-child {
+  margin-bottom: 0;
+}
+
+/* ⭐ 아이콘 스타일 */
+.dropdown-menu ul li .menu-icon {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 18px;
+  transition: transform 0.2s ease;
+}
+
+/* ⭐ 일반 메뉴 호버 (초록색) */
+.dropdown-menu ul li:not(:last-child):hover {
+  background: linear-gradient(
+    90deg,
+    rgba(33, 156, 144, 0.12) 0%,
+    rgba(33, 156, 144, 0.04) 100%
+  );
+  border-left-color: #219c90;
+  color: #219c90;
+  padding-left: 20px;
+  transform: translateX(2px);
+}
+
+.dropdown-menu ul li:not(:last-child):hover .menu-icon {
+  transform: scale(1.1);
+}
+
+/* ⭐ 로그아웃 구분선 */
+.dropdown-menu ul li:last-child {
+  margin-top: 6px;
+  padding-top: 14px; /* ⭐ 12px → 14px (구분선 고려) */
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  /* padding-left는 기본값(16px) 유지 */
+}
+
+/* ⭐ 로그아웃 호버 (빨간색) */
+.dropdown-menu ul li:last-child:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 107, 107, 0.12) 0%,
+    rgba(255, 107, 107, 0.04) 100%
+  ) !important;
+  border-left-color: #ff6b6b !important;
+  color: #ff6b6b !important;
+  padding-left: 20px;
+  transform: translateX(2px);
+}
+
+.dropdown-menu ul li:last-child:hover .menu-icon {
+  transform: scale(1.1) rotate(-5deg);
+}
+
+/* 반응형 */
 @media screen and (max-width: 1000px) {
+  .navbar {
+    padding: 0 20px;
+    height: 60px;
+  }
+
   .navbar .navbar-menu {
     display: none;
+  }
+
+  .navbar .logo .logo-image {
+    width: 130px;
   }
 }
