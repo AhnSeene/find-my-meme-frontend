@@ -120,7 +120,7 @@ function FindMemePage() {
         <p>게시물이 없습니다다</p>
       )}
 
-      {/* 페이지네이션션 */}
+      {/* 페이지네이션 */}
       <div className="pagination">
         {Array.from({ length: activeData?.totalPages || 0 }, (_, index) => (
           <button
