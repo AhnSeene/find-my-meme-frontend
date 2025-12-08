@@ -1,36 +1,183 @@
 .comment-form-container {
-    width: 90%;
-    margin-top: 15px;
-    padding: 10px;
-    border-radius: 5px;
-    min-height: 200px; 
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 24px;
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.comment-form-container:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Quill 에디터 스타일링 */
+.custom-quill-editor {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.custom-quill-editor:hover {
+  border-color: rgba(33, 156, 144, 0.3);
+}
+
+.custom-quill-editor.ql-container {
+  font-family: inherit;
+}
+
+.custom-quill-editor .ql-toolbar {
+  background: #f8f9fa;
+  border: none;
+  border-bottom: 1px solid #e9ecef;
+  border-radius: 12px 12px 0 0;
+  padding: 12px;
+}
+
+.custom-quill-editor .ql-toolbar button {
+  transition: all 0.2s ease;
+}
+
+.custom-quill-editor .ql-toolbar button:hover {
+  background: rgba(33, 156, 144, 0.1);
+  border-radius: 4px;
+}
+
+.custom-quill-editor .ql-toolbar button.ql-active {
+  background: rgba(33, 156, 144, 0.15);
+  color: #219c90;
+}
+
+.custom-quill-editor .ql-editor {
+  min-height: 150px;
+  max-height: 400px;
+  overflow-y: auto;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #2c3e50;
+  padding: 16px;
+  border: none;
+}
+
+.custom-quill-editor .ql-editor.ql-blank::before {
+  color: #95a5a6;
+  font-style: normal;
+  font-size: 14px;
+}
+
+.custom-quill-editor .ql-editor:focus {
+  outline: none;
+}
+
+.custom-quill-editor.ql-container.ql-snow {
+  border: none;
+}
+
+/* 에디터 포커스 시 */
+.comment-form-container:focus-within .custom-quill-editor {
+  border-color: #219c90;
+  box-shadow: 0 0 0 3px rgba(33, 156, 144, 0.1);
+}
+
+/* 버튼 영역 */
+.comment-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e9ecef;
+}
+
+/* 취소 버튼 */
+.cancel-button {
+  padding: 10px 20px;
+  background: white;
+  color: #6c757d;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-button:hover {
+  background: #f8f9fa;
+  border-color: #dee2e6;
+  color: #495057;
+  transform: translateY(-1px);
+}
+
+.cancel-button:active {
+  transform: translateY(0);
+}
+
+/* 등록 버튼 */
+.submit-button {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #219c90 0%, #1a7a6f 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(33, 156, 144, 0.3);
+  transition: all 0.3s ease;
+}
+
+.submit-button:hover {
+  background: linear-gradient(135deg, #1a7a6f 0%, #156359 100%);
+  box-shadow: 0 6px 16px rgba(33, 156, 144, 0.4);
+  transform: translateY(-2px);
+}
+
+.submit-button:active {
+  transform: translateY(0);
+}
+
+.submit-button:disabled {
+  background: #dee2e6;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Quill 에디터 내부 이미지 스타일 */
+.custom-quill-editor .ql-editor img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 8px 0;
+}
+
+/* 반응형 - 모바일 */
+@media screen and (max-width: 600px) {
+  .comment-form-container {
+    padding: 16px;
   }
-  
-  .comment-form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 10px;
-    text-align: right;
-  }
-  
-  .submit-button {
-    background-color: #007bff;
-    color: white;
-    padding: 6px 12px;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-  
-  .submit-button:hover {
-    background-color: #0056b3;
+
+  .custom-quill-editor .ql-toolbar {
+    padding: 8px;
   }
 
   .custom-quill-editor .ql-editor {
-    min-height: 150px;  /* 최소 높이 설정 */
-    max-height: 300px;  /* 최대 높이 설정 */
-    overflow-y: auto;   /* 내용이 많아지면 스크롤 */
+    min-height: 120px;
+    font-size: 13px;
+    padding: 12px;
   }
-  
-  
+
+  .comment-form-actions {
+    gap: 8px;
+  }
+
+  .cancel-button,
+  .submit-button {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}

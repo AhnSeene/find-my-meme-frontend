@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../contexts/api";
 import useAuthStore from "../store/useAuthStore";
 import useMemesFilterStore from "../store/useMemesFilterStore";
+import { toast } from "react-toastify";
 
 const useToggleLike = ({ isProfile, username }) => {
   const { selectedSubTags, mediaType } = useMemesFilterStore();
@@ -11,7 +12,7 @@ const useToggleLike = ({ isProfile, username }) => {
   return useMutation({
     mutationFn: async ({ memeId, isLiked }) => {
       if (!isLoggedIn) {
-        alert("로그인해야 사용할 수 있습니다.");
+        toast.error("로그인해야 사용할 수 있습니다.");
         throw new Error("로그인이 필요합니다."); // 요청 중단
       }
       try {

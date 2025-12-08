@@ -21,11 +21,11 @@ function MyPage() {
   const isOwnProfile = usernameFromStore === username;
   const { memes, fetchNextPage, hasNextPage, isLoading } =
     useProfileMemesQuery(username);
-  useEffect(() => {
-    if (!isLoggedIn) {
-      navigate("/login");
-    }
-  }, [isLoggedIn, navigate]);
+  // useEffect(() => {
+  //   if (!isLoggedIn) {
+  //     navigate("/login");
+  //   }
+  // }, [isLoggedIn, navigate]);
 
   const renderContent = () => {
     // 로그인된 사용자의 경우 탭에 따라 콘텐츠 렌더링
@@ -47,7 +47,7 @@ function MyPage() {
   // };
 
   return (
-    <div className="mypage">
+    <div className="mypage-page">
       <Profile username={username} isOwnProfile={isOwnProfile} />
       {isOwnProfile && (
         <>

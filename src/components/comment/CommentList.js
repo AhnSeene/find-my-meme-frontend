@@ -103,7 +103,7 @@ function CommentList({
           <div dangerouslySetInnerHTML={{ __html: comment.htmlContent }} />
           {comment.deletedAt && (
             <div className="deleted-info">
-              삭제된 시간: {formatDateTime(comment.deletedAt)}
+              삭제된 시간 : {formatDateTime(comment.deletedAt)}
             </div>
           )}
           {comment.username === userUsername && !comment.deletedAt && (

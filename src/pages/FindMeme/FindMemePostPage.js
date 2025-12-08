@@ -1,10 +1,11 @@
-import { useState, useRef, useMemo, useEffect } from "react";
+import { useState, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import TagSelector from "../../components/tag/TagSelector";
 import api from "../../contexts/api";
 import axios from "axios";
+import "./FindMemePostPage.css";
 
 function FindMemePostPage() {
   const [selectedSubTags, setSelectedSubTags] = useState([]);
@@ -34,11 +35,13 @@ function FindMemePostPage() {
         const presignedUrl = await getPresignedUrl(file.name);
         if (!presignedUrl) {
           console.error("Failed to get presigned URL");
+          return;
         }
-        console.log(presignedUrl);
+
         const uploadSuccess = await uploadFileToS3(file, presignedUrl);
         if (!uploadSuccess) {
           console.error("Failed to upload file to S3");
+          return;
         }
 
         const { width, height } = await getImageDimensions(file);
@@ -54,6 +57,7 @@ function FindMemePostPage() {
         const uploadResponse = await completeUpload(fileMeta);
         if (!uploadResponse) {
           console.error("Failed to complete file upload");
+          return;
         }
 
         const imageUrl = `${uploadResponse.fileUrl}`;
@@ -73,7 +77,6 @@ function FindMemePostPage() {
         {},
         {}
       );
-
       return response.data.data.presignedUrl;
     } catch (error) {
       console.error("Error fetching presigned URL:", error);
@@ -89,7 +92,6 @@ function FindMemePostPage() {
         },
         withCredentials: true,
       });
-
       return response.status === 200;
     } catch (error) {
       console.error("Error uploading file to S3:", error);
@@ -101,7 +103,6 @@ function FindMemePostPage() {
     return new Promise((resolve) => {
       const img = new Image();
       img.src = URL.createObjectURL(file);
-
       img.onload = () => {
         resolve({ width: img.width, height: img.height });
       };
@@ -115,7 +116,6 @@ function FindMemePostPage() {
           "Content-Type": "application/json",
         },
       });
-
       return response.data.data;
     } catch (error) {
       console.error("Error completing upload:", error);
@@ -149,6 +149,12 @@ function FindMemePostPage() {
       }
     } catch (error) {
       console.error("Error submitting post:", error);
+    }
+  };
+
+  const handleCancel = () => {
+    if (window.confirm("작성 중인 내용이 사라집니다. 정말 취소하시겠습니까?")) {
+      navigate("/findmeme");
     }
   };
 
@@ -220,9 +226,18 @@ function FindMemePostPage() {
           setSelectedSubTags={setSelectedSubTags}
           isWritingMode={true}
         />
-        <button className="findMemePost-btn" type="submit">
-          등록
-        </button>
+        <div className="findMemePost-button-group">
+          <button
+            type="button"
+            className="findMemePost-btn-cancel"
+            onClick={handleCancel}
+          >
+            취소
+          </button>
+          <button className="findMemePost-btn" type="submit">
+            등록
+          </button>
+        </div>
       </form>
     </div>
   );

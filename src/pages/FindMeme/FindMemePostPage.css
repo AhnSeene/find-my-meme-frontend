@@ -1,133 +1,370 @@
 .findMemePost {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 1200px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.findMemePost h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 32px;
+  text-align: center;
+  position: relative;
+  padding-bottom: 16px;
+}
+
+/* 제목 아래 장식 선 */
+.findMemePost h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #219c90 0%, #1a7a6f 100%);
+  border-radius: 2px;
 }
 
 .findMemePost form {
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-.findMemePost h2 {
-  margin-bottom: 20px;
-}
-
-.findMemePost input {
-  font-size: 16px;
-  padding: 8px 12px;
-  margin-bottom: 20px;
-  width: 100%;
+/* 제목 입력 필드 */
+.findMemePost input[type="text"] {
+  font-size: 18px;
+  font-weight: 600;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  background: #f8f9fa;
+  transition: all 0.3s ease;
   box-sizing: border-box;
+  width: 100%;
 }
 
+.findMemePost input[type="text"]:focus {
+  outline: none;
+  border-color: #219c90;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(33, 156, 144, 0.1);
+}
+
+.findMemePost input[type="text"]::placeholder {
+  color: #adb5bd;
+  font-weight: 400;
+}
+
+/* ⭐⭐⭐ ReactQuill 에디터 - 가장 중요! ⭐⭐⭐ */
 .custom-editor {
   width: 100%;
-  margin-bottom: 20px;
-  box-sizing: border-box;
+  margin-bottom: 24px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid #e9ecef;
+  transition: border-color 0.3s ease;
+  background: white;
 }
 
+.custom-editor:focus-within {
+  border-color: #219c90;
+  box-shadow: 0 0 0 4px rgba(33, 156, 144, 0.1);
+}
+
+/* Quill 툴바 */
+.custom-editor .ql-toolbar {
+  background: #f8f9fa;
+  border: none !important;
+  border-bottom: 2px solid #e9ecef !important;
+  padding: 12px;
+}
+
+.custom-editor .ql-toolbar button:hover {
+  color: #219c90 !important;
+}
+
+.custom-editor .ql-toolbar .ql-active {
+  color: #219c90 !important;
+}
+
+/* Quill 컨테이너 */
 .custom-editor .ql-container {
+  border: none !important;
+  font-size: 16px;
   height: 100%;
+  background: white;
 }
 
+/* Quill 에디터 영역 */
 .custom-editor .ql-editor {
   min-height: 400px;
+  padding: 24px;
+  line-height: 1.8;
+  font-size: 16px;
 }
+
+.custom-editor .ql-editor.ql-blank::before {
+  color: #adb5bd;
+  font-style: normal;
+  left: 24px;
+}
+
 .custom-editor .ql-editor img {
-  max-width: 90%; /* 부모 요소 기준 최대 너비 설정 */
-  height: auto; /* 비율 유지 */
-  display: block; /* 정렬 문제 해결 */
-  margin: 10px auto;
+  max-width: 90%;
+  height: auto;
+  display: block;
+  margin: 16px auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+
+/* 태그 선택기 영역 */
 .findMemePost-tag {
   width: 100%;
-  margin-bottom: 20px; /* 폼 요소와 등록 버튼 사이의 간격 */
+  margin-bottom: 24px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
 }
+
 .findMemePost-tag-top {
   display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
 }
 
 .findMemePost-tag select {
-  width: 100%;
-  padding: 8px;
-  font-size: 16px;
-  margin-bottom: 10px;
+  flex: 1;
+  min-width: 200px;
+  padding: 12px 16px;
+  font-size: 15px;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.findMemePost-tag .tag-buttons {
+.findMemePost-tag select:hover {
+  border-color: #219c90;
+}
+
+.findMemePost-tag select:focus {
+  outline: none;
+  border-color: #219c90;
+  box-shadow: 0 0 0 3px rgba(33, 156, 144, 0.1);
+}
+
+/* 선택된 태그들 */
+.findMemePost-tag .selected-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px; /* 버튼 사이의 간격 */
-}
-
-.findMemePost-tag button {
-  background-color: #219c90;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 14px;
-  cursor: pointer;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3), 0px 1px 3px rgba(0, 0, 0, 0.2);
+  gap: 10px;
+  margin-bottom: 16px;
 }
 
 .findMemePost-tag .selected-tag {
   display: flex;
   align-items: center;
-  background-color: #e0f4f1;
-  border: 1px solid #219c90;
-  border-radius: 8px;
-  padding: 8px;
-  margin-bottom: 10px;
+  gap: 8px;
+  background: linear-gradient(135deg, #e3f3f1 0%, #d1ebe8 100%);
+  border: 1px solid rgba(33, 156, 144, 0.3);
+  border-radius: 20px;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #219c90;
+  transition: all 0.2s ease;
+}
+
+.findMemePost-tag .selected-tag:hover {
+  background: linear-gradient(135deg, #d1ebe8 0%, #c0e4e0 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(33, 156, 144, 0.2);
 }
 
 .findMemePost-tag .selected-tag button {
-  background-color: #ff4d4d; /* 제거 버튼 색상 */
+  background: rgba(255, 107, 107, 0.2);
   border: none;
-  color: white;
-  border-radius: 4px;
-  padding: 2px 6px;
-  margin-left: 10px;
+  color: #ff6b6b;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  padding: 0;
   cursor: pointer;
-  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  box-shadow: none;
 }
 
 .findMemePost-tag .selected-tag button:hover {
-  background-color: #e60000;
+  background: rgba(255, 107, 107, 0.3);
+  transform: scale(1.1);
 }
 
-.findMemePost-btn {
-  width: 100px;
-  height: 40px;
-  border: none;
-  background-color: #219c90;
-  font-size: 16px;
-  color: white;
-  border-radius: 8px;
+/* 태그 버튼들 */
+.findMemePost-tag .tag-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.findMemePost-tag button {
+  background: white;
+  color: #495057;
+  border: 2px solid #e9ecef;
+  border-radius: 20px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3), 0px 1px 3px rgba(0, 0, 0, 0.2);
-  margin-top: 20px; /* 등록 버튼과 폼 요소 간의 간격 */
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-/* 버튼에 호버 효과 추가 */
+.findMemePost-tag button:hover {
+  border-color: #219c90;
+  color: #219c90;
+  background: #f8f9fa;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(33, 156, 144, 0.15);
+}
+
+.findMemePost-tag button.selected {
+  background: linear-gradient(135deg, #219c90 0%, #1a7a6f 100%);
+  color: white;
+  border-color: #219c90;
+  box-shadow: 0 4px 12px rgba(33, 156, 144, 0.3);
+}
+
+/* 버튼 그룹 */
+.findMemePost-button-group {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+/* 취소 버튼 */
+.findMemePost-btn-cancel {
+  min-width: 160px;
+  height: 50px;
+  padding: 0 32px;
+  border: 2px solid #e9ecef;
+  background: white;
+  font-size: 16px;
+  font-weight: 600;
+  color: #6c757d;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.findMemePost-btn-cancel:hover {
+  border-color: #ff6b6b;
+  color: #ff6b6b;
+  background: #fff5f5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.2);
+}
+
+.findMemePost-btn-cancel:active {
+  transform: translateY(0);
+}
+
+/* 등록 버튼 */
+.findMemePost-btn {
+  min-width: 160px;
+  height: 50px;
+  padding: 0 32px;
+  border: none;
+  background: linear-gradient(135deg, #219c90 0%, #1a7a6f 100%);
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(33, 156, 144, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .findMemePost-btn:hover {
-  box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.4), 0px 2px 4px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #1a7a6f 0%, #156359 100%);
+  box-shadow: 0 6px 16px rgba(33, 156, 144, 0.4);
   transform: translateY(-2px);
 }
 
-/* 버튼을 클릭했을 때의 효과 */
 .findMemePost-btn:active {
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4), 0px 1px 2px rgba(0, 0, 0, 0.3);
-  transform: translateY(1px);
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(33, 156, 144, 0.3);
 }
 
-.findMemePost-tag .selected-tags {
-  display: flex;
-  flex-wrap: wrap; /* 태그가 가로로 나열되며 공간이 부족할 경우 줄 바꿈 */
-  gap: 10px; /* 태그 간의 간격 */
-  margin-bottom: 10px; /* 선택된 태그와 다른 요소들 간의 간격 */
+/* 반응형 - 태블릿 */
+@media screen and (max-width: 768px) {
+  .findMemePost {
+    padding: 24px 16px;
+  }
+
+  .findMemePost h2 {
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+
+  .findMemePost form {
+    padding: 24px 20px;
+  }
+
+  .findMemePost input[type="text"] {
+    font-size: 16px;
+    padding: 14px 16px;
+  }
+
+  .custom-editor .ql-editor {
+    min-height: 300px;
+    padding: 16px;
+  }
+
+  .findMemePost-tag {
+    padding: 16px;
+  }
+
+  .findMemePost-button-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .findMemePost-btn,
+  .findMemePost-btn-cancel {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+/* 반응형 - 모바일 */
+@media screen and (max-width: 480px) {
+  .findMemePost h2 {
+    font-size: 20px;
+  }
+
+  .findMemePost form {
+    padding: 20px 16px;
+  }
+
+  .findMemePost-tag select {
+    min-width: 100%;
+  }
 }
