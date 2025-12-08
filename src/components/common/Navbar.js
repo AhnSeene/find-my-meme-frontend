@@ -5,16 +5,19 @@ import { IoCloudUploadOutline } from "react-icons/io5";
 import { GoPerson } from "react-icons/go";
 import { HiOutlinePhotograph } from "react-icons/hi";
 import { FiUser, FiEdit3, FiLogOut } from "react-icons/fi";
-import { triggerLogout } from "../../contexts/api";
 import useAuthStore from "../../store/useAuthStore";
+import { useQueryClient } from "@tanstack/react-query";
 import logo from "../../assets/logo.png";
 import "./Navbar.css";
+import NotificationBell from "../notification/NotificationBell";
 
 function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const usernameFromStore = useAuthStore((state) => state.username);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const logout = useAuthStore((state) => state.logout);
+  const queryClient = useQueryClient();
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -49,13 +52,13 @@ function Navbar() {
     if (isLoggedIn) {
       navigate(`/users/${usernameFromStore}`, { replace: true });
     } else {
-      console.log("로그인안됐는데?");
       navigate("/login");
     }
   };
 
   const handleLogout = () => {
-    triggerLogout();
+    logout();
+    queryClient.clear();
     navigate("/", { replace: true });
   };
 
@@ -80,10 +83,20 @@ function Navbar() {
           <Link to="/findmeme">내 표현을 찾아줘</Link>
         </li>
       </ul>
+
+      {/* 사이드 메뉴 */}
       <ul className="navbar-sidemenu">
+        {/* 알림 벨 */}
+        <li className="notification-item">
+          <NotificationBell />
+        </li>
+
+        {/* 업로드 */}
         <li onClick={handleUpload}>
           <IoCloudUploadOutline style={{ fontSize: "22px" }} />
         </li>
+
+        {/* 마이페이지 */}
         <li
           className="mypage"
           onClick={handleMyPageClick}
@@ -112,14 +125,24 @@ function Navbar() {
                   <span>내 정보</span>
                 </li>
 
-                <li onClick={handleMyPageClick}>
+                <li
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleMyPageClick();
+                  }}
+                >
                   <span className="menu-icon">
                     <FiEdit3 />
                   </span>
                   <span>게시글 관리</span>
                 </li>
 
-                <li onClick={handleLogout}>
+                <li
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleLogout();
+                  }}
+                >
                   <span className="menu-icon">
                     <FiLogOut />
                   </span>

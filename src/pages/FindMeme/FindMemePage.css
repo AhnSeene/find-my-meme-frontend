@@ -1,126 +1,288 @@
 .findmeme {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 40px;
+  min-height: 100vh;
 }
 
-.findmeme-posts {
+/* 상단 버튼 영역 */
+.findmeme-btn {
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
-  width: 70%; /* 부모 요소의 전체 너비 */
+  align-items: center;
+  margin-bottom: 32px;
   gap: 20px;
 }
 
-.post-summary {
+.findmeme-btn-left {
   display: flex;
-  flex-direction: column;
-  padding: 10px 40px;
-  width: 48%;
-  text-align: left;
-  box-sizing: border-box;
-  border-radius: 20px;
+  gap: 12px;
+  background: white;
+  padding: 6px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* 물음표/느낌표 버튼 */
+.findmeme-btn-left button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  min-width: 80px;
+}
+
+.findmeme-btn-left button:hover {
+  background: rgba(33, 156, 144, 0.08);
+}
+
+.findmeme-btn-left button.active {
+  background: linear-gradient(135deg, #219c90 0%, #1a7a6f 100%);
+  box-shadow: 0 4px 12px rgba(33, 156, 144, 0.3);
+}
+
+.question-img,
+.exclamation-img {
+  width: 36px;
+  height: 36px;
+  transition: transform 0.3s ease;
+}
+
+.findmeme-btn-left button:hover .question-img,
+.findmeme-btn-left button:hover .exclamation-img {
+  transform: scale(1.1);
+}
+
+/* 글 등록 버튼 */
+.findmeme-post-btn {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #219c90 0%, #1a7a6f 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(33, 156, 144, 0.3);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.findmeme-post-btn:hover {
+  background: linear-gradient(135deg, #1a7a6f 0%, #156359 100%);
+  box-shadow: 0 6px 16px rgba(33, 156, 144, 0.4);
+  transform: translateY(-2px);
+}
+
+.findmeme-post-btn:active {
+  transform: translateY(0);
+}
+
+/* 게시글 목록 */
+.findmeme-posts {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+/* 게시글 카드 */
+.post-summary {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.post-summary::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, #219c90 0%, #1a7a6f 100%);
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+  transform-origin: bottom;
 }
 
 .post-summary:hover {
-  background-color: #f0f0f0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+  border-color: rgba(33, 156, 144, 0.2);
 }
-/* 링크 스타일 제거 */
+
+.post-summary:hover::before {
+  transform: scaleY(1);
+}
+
 .post-summary a {
-  text-decoration: none; /* 밑줄 제거 */
-  color: inherit; /* 기본 텍스트 색상 유지 */
-  height: 100%; /* 링크를 전체 높이로 설정 */
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
 
+/* 제목 */
 .findmeme-posts-title {
-  font-weight: bold;
-  font-size: 20px;
-  white-space: nowrap; /* 제목을 한 줄로 유지 */
-  overflow: hidden; /* 넘치는 내용 숨기기 */
-  text-overflow: ellipsis; /* 넘치는 내용을 생략부호로 대체 */
-  border-bottom: 30px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+  transition: color 0.3s ease;
 }
 
+.post-summary:hover .findmeme-posts-title {
+  color: #219c90;
+}
+
+/* 내용 */
 .findmeme-posts-content {
-  font-size: 16px;
+  font-size: 14px;
+  color: #6c757d;
+  line-height: 1.6;
+  margin-bottom: 16px;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* 최대 두 줄까지 표시 */
-  -webkit-box-orient: vertical; /* 수직 박스 정렬 */
-  overflow: hidden; /* 넘치는 내용 숨기기 */
-  text-overflow: ellipsis; /* 넘치는 내용을 생략부호로 대체 */
-  margin-bottom: 10px; /* 내용과 작성자, 작성시간 사이의 여백 추가 */
-  height: 3.2em; /* 두 줄 높이 설정 */
-  line-height: 1.6em; /* 한 줄 높이 설정 (line-height에 맞게 조정) */
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 44px;
 }
 
+/* 작성자/날짜 */
 .findmeme-posts-other {
-  font-size: 14px;
-  color: #666; /* 색상 설정 (선택사항) */
-  display: flex; /* flexbox 활성화 */
-  justify-content: space-between; /* 양쪽 끝에 배치 */
-}
-
-.findmeme-btn {
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  width: 70%;
   justify-content: space-between;
-}
-
-.findmeme-btn .findmeme-btn-left {
-  display: flex;
-  gap: 10px;
-}
-
-.findmeme-btn button {
-  display: flex;
   align-items: center;
-  gap: 8px;
-  border: none;
-  cursor: pointer;
-  font-size: 20px;
-  background: none;
+  font-size: 13px;
+  color: #95a5a6;
+  padding-top: 12px;
+  border-top: 1px solid #e9ecef;
 }
-.findmeme-btn .findmeme-post-btn {
-  border: none;
-  background-color: #219c90;
-  cursor: pointer;
-  color: white;
-  font-size: 14px;
+
+.findmeme-posts-other div:first-child {
+  font-weight: 600;
+  color: #6c757d;
 }
-.findmeme-btn .findmeme-post-btn:hover {
-  background-color: #219c90cc;
-}
-.exclamation-img {
-  width: 46px;
-}
-.question-img {
-  width: 46px;
-}
+
+/* 페이지네이션 */
 .pagination {
-  margin-top: 20px; /* 페이지네이션과 게시글 목록 사이에 간격 추가 */
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 40px;
+  padding-bottom: 40px;
+}
+
+.pagination button {
+  min-width: 40px;
+  height: 40px;
+  padding: 0 12px;
+  border: 2px solid #e9ecef;
+  background: white;
+  color: #6c757d;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pagination button:hover {
+  border-color: #219c90;
+  background: rgba(33, 156, 144, 0.05);
+  color: #219c90;
 }
 
 .pagination button.active {
-  font-weight: bold; /* 현재 페이지 버튼을 강조 */
-  background-color: #f0f0f0; /* 강조된 버튼 배경색 */
+  background: linear-gradient(135deg, #219c90 0%, #1a7a6f 100%);
+  border-color: #219c90;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(33, 156, 144, 0.3);
 }
 
-.findmeme-btn button.active .icon {
-  color: #219c90; /* 아이콘 색상 변경 (예: 노란색) */
+/* Loading & Empty 상태 */
+.findmeme > p {
+  text-align: center;
+  padding: 80px 20px;
+  font-size: 16px;
+  color: #95a5a6;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.findmeme-btn button .icon {
-  transition: color 0.3s ease; /* 아이콘 색상 전환 애니메이션 */
-}
-
-@media (max-width: 1000px) {
-  .findmeme-posts {
-    flex-direction: column;
+/* 반응형 - 태블릿 */
+@media screen and (max-width: 1000px) {
+  .findmeme {
+    padding: 24px 20px;
   }
+
+  .findmeme-posts {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .findmeme-btn {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .findmeme-btn-left {
+    justify-content: center;
+  }
+
+  .findmeme-post-btn {
+    width: 100%;
+  }
+}
+
+/* 반응형 - 모바일 */
+@media screen and (max-width: 600px) {
+  .findmeme {
+    padding: 20px 16px;
+  }
+
   .post-summary {
-    min-width: 50%;
+    padding: 20px;
+  }
+
+  .findmeme-posts-title {
+    font-size: 16px;
+  }
+
+  .findmeme-posts-content {
+    font-size: 13px;
+  }
+
+  .findmeme-posts-other {
+    font-size: 12px;
+  }
+
+  .findmeme-btn-left button {
+    min-width: 60px;
+    padding: 10px 16px;
+  }
+
+  .question-img,
+  .exclamation-img {
+    width: 28px;
+    height: 28px;
   }
 }
