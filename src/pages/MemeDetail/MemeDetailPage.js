@@ -5,11 +5,13 @@ import { SiKakaotalk } from "react-icons/si";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import { FaFacebookSquare } from "react-icons/fa";
 import { FaLink } from "react-icons/fa";
-import { AiFillLike } from "react-icons/ai";
-import { GoHeart, GoHeartFill } from "react-icons/go";
+import { GoHeartFill, GoHeart } from "react-icons/go";
+import { GrFormView } from "react-icons/gr";
+import { IoMdDownload } from "react-icons/io";
 import MemeSwiper from "../../components/meme/MemeSwiper";
 import { toast } from "react-toastify";
 import api from "../../contexts/api";
+import ResponsiveImage from "../../components/common/ResponsiveImage";
 import "./MemeDetailPage.css";
 
 function MemeDetailPage() {
@@ -44,30 +46,14 @@ function MemeDetailPage() {
     fetchRecommendedMemes();
   }, [id]);
 
-  if (loading) return <div>Loadding...</div>;
-  if (error) return <div>{Error}</div>;
-
-  const getResizedImageUrl = (originalUrl, width) => {
-    // 원본: images/memes/2024/02/uuid.jpg
-    // 변환: resized/memes/2024/02/uuid-288w.jpg
-    return originalUrl
-      .replace("images/", "resized/")
-      .replace(/.(jpg|jpeg|png|gif)$/, `_${width}w.$1`);
-  };
-
-  const ResponsiveImage = ({ src, alt }) => {
+  if (loading)
     return (
-      <img
-        srcSet={`
-          ${getResizedImageUrl(src, 288)} 288w,
-          ${getResizedImageUrl(src, 657)} 657w
-        `}
-        sizes="(max-width: 500px) 288px, 657px"
-        src={getResizedImageUrl(src, 657)} // 기본 이미지
-        alt={alt}
-      />
+      <div className="loading">
+        <div className="spinner"></div>
+        <p>로딩중...</p>
+      </div>
     );
-  };
+  if (error) return <div className="error-message">{error}</div>;
 
   const handleDownload = async () => {
     window.location.href = `${apiUrl}/v1/meme-posts/${meme.id}/download`;
@@ -76,7 +62,6 @@ function MemeDetailPage() {
   const handleLikeToggle = async () => {
     if (!meme) return;
 
-    // UI를 먼저 업데이트
     const newIsLiked = !meme.isLiked;
     const newLikeCount = newIsLiked ? meme.likeCount + 1 : meme.likeCount - 1;
 
@@ -87,11 +72,9 @@ function MemeDetailPage() {
     }));
 
     try {
-      // 서버 요청
       const response = await api.post(`/meme-posts/${id}/toggleLike`);
       const { isLiked } = response.data.data;
 
-      // 서버 응답에 따라 상태 동기화
       setMeme((prevMeme) => ({
         ...prevMeme,
         isLiked,
@@ -99,7 +82,6 @@ function MemeDetailPage() {
     } catch (error) {
       console.error("Failed to toggle like:", error);
 
-      // 에러 발생 시 UI 상태 원복
       setMeme((prevMeme) => ({
         ...prevMeme,
         isLiked: !newIsLiked,
@@ -110,7 +92,6 @@ function MemeDetailPage() {
 
   function shareOnKakao() {
     const imageUrl = `${meme.imageUrl}`;
-    // 카카오톡 공유 API를 사용하여 이미지 공유 (사전 설정 필요)
     window.Kakao.Link.sendDefault({
       objectType: "feed",
       content: {
@@ -142,67 +123,119 @@ function MemeDetailPage() {
       .catch((err) => console.error("Failed to copy link: ", err));
   }
 
+  // 숫자 포맷팅 함수 (1000 -> 1K)
+  const formatNumber = (num) => {
+    if (num >= 1000000) {
+      return (num / 1000000).toFixed(1) + "M";
+    }
+    if (num >= 1000) {
+      return (num / 1000).toFixed(1) + "K";
+    }
+    return num.toString();
+  };
+
   return (
     <div className="memedetail">
       <div className="memedetail-info">
         <div className="memedetail-left">
-          <ResponsiveImage src={`${meme.imageUrl}`} alt={`Meme ${meme.id}`} />
+          <ResponsiveImage mediaInfo={meme.mediaInfo} />
 
-          {/* <img src={`${fileBaseUrl}${meme.imageUrl}`} alt={`Meme ${meme.id}`} /> */}
           <div className="memedetail-left-info">
             <Link to={`/users/${meme.username}`} className="memedetail-link">
-              <img
-                src={`${meme.userProfileImageUrl}`}
-                alt={`${meme.id}img`}
-              ></img>
-              <span>{meme.username} </span>
+              <img src={`${meme.userProfileImageUrl}`} alt={meme.username} />
+              <span>{meme.username}</span>
             </Link>
             <button onClick={handleLikeToggle}>
               {meme.isLiked ? (
-                <GoHeartFill style={{ fontSize: "24px", color: "red" }} />
+                <GoHeartFill style={{ fontSize: "24px", color: "#e74c3c" }} />
               ) : (
                 <GoHeart style={{ fontSize: "24px" }} />
               )}
+              <span>{formatNumber(meme.likeCount)}</span>
             </button>
-            {meme.likeCount}
           </div>
         </div>
+
         <div className="memedetail-right">
-          <div>
-            weight x height : {meme.weight} x {meme.height}
+          {/* 인기도 통계 */}
+          <div className="stats-container">
+            <div className="stat-item">
+              <GrFormView className="stat-icon" />
+              <div className="stat-info">
+                <span className="stat-label">조회수</span>
+                <span className="stat-value">
+                  {formatNumber(meme.viewCount)}
+                </span>
+              </div>
+            </div>
+            <div className="stat-item">
+              <GoHeartFill className="stat-icon heart" />
+              <div className="stat-info">
+                <span className="stat-label">좋아요</span>
+                <span className="stat-value">
+                  {formatNumber(meme.likeCount)}
+                </span>
+              </div>
+            </div>
+            <div className="stat-item">
+              <IoMdDownload className="stat-icon" />
+              <div className="stat-info">
+                <span className="stat-label">다운로드</span>
+                <span className="stat-value">
+                  {formatNumber(meme.downloadCount)}
+                </span>
+              </div>
+            </div>
           </div>
-          <div>size : {meme.size}</div>
+
+          {/* 다운로드 버튼 */}
           <button className="download-btn" onClick={handleDownload}>
             <MdDownload />
             다운로드
           </button>
+
+          {/* 공유 메뉴 */}
           <div className="share-menu">
-            <button onClick={shareOnKakao}>
+            <button onClick={shareOnKakao} title="카카오톡 공유">
               <SiKakaotalk />
             </button>
-            <button onClick={shareOnTwitter}>
+            <button onClick={shareOnTwitter} title="트위터 공유">
               <FaSquareXTwitter />
             </button>
-            <button>
+            <button title="페이스북 공유">
               <FaFacebookSquare />
             </button>
-            <button onClick={copyLink}>
+            <button onClick={copyLink} title="링크 복사">
               <FaLink />
             </button>
           </div>
+
+          {/* 태그 */}
           <div className="memedetail-tags">
             {meme.tags.map((tag, index) => (
               <span key={index} className="memedetail-tag">
-                # {tag}
+                #{tag}
               </span>
             ))}
           </div>
+
+          <details className="technical-info">
+            <summary>상세 정보</summary>
+            <div className="tech-details">
+              <div>
+                해상도: {meme.weight} × {meme.height}px
+              </div>
+              <div>파일 크기: {meme.size}</div>
+            </div>
+          </details>
         </div>
       </div>
+
       <div className="recommend-meme">
         <MemeSwiper memes={recommendedMemes} />
       </div>
     </div>
   );
 }
+
 export default MemeDetailPage;

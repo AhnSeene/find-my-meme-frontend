@@ -129,7 +129,42 @@
   gap: 16px;
 }
 
-.navbar-sidemenu li {
+.navbar-sidemenu .mypage {
+  position: relative;
+  height: 40px !important; /* ⭐ 높이 고정 */
+  overflow: visible !important; /* ⭐ 드롭다운이 밖으로 나갈 수 있게 */
+}
+
+/* 알림 벨 아이템 - 다른 li와 동일하게 */
+.navbar-sidemenu > li.notification-item {
+  /* li.notification-item으로 변경 */
+  padding: 0;
+  line-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: transparent;
+}
+.navbar-sidemenu > li.notification-item:hover {
+  background: transparent;
+  transform: none;
+}
+.navbar-sidemenu .notification-item:hover {
+  background: transparent; /* NotificationBell 자체에서 처리 */
+  transform: none; /* NotificationBell 자체에서 처리 */
+}
+
+/* NotificationBell이 li 스타일을 상속받지 않도록 */
+.navbar-sidemenu .notification-item .notification-bell {
+  width: 100%;
+  height: 100%;
+}
+
+.navbar-sidemenu > li {
   line-height: 0;
   display: flex;
   align-items: center;
@@ -141,16 +176,16 @@
   cursor: pointer;
 }
 
-.navbar-sidemenu li:hover {
+.navbar-sidemenu > li:hover {
   background-color: rgba(33, 156, 144, 0.1);
   transform: translateY(-2px);
 }
 
-.navbar-sidemenu li svg {
+.navbar-sidemenu > li svg {
   transition: color 0.3s ease;
 }
 
-.navbar-sidemenu li:hover svg {
+.navbar-sidemenu > li:hover svg {
   color: #219c90;
 }
 

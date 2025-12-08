@@ -1,88 +1,267 @@
 .findMemeDetail {
-  display: flex;
-  flex-direction: column;
-  margin: 40px auto;
-  align-items: center;
-}
-.findMemeDetail-title {
-  display: flex; /* Flexbox 적용 */
-  align-items: center; /* 아이템들을 수직 가운데 정렬 */
-  gap: 12px; /* 아이콘과 제목 사이의 간격 */
-  width: 100%;
-  box-sizing: border-box; /* 패딩과 테두리를 포함한 높이 */
-  margin-bottom: 10px;
-}
-.findMemeDetail-title img {
-  width: 50px;
-}
-.findMemeDetail-title > div {
-  flex-grow: 1; /* 제목이 남은 공간을 채우도록 설정 */
-  border-radius: 4px;
-  padding: 4px 8px;
-  font-size: 20px;
-  text-align: left;
-}
-.findMemeDetail-dates {
-  width: 100%;
-  text-align: right;
-  margin-bottom: 10px; /* 필요시 추가 */
-}
-.findMemeDetail-content {
-  width: 100%;
-  min-height: 400px;
-  padding: 8px 8px;
-  border-radius: 4px;
-  border: 1px solid black;
-  box-sizing: border-box; /* 패딩과 테두리를 포함한 높이 */
-  margin-bottom: 10px;
-}
-.findMemeDetail-content img {
-  max-width: 90%; /* 콘텐츠 영역의 이미지 최대 너비를 100%로 제한 */
-  height: auto; /* 이미지 비율 유지 */
-  display: block; /* 이미지 주변 여백 제거 */
-  margin: 0 auto; /* 이미지 중앙 정렬 */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 40px;
+  min-height: 100vh;
 }
 
+/* 제목 영역 */
+.findMemeDetail-title {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+.findMemeDetail-title img {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+.findMemeDetail-title > div {
+  flex: 1;
+  font-size: 24px;
+  font-weight: 700;
+  color: #2c3e50;
+  line-height: 1.4;
+}
+
+/* 작성일자 */
+.findMemeDetail-dates {
+  text-align: right;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #95a5a6;
+  padding: 0 4px;
+}
+
+/* 본문 영역 */
+.findMemeDetail-content {
+  background: white;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  min-height: 400px;
+  margin-bottom: 20px;
+  line-height: 1.8;
+  color: #2c3e50;
+  font-size: 15px;
+}
+
+.findMemeDetail-content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 20px auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 태그 영역 */
+.findMemeDetail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 0 4px;
+}
+
+.tag-item {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  background: linear-gradient(
+    135deg,
+    rgba(33, 156, 144, 0.1) 0%,
+    rgba(26, 122, 111, 0.1) 100%
+  );
+  color: #219c90;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid rgba(33, 156, 144, 0.2);
+  transition: all 0.3s ease;
+}
+
+.tag-item:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(33, 156, 144, 0.2) 0%,
+    rgba(26, 122, 111, 0.2) 100%
+  );
+  transform: translateY(-1px);
+}
+
+/* 수정/삭제 버튼 */
 .findMemeDetail-actions {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   justify-content: flex-end;
-  width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 32px;
 }
 
 .findMemeDetail-btn {
-  width: 70px; /* 버튼 너비를 100px로 설정 */
-  height: 40px; /* 버튼 높이 설정 (선택사항) */
-  background-color: #219c90;
-  color: white;
-  border-radius: 4px;
-  border: none; /* 기본 테두리 제거 */
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 3D 효과를 위한 그림자 */
-  transition: background-color 0.3s ease; /* 마우스 오버 시 배경색 변경 효과 (선택사항) */
-  width: 80;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.findMemeDetail-btn:not(.delete) {
+  background: linear-gradient(135deg, #219c90 0%, #1a7a6f 100%);
+  color: white;
+}
+
+.findMemeDetail-btn:not(.delete):hover {
+  background: linear-gradient(135deg, #1a7a6f 0%, #156359 100%);
+  box-shadow: 0 6px 16px rgba(33, 156, 144, 0.4);
+  transform: translateY(-2px);
 }
 
 .findMemeDetail-btn.delete {
-  background-color: #d9534f; /* 삭제 버튼에 다른 색상 지정 (선택사항) */
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
 }
 
-.findMemeDetail-btn:hover {
-  background-color: #197c72; /* 마우스 오버 시 배경색 변경 */
+.findMemeDetail-btn.delete:hover {
+  background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+  box-shadow: 0 6px 16px rgba(231, 76, 60, 0.4);
+  transform: translateY(-2px);
 }
 
+.findMemeDetail-btn:active {
+  transform: translateY(0);
+}
+
+/* 댓글 입력 필드 */
 .findMemeDetail-input {
-  width: 80%;
-  height: 40px;
-  border-radius: 8px;
-  padding-left: 20px;
+  width: 100%;
+  padding: 16px 20px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 14px;
+  background: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  margin-bottom: 24px;
 }
 
+.findMemeDetail-input:hover {
+  border-color: #219c90;
+  box-shadow: 0 4px 12px rgba(33, 156, 144, 0.1);
+}
+
+.findMemeDetail-input:focus {
+  outline: none;
+  border-color: #219c90;
+  box-shadow: 0 4px 16px rgba(33, 156, 144, 0.2);
+}
+
+.findMemeDetail-input::placeholder {
+  color: #95a5a6;
+}
+
+/* 댓글 섹션 */
 .comments-section {
-  width: 100%; /* findMemeDetail의 너비에 맞춰 설정 */
-  max-width: 1200px; /* 최대 너비 설정, 필요에 따라 조정 */
-  margin: 0 auto; /* 가운데 정렬 */
-  padding: 10px; /* 필요에 따라 패딩 추가 */
-  box-sizing: border-box; /* 패딩과 테두리를 포함한 너비 */
+  width: 100%;
+  margin-top: 40px;
+}
+
+.comments-section > div:first-child {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  padding: 0 4px;
+}
+
+/* 로그인 필요 메시지 */
+.findMemeDetail > p {
+  text-align: center;
+  padding: 20px;
+  background: rgba(33, 156, 144, 0.05);
+  border: 2px dashed rgba(33, 156, 144, 0.3);
+  border-radius: 12px;
+  color: #219c90;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+
+/* 반응형 - 태블릿 */
+@media screen and (max-width: 1000px) {
+  .findMemeDetail {
+    padding: 24px 20px;
+  }
+
+  .findMemeDetail-title {
+    padding: 20px;
+  }
+
+  .findMemeDetail-title > div {
+    font-size: 20px;
+  }
+
+  .findMemeDetail-content {
+    padding: 24px;
+    min-height: 300px;
+  }
+}
+
+/* 반응형 - 모바일 */
+@media screen and (max-width: 600px) {
+  .findMemeDetail {
+    padding: 20px 16px;
+  }
+
+  .findMemeDetail-title {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .findMemeDetail-title img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .findMemeDetail-title > div {
+    font-size: 18px;
+  }
+
+  .findMemeDetail-content {
+    padding: 20px;
+    min-height: 250px;
+    font-size: 14px;
+  }
+
+  .findMemeDetail-dates {
+    font-size: 12px;
+  }
+
+  .tag-item {
+    font-size: 12px;
+    padding: 5px 12px;
+  }
+
+  .findMemeDetail-actions {
+    gap: 8px;
+  }
+
+  .findMemeDetail-btn {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+
+  .comments-section > div:first-child {
+    font-size: 16px;
+  }
 }
