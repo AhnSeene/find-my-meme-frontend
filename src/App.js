@@ -18,8 +18,12 @@ import Navbar from "./components/common/Navbar";
 //import PrivateRoute from "./components/PrivateRoute";
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
+import useSSE from "./hooks/useSSE";
+import useFetchNotifications from "./hooks/useFetchNotifications";
 
 function App() {
+  useSSE();
+  useFetchNotifications();
   return (
     <BrowserRouter>
       <div className="App">
