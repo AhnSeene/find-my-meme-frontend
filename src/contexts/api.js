@@ -71,9 +71,6 @@ api.interceptors.response.use(
           toast.error(
             error.response?.data?.message || "인증 오류가 발생했습니다."
           );
-          // setTimeout(() => {
-          //   window.location.href = "/login";
-          // }, 2000);
 
           return Promise.reject(error);
       }
