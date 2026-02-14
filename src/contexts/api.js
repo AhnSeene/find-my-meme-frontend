@@ -24,6 +24,21 @@ api.interceptors.request.use(
   }
 );
 
+// Token Refresh Queue: 동시 다발 401 요청 처리
+let isRefreshing = false;
+let failedQueue = [];
+
+const processQueue = (error) => {
+  failedQueue.forEach(({ resolve, reject }) => {
+    if (error) {
+      reject(error);
+    } else {
+      resolve();
+    }
+  });
+  failedQueue = [];
+};
+
 // 응답 인터셉터: 401처리 + 재발급
 api.interceptors.response.use(
   (response) => response,
@@ -45,23 +60,37 @@ api.interceptors.response.use(
 
       switch (errorCode) {
         case "AUTH_EXPIRED_ACCESS_TOKEN":
-          //액세스 토큰 만료 -> 토큰 재발급 시도
+          // 리프레시 진행 중이면 큐에 대기
+          if (isRefreshing) {
+            return new Promise((resolve, reject) => {
+              failedQueue.push({ resolve, reject });
+            }).then(() => {
+              return api(originalRequest);
+            });
+          }
+
+          // 첫 번째 401 → 리프레시 시작
+          isRefreshing = true;
           originalRequest._retry = true;
           try {
             const res = await api.post("/reissue");
             const newToken = res.data.data.accessToken;
             login(newToken, useAuthStore.getState().username);
-            api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
+            processQueue(null);
             return api(originalRequest);
-          } catch (error) {
+          } catch (refreshError) {
+            processQueue(refreshError);
+            logout();
             toast.error(
-              error.response?.data?.message ||
+              refreshError.response?.data?.message ||
                 "Refresh Token도 만료되어 로그아웃 됩니다."
             );
             setTimeout(() => {
               window.location.href = "/login";
             }, 2000);
-            return Promise.reject(error);
+            return Promise.reject(refreshError);
+          } finally {
+            isRefreshing = false;
           }
         case "AUTH_INVALID_CREDENTIALS":
         case "AUTH_EXPIRED_REFRESH_TOKEN":
