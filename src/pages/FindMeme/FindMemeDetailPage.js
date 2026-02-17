@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import DOMPurify from "dompurify";
 import { FaSearch } from "react-icons/fa";
 import CommentList from "../../components/comment/CommentList";
 import CommentForm from "../../components/comment/CommentForm";
@@ -166,7 +167,7 @@ function FindMemeDetailPage() {
       </div>
       <div
         className="findMemeDetail-content"
-        dangerouslySetInnerHTML={{ __html: post.data.htmlContent }}
+        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.data.htmlContent) }}
       />
       <div className="findMemeDetail-tags">
         {post.data.tags.map((tag) => (

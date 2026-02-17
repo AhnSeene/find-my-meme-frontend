@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import DOMPurify from "dompurify";
 import CommentForm from "./CommentForm";
 import api from "../../contexts/api";
 import "./commentlist.css";
@@ -100,7 +101,7 @@ function CommentList({
       >
         <div className={`comment ${comment.selected ? "selected" : ""}`}>
           <div className="comment-username">{comment.username}</div>
-          <div dangerouslySetInnerHTML={{ __html: comment.htmlContent }} />
+          <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(comment.htmlContent) }} />
           {comment.deletedAt && (
             <div className="deleted-info">
               삭제된 시간 : {formatDateTime(comment.deletedAt)}
@@ -131,7 +132,7 @@ function CommentList({
                     <span className="username">{reply.username}</span>
                   </div>
                   <div
-                    dangerouslySetInnerHTML={{ __html: reply.htmlContent }}
+                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(reply.htmlContent) }}
                   />
                   {reply.deletedAt && (
                     <div className="deleted-info">
