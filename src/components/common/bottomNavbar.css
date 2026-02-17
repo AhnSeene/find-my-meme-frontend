@@ -4,40 +4,78 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: #fff;
-  border-top: 1px solid #ccc;
-  padding: 10px 0;
-}
-
-.bottomnavbar ul {
-  display: flex;
-  justify-content: space-around;
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-.bottomnavbar li {
-  text-align: center;
-}
-
-.bottomnavbar a {
-  text-decoration: none;
-  color: inherit;
-}
-
-.bottomnavbar .bottomnavbar .icon {
-  font-size: 24px;
-}
-
-.bottomnavbar span {
-  display: block;
-  font-size: 12px;
-  margin-top: 5px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
+  padding: 8px 0;
+  padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
 }
 
 @media (max-width: 600px) {
   .bottomnavbar {
-    display: block;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
   }
+}
+
+.bottomnavbar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #95a5a6;
+  transition: all 0.25s ease;
+  position: relative;
+  min-width: 64px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bottomnavbar-item span {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+}
+
+.bottomnavbar-icon {
+  font-size: 22px;
+  transition: transform 0.25s ease;
+}
+
+/* Active state */
+.bottomnavbar-item.active {
+  color: #219c90;
+}
+
+.bottomnavbar-item.active .bottomnavbar-icon {
+  transform: scale(1.1);
+}
+
+.bottomnavbar-item.active::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  background: #219c90;
+  border-radius: 0 0 3px 3px;
+}
+
+.bottomnavbar-item.active span {
+  font-weight: 700;
+}
+
+/* Tap/hover feedback */
+.bottomnavbar-item:active {
+  transform: scale(0.92);
 }
