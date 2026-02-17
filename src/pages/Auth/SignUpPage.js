@@ -5,6 +5,7 @@ import { BiHide } from "react-icons/bi";
 import { IoMdCloseCircle } from "react-icons/io";
 import Button from "../../components/common/Button";
 import Modal from "react-modal";
+import { toast } from "react-toastify";
 import api from "../../contexts/api";
 import "./SignUpPage.css";
 
@@ -223,6 +224,11 @@ function SignUpPage() {
       setIsSignupModal(true);
     } catch (error) {
       console.error("회원가입 실패", error);
+      if (error.response && error.response.status === 409) {
+        toast.error("이미 존재하는 계정입니다.");
+      } else {
+        toast.error("회원가입에 실패했습니다. 다시 시도해주세요.");
+      }
     }
   };
 
