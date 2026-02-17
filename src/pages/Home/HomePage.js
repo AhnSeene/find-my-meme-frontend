@@ -1,16 +1,13 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useRef, useCallback, useEffect } from "react";
 import MemeGrid from "../../components/meme/MemeGrid";
 import "./HomePage.css";
 import useHomeMemesQuery from "../../hooks/useHomeMemesQuery";
-import useMemesFilterStore from "../../store/useMemesFilterStore";
 import FilterBar from "../../components/filter/FilterBar";
 
 function HomePage() {
-  const { selectedSubTags, setSelectedSubTags } = useMemesFilterStore();
   const { memes, fetchNextPage, hasNextPage, isLoading } = useHomeMemesQuery();
 
   const observerRef = useRef(null);
-  console.log("selectedSubTags:", selectedSubTags);
   const handleObserver = useCallback(
     (entries) => {
       const [entry] = entries;
@@ -20,9 +17,6 @@ function HomePage() {
     },
     [fetchNextPage, hasNextPage, isLoading]
   );
-  useEffect(() => {
-    console.log("memes:", memes);
-  });
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleObserver, {
