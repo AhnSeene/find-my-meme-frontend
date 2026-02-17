@@ -4,8 +4,13 @@ import api from "../contexts/api";
 
 const useProfileMemesQuery = (username) => {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const currentUsername = useAuthStore((state) => state.username);
+  const isOwnProfile = currentUsername === username;
+
   const fetchProfileMemes = async ({ pageParam = 0 }) => {
-    const url = `/meme-posts/me?page=${pageParam}&size=10`;
+    const url = isOwnProfile
+      ? `/meme-posts/me?page=${pageParam}&size=10`
+      : `/meme-posts/users/${username}?page=${pageParam}&size=10`;
     const response = await api.get(url);
     const data = response.data.data.memePosts;
     return {
@@ -18,14 +23,9 @@ const useProfileMemesQuery = (username) => {
     queryKey: ["profileMemes", username],
     queryFn: fetchProfileMemes,
     getNextPageParam: (lastPage) => lastPage.nextPage,
-    enabled: !!username && isLoggedIn,
+    enabled: !!username && (isOwnProfile ? isLoggedIn : true),
   });
-  console.log("useInfiniteQuery result:", result);
-  console.log("📄 pages:", result.data?.pages);
-  console.log(
-    "🧩 각 page의 content:",
-    result.data?.pages?.map((p, i) => ({ page: i, content: p.content }))
-  );
+
   return {
     memes: result.data?.pages.flatMap((page) => page.content) || [],
     ...result,
