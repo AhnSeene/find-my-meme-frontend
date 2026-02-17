@@ -30,6 +30,7 @@ function Profile({ username, isOwnProfile }) {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      if (previewImage) URL.revokeObjectURL(previewImage);
       setNewProfileImage(file);
       setPreviewImage(URL.createObjectURL(file));
       setIsEditing(true);
@@ -47,6 +48,7 @@ function Profile({ username, isOwnProfile }) {
       setProfileImage(response.data.profileImageUrl);
       alert("프로필 사진이 업데이트되었습니다.");
       setIsEditing(false);
+      if (previewImage) URL.revokeObjectURL(previewImage);
       setPreviewImage(null);
       setNewProfileImage(null);
     } catch (error) {
@@ -58,6 +60,7 @@ function Profile({ username, isOwnProfile }) {
   // 취소 핸들러
   const handleCancel = () => {
     setIsEditing(false);
+    if (previewImage) URL.revokeObjectURL(previewImage);
     setPreviewImage(null);
     setNewProfileImage(null);
   };
