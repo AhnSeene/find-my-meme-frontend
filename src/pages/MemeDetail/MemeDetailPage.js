@@ -39,7 +39,7 @@ function MemeDetailPage() {
         const response = await api.get(`/meme-posts/${id}/recommendations`);
         setRecommendedMemes(response.data.data);
       } catch (error) {
-        console.error(`Filed to load recommended memes:`, error);
+        console.error(`Failed to load recommended memes:`, error);
       }
     };
     fetchMeme();
@@ -223,7 +223,7 @@ function MemeDetailPage() {
             <summary>상세 정보</summary>
             <div className="tech-details">
               <div>
-                해상도: {meme.weight} × {meme.height}px
+                해상도: {meme.width} × {meme.height}px
               </div>
               <div>파일 크기: {meme.size}</div>
             </div>
