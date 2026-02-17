@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
 import api from "../../contexts/api";
-import useMemesFilterStore from "../../store/useMemesFilterStore";
 import "./TagSelector.css";
 import useTagsStore from "../../store/useTagsStore";
 
-function TagSelector() {
+function TagSelector({ selectedSubTags, setSelectedSubTags }) {
   const { tags, subTags, setTags, setSubTags } = useTagsStore();
-  const { selectedSubTags, setSelectedSubTags } = useMemesFilterStore();
 
   useEffect(() => {
     const fetchTags = async () => {
