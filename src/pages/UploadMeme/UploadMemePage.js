@@ -115,17 +115,16 @@ function UploadMemePage() {
     };
     try {
       // 모든 파일을 비동기로 업로드
-      const uploadPromises = selectedFileIndices.map(async (file, index) => {
+      const uploadPromises = selectedFileIndices.map(async (fileIndex) => {
         // 파일을 서버에 업로드하고 URL을 얻기
-        const relativeUrl = getRelativeUrl(previewUrls[index]).slice(1);
-        console.log("relate:", relativeUrl);
+        const relativeUrl = getRelativeUrl(previewUrls[fileIndex]).slice(1);
 
         // URL과 태그를 서버에 전송
         await api.post(
           "/meme-posts",
           {
             imageUrl: relativeUrl,
-            tags: fileTags[index] || [],
+            tags: fileTags[fileIndex] || [],
           },
           {
             headers: {
