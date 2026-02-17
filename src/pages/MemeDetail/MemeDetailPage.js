@@ -85,7 +85,7 @@ function MemeDetailPage() {
       setMeme((prevMeme) => ({
         ...prevMeme,
         isLiked: !newIsLiked,
-        likeCount: newLikeCount,
+        likeCount: newIsLiked ? prevMeme.likeCount - 1 : prevMeme.likeCount + 1,
       }));
     }
   };
