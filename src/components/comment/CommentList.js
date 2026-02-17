@@ -39,7 +39,6 @@ function CommentList({
     });
   };
 
-  // 댓글 채택 처리
   const handleSelect = async (commentId) => {
     try {
       await api.post(`/find-posts/${postId}/comments/${commentId}/select`);
@@ -121,7 +120,7 @@ function CommentList({
         {comment.replies && comment.replies.length > 0 && (
           <div className="reply-list">
             {comment.replies
-              .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)) // 오래된 순으로 정렬
+              .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
               .map((reply) => (
                 <div
                   key={reply.id}
@@ -151,15 +150,12 @@ function CommentList({
                     )}
                   <button onClick={() => handleReply(reply.id)}>답글</button>
 
-                  {/* 대댓글에 대한 대댓글도 렌더링 */}
                   {reply.replies && reply.replies.length > 0 && (
                     <div className="reply-list">
                       {renderCommentsAndReplies(reply.replies)}{" "}
-                      {/* 재귀 호출 */}
                     </div>
                   )}
 
-                  {/* 답글 입력 폼을 여기로 이동 */}
                   {replyingTo === reply.id && (
                     <CommentForm
                       postId={postId}
@@ -173,7 +169,6 @@ function CommentList({
           </div>
         )}
 
-        {/* 최상위 댓글에 대한 답글 입력 폼*/}
         {replyingTo === comment.id && (
           <CommentForm
             postId={postId}

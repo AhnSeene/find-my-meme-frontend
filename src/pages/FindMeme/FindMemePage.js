@@ -7,7 +7,6 @@ import "./FindMemePage.css";
 import useAuthStore from "../../store/useAuthStore";
 import { useQuery } from "@tanstack/react-query";
 
-// 날짜 포맷팅 함수
 const formatDate = (dateString) => {
   const date = new Date(dateString);
 
@@ -36,13 +35,13 @@ function FindMemePage() {
   const { data: findData, isLoading: isFindLoading } = useQuery({
     queryKey: ["findPosts", { page: findPage, status: "FIND" }],
     queryFn: fetchPosts,
-    keepPreviousData: true, // 이전 페이지 데이터 유지
+    keepPreviousData: true,
   });
 
   const { data: foundData, isLoading: isFoundLoading } = useQuery({
     queryKey: ["foundPosts", { page: foundPage, status: "FOUND" }],
     queryFn: fetchPosts,
-    keepPreviousData: true, // 이전 페이지 데이터 유지
+    keepPreviousData: true,
   });
 
   const handlePageChange = (page) => {

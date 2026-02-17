@@ -40,13 +40,12 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5); /* 반투명 검정색 */
   opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out, transform 0.4s ease-in-out, border-radius 0.4s ease-in-out;
   display: flex;
   justify-content: center;
   align-items: center;
   pointer-events: none;
   border-radius: 20px;
-  transition: transform 0.4s ease-in-out, border-radius 0.4s ease-in-out;
 }
 
 /* 마우스 오버 시 오버레이와 이미지 확대 효과 */

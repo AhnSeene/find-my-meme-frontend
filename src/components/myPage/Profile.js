@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./profile.css";
 import api from "../../contexts/api";
 import { FiPlusCircle } from "react-icons/fi";
+import { toast } from "react-toastify";
 import useAuthStore from "../../store/useAuthStore";
 
 function Profile({ username, isOwnProfile }) {
@@ -11,7 +12,6 @@ function Profile({ username, isOwnProfile }) {
   const [isEditing, setIsEditing] = useState(false);
   const [newProfileImage, setNewProfileImage] = useState(null);
 
-  // 사용자 프로필 정보 불러오기
   useEffect(() => {
     if (!isLoggedIn) return;
     const fetchUserProfile = async () => {
@@ -26,7 +26,6 @@ function Profile({ username, isOwnProfile }) {
     fetchUserProfile();
   }, [username, isLoggedIn]);
 
-  // 프로필 사진 파일 선택 핸들러
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -37,7 +36,6 @@ function Profile({ username, isOwnProfile }) {
     }
   };
 
-  // 프로필 사진 업로드 핸들러
   const handleUpload = async () => {
     if (!newProfileImage) return;
 
@@ -46,18 +44,17 @@ function Profile({ username, isOwnProfile }) {
       formData.append("file", newProfileImage);
       const response = await api.uploadProfileImage(formData);
       setProfileImage(response.data.profileImageUrl);
-      alert("프로필 사진이 업데이트되었습니다.");
+      toast.success("프로필 사진이 업데이트되었습니다.");
       setIsEditing(false);
       if (previewImage) URL.revokeObjectURL(previewImage);
       setPreviewImage(null);
       setNewProfileImage(null);
     } catch (error) {
       console.error("프로필 사진 업로드 실패:", error);
-      alert("프로필 사진 업로드에 실패했습니다.");
+      toast.error("프로필 사진 업로드에 실패했습니다.");
     }
   };
 
-  // 취소 핸들러
   const handleCancel = () => {
     setIsEditing(false);
     if (previewImage) URL.revokeObjectURL(previewImage);
@@ -66,8 +63,6 @@ function Profile({ username, isOwnProfile }) {
   };
 
   const handleFollow = () => {
-    console.log("팔로우 버튼 클릭");
-    // 팔로우 API 호출
   };
 
   return (
@@ -75,12 +70,9 @@ function Profile({ username, isOwnProfile }) {
       <div className="profile-background"></div>
 
       <div className="profile">
-        {/* 상단 배너 */}
         <div className="profile-banner"></div>
 
-        {/* 프로필 컨텐츠 */}
         <div className="profile-content">
-          {/* 프로필 이미지 섹션 */}
           <div className="profile-image-section">
             <div className="profile-image">
               <img
@@ -106,7 +98,6 @@ function Profile({ username, isOwnProfile }) {
               )}
             </div>
 
-            {/* 편집 모드 버튼 */}
             {isEditing && (
               <div className="profile-image-edit">
                 <button onClick={handleUpload}>저장</button>
@@ -115,7 +106,6 @@ function Profile({ username, isOwnProfile }) {
             )}
           </div>
 
-          {/* 프로필 정보 */}
           <div className="profile-info">
             <div className="profile-header">
               <h1 className="profile-username">{username}</h1>
@@ -130,10 +120,6 @@ function Profile({ username, isOwnProfile }) {
               )}
             </div>
 
-            {/* 바이오 (선택사항 - 데이터가 있으면 표시) */}
-            {/* <div className="profile-bio">
-              안녕하세요! 재미있는 밈을 공유하는 것을 좋아합니다 🎨
-            </div> */}
           </div>
         </div>
       </div>

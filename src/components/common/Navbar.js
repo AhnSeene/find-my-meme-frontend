@@ -22,7 +22,6 @@ function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  // 스크롤 감지
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -37,7 +36,7 @@ function Navbar() {
   };
 
   const handleLogoClick = () => {
-    window.location.href = "/";
+    navigate("/");
   };
 
   const handleUpload = () => {
@@ -84,19 +83,15 @@ function Navbar() {
         </li>
       </ul>
 
-      {/* 사이드 메뉴 */}
       <ul className="navbar-sidemenu">
-        {/* 알림 벨 */}
         <li className="notification-item">
           <NotificationBell />
         </li>
 
-        {/* 업로드 */}
         <li onClick={handleUpload}>
           <IoCloudUploadOutline style={{ fontSize: "22px" }} />
         </li>
 
-        {/* 마이페이지 */}
         <li
           className="mypage"
           onClick={handleMyPageClick}

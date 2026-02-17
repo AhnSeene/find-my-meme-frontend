@@ -3,20 +3,24 @@
   justify-content: center;
   align-items: center;
   margin-top: 100px;
+  padding: 0 16px;
 }
 .LoginForm {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
   align-items: center;
 }
 
 .LoginForm input[type="text"],
 .LoginForm input[type="password"] {
-  width: 300px;
+  width: 100%;
+  max-width: 300px;
   height: 30px;
   padding-left: 10px;
+  box-sizing: border-box;
 }
 .rememberId-checkbox {
   width: 18px;
@@ -25,10 +29,10 @@
 .LoginForm button {
   width: 200px;
   height: 40px;
-  background-color: #219c90; /* 기본 버튼 색상 */
+  background-color: #219c90;
   color: white;
   border: none;
-  border-radius: 5px; /* 둥근 모서리 */
+  border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
   font-weight: bold;
@@ -41,14 +45,15 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  width: 300px;
+  width: 100%;
+  max-width: 300px;
   gap: 5px;
 }
 
 .LoginForm .signup-container {
   display: flex;
   align-items: center;
-  gap: 5px; /* 버튼과 텍스트 사이 간격 */
+  gap: 5px;
 }
 
 .LoginForm .signup-button {
@@ -58,5 +63,15 @@
   color: #007bff;
   cursor: pointer;
   font-size: 14px;
-  text-decoration: underline; /* 버튼 텍스트에 밑줄 추가 */
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .Login {
+    margin-top: 60px;
+  }
+  .LoginForm button {
+    width: 100%;
+    max-width: 300px;
+  }
 }

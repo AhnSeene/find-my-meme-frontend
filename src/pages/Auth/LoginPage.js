@@ -16,13 +16,12 @@ function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const { login } = useAuthStore(); // login 함수 가져오기
+  const { login } = useAuthStore();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 로컬 스토리지에서 아이디와 체크박스 상태를 로드
     const savedId = localStorage.getItem("savedId");
-    const isRemembered = localStorage.getItem("rememberId") === "true"; // 'true' 문자열을 불러옴
+    const isRemembered = localStorage.getItem("rememberId") === "true";
 
     if (savedId) {
       setId(savedId);
@@ -46,16 +45,14 @@ function LoginPage() {
 
       if (response.status === 200) {
         const token = response.data.data.accessToken;
-        const username = response.data.data.username; // 서버 응답에서 username 가져오기
-
-        // login 함수를 사용해 AuthContext에 token과 username을 저장
+        const username = response.data.data.username;
         login(token, username);
 
         if (rememberId) {
-          localStorage.setItem("savedId", id); // 아이디 저장
+          localStorage.setItem("savedId", id);
           localStorage.setItem("rememberId", JSON.stringify(rememberId));
         } else {
-          localStorage.removeItem("savedId"); // 아이디 제거
+          localStorage.removeItem("savedId");
           localStorage.removeItem("rememberId");
         }
 

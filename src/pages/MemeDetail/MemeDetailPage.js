@@ -123,7 +123,6 @@ function MemeDetailPage() {
       .catch((err) => console.error("Failed to copy link: ", err));
   }
 
-  // 숫자 포맷팅 함수 (1000 -> 1K)
   const formatNumber = (num) => {
     if (num >= 1000000) {
       return (num / 1000000).toFixed(1) + "M";
@@ -157,7 +156,6 @@ function MemeDetailPage() {
         </div>
 
         <div className="memedetail-right">
-          {/* 인기도 통계 */}
           <div className="stats-container">
             <div className="stat-item">
               <GrFormView className="stat-icon" />
