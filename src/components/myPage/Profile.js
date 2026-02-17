@@ -62,9 +62,6 @@ function Profile({ username, isOwnProfile }) {
     setNewProfileImage(null);
   };
 
-  const handleFollow = () => {
-  };
-
   return (
     <div className="profile-wrapper">
       <div className="profile-background"></div>
@@ -110,14 +107,6 @@ function Profile({ username, isOwnProfile }) {
             <div className="profile-header">
               <h1 className="profile-username">{username}</h1>
 
-              {!isOwnProfile && (
-                <button
-                  className="profile-follow-button"
-                  onClick={handleFollow}
-                >
-                  팔로우
-                </button>
-              )}
             </div>
 
           </div>

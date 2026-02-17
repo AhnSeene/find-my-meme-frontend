@@ -250,51 +250,6 @@
   border-radius: 2px;
 }
 
-/* 팔로우 버튼 */
-.profile-follow-button {
-  padding: 14px 40px;
-  background: linear-gradient(135deg, #219c90 0%, #1a7a6f 100%);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 4px 16px rgba(33, 156, 144, 0.3);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.profile-follow-button::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.2),
-    transparent
-  );
-  transition: left 0.5s ease;
-}
-
-.profile-follow-button:hover::before {
-  left: 100%;
-}
-
-.profile-follow-button:hover {
-  background: linear-gradient(135deg, #1a7a6f 0%, #156359 100%);
-  box-shadow: 0 6px 20px rgba(33, 156, 144, 0.4);
-  transform: translateY(-2px);
-}
-
-.profile-follow-button:active {
-  transform: translateY(0);
-}
 
 /* 바이오 */
 .profile-bio {
@@ -396,10 +351,6 @@
     bottom: -6px;
   }
 
-  .profile-follow-button {
-    width: 100%;
-    padding: 14px;
-  }
 
   .profile-bio {
     max-width: 100%;
