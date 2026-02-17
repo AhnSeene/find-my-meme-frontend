@@ -162,7 +162,7 @@ function SignUpPage() {
       }
     } catch (error) {
       console.error("이메일 중복검사 실패", error);
-      if (error.response && error.response.status == 400) {
+      if (error.response && error.response.status === 400) {
         setModalMessage("이미 사용중인 이메일입니다.");
       } else {
         setModalMessage("중복 검사 중 오류가 발생했습니다.");
@@ -219,7 +219,6 @@ function SignUpPage() {
         password,
         email,
       });
-      console.log("회원가입 성공!", response.data);
       setModalMessage("회원가입을 완료하였습니다!");
       setIsSignupModal(true);
     } catch (error) {

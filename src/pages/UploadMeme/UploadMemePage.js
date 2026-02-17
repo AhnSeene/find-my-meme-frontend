@@ -6,6 +6,7 @@ import UploadTagSelector from "../../components/tag/UploadTagSelector";
 import PreviewItem from "../../components/upload/PreviewItem";
 import ImageModal from "../../components/modal/ImageModal";
 import useFileUpload from "../../hooks/useFileUpload";
+import { toast } from "react-toastify";
 import "./UploadMemePage.css";
 
 function UploadMemePage() {
@@ -62,17 +63,16 @@ function UploadMemePage() {
   const handleSubcategoryChange = (subcategory) => {
     const newTags = { ...fileTags };
     selectedFileIndices.forEach((index) => {
-      if (!newTags[index]) {
-        newTags[index] = [];
-      }
+      const current = newTags[index] ? [...newTags[index]] : [];
 
       // 서브카테고리 태그 ID 추가 (최대 3개)
       if (
-        !newTags[index].some((tagId) => tagId === subcategory.id) &&
-        newTags[index].length < 3
+        !current.some((tagId) => tagId === subcategory.id) &&
+        current.length < 3
       ) {
-        newTags[index].push(subcategory.id);
+        current.push(subcategory.id);
       }
+      newTags[index] = current;
     });
     setFileTags(newTags);
   };
@@ -99,7 +99,7 @@ function UploadMemePage() {
     e.preventDefault();
 
     if (selectedFileIndices.length === 0) {
-      alert("선택된 파일이 없습니다.");
+      toast.warning("선택된 파일이 없습니다.");
       return;
     }
 
@@ -137,7 +137,7 @@ function UploadMemePage() {
       // 모든 업로드가 완료될 때까지 기다리기
       await Promise.all(uploadPromises);
       navigate("/", { replace: true });
-      console.log("Upload Success");
+      toast.success("업로드 완료!");
     } catch (error) {
       console.error("Upload Error:", error);
     }

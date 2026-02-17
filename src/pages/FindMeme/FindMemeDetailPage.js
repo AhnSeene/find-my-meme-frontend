@@ -19,11 +19,6 @@ function FindMemeDetailPage() {
   const [commentCount, setCommentCount] = useState(0);
   const navigate = useNavigate();
 
-  //comments 업데이트 될때 출력 확인하려고
-  useEffect(() => {
-    console.log("Updated comments:", comments);
-  }, [comments]);
-
   useEffect(() => {
     const fetchPost = async () => {
       try {

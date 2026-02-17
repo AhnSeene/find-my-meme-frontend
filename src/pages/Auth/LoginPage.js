@@ -63,7 +63,7 @@ function LoginPage() {
       }
     } catch (error) {
       if (
-        error.response?.status == 401 &&
+        error.response?.status === 401 &&
         error.response?.data?.code === "AUTH_INVALID_ID_CREDENTIALS"
       ) {
         setErrorMessage(error.response?.data?.message);
@@ -146,7 +146,7 @@ function LoginPage() {
 
       <Modal
         isOpen={isModalOpen}
-        // onRequestClose={() => setIsModalOpen(false)}
+        onRequestClose={() => setIsModalOpen(false)}
         contentLabel="로그인 오류"
         className="Modal"
         overlayClassName="Overlay"
