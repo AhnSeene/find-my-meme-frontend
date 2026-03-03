@@ -7,7 +7,7 @@
 ## 미리보기
 <table>
   <tr>
-    <td><img width="400" src="https://github.com/user-attachments/assets/b00be1a4-7eba-4ca1-9af1-aeef6e1d4d95" /></td>
+    <td><img width="400" src="https://github.com/user-attachments/assets/3f0e4bb6-35e1-4152-8866-e30a2c4e451f" /></td>
     <td><img width="400" src="https://github.com/user-attachments/assets/faf5f958-2d87-4c05-8aeb-c5c73c61e8e9" /></td>
   </tr>
   <tr>
