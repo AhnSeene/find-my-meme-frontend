@@ -6,6 +6,7 @@ import UploadTagSelector from "../../components/tag/UploadTagSelector";
 import PreviewItem from "../../components/upload/PreviewItem";
 import ImageModal from "../../components/modal/ImageModal";
 import useFileUpload from "../../hooks/useFileUpload";
+import { toast } from "react-toastify";
 import "./UploadMemePage.css";
 
 function UploadMemePage() {
@@ -26,7 +27,7 @@ function UploadMemePage() {
   const [subcategories, setSubcategories] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState(null);
-  const [tagIdToNameMap, setTagIdToNameMap] = useState({}); // 태그 ID와 이름 간의 매핑
+  const [tagIdToNameMap, setTagIdToNameMap] = useState({});
 
   const navigate = useNavigate();
 
@@ -62,17 +63,15 @@ function UploadMemePage() {
   const handleSubcategoryChange = (subcategory) => {
     const newTags = { ...fileTags };
     selectedFileIndices.forEach((index) => {
-      if (!newTags[index]) {
-        newTags[index] = [];
-      }
+      const current = newTags[index] ? [...newTags[index]] : [];
 
-      // 서브카테고리 태그 ID 추가 (최대 3개)
       if (
-        !newTags[index].some((tagId) => tagId === subcategory.id) &&
-        newTags[index].length < 3
+        !current.some((tagId) => tagId === subcategory.id) &&
+        current.length < 3
       ) {
-        newTags[index].push(subcategory.id);
+        current.push(subcategory.id);
       }
+      newTags[index] = current;
     });
     setFileTags(newTags);
   };
@@ -99,33 +98,28 @@ function UploadMemePage() {
     e.preventDefault();
 
     if (selectedFileIndices.length === 0) {
-      alert("선택된 파일이 없습니다.");
+      toast.warning("선택된 파일이 없습니다.");
       return;
     }
 
-    // 상대 경로를 추출하는 함수
     const getRelativeUrl = (url) => {
       try {
         const parsedUrl = new URL(url);
-        return parsedUrl.pathname; // pathname은 상대 경로를 포함
+        return parsedUrl.pathname;
       } catch (error) {
         console.error("Invalid URL:", url);
-        return url; // 기본적으로 원래 URL 반환
+        return url;
       }
     };
     try {
-      // 모든 파일을 비동기로 업로드
-      const uploadPromises = selectedFileIndices.map(async (file, index) => {
-        // 파일을 서버에 업로드하고 URL을 얻기
-        const relativeUrl = getRelativeUrl(previewUrls[index]).slice(1);
-        console.log("relate:", relativeUrl);
+      const uploadPromises = selectedFileIndices.map(async (fileIndex) => {
+        const relativeUrl = getRelativeUrl(previewUrls[fileIndex]).slice(1);
 
-        // URL과 태그를 서버에 전송
         await api.post(
           "/meme-posts",
           {
             imageUrl: relativeUrl,
-            tags: fileTags[index] || [],
+            tags: fileTags[fileIndex] || [],
           },
           {
             headers: {
@@ -135,10 +129,9 @@ function UploadMemePage() {
         );
       });
 
-      // 모든 업로드가 완료될 때까지 기다리기
       await Promise.all(uploadPromises);
       navigate("/", { replace: true });
-      console.log("Upload Success");
+      toast.success("업로드 완료!");
     } catch (error) {
       console.error("Upload Error:", error);
     }

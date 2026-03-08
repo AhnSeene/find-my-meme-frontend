@@ -27,7 +27,6 @@ function CommentForm({ postId, onCommentAdded, replyingTo, onCancel }) {
         if (!presignedUrl) {
           console.error("Failed to get presigned URL");
         }
-        console.log(presignedUrl);
         const uploadSuccess = await uploadFileToS3(file, presignedUrl);
         if (!uploadSuccess) {
           console.error("Failed to upload file to S3");
@@ -115,7 +114,6 @@ function CommentForm({ postId, onCommentAdded, replyingTo, onCancel }) {
     }
   };
 
-  // 커스텀 이미지 핸들러를 툴바에 추가
   const modules = useMemo(
     () => ({
       toolbar: {
@@ -124,11 +122,11 @@ function CommentForm({ postId, onCommentAdded, replyingTo, onCancel }) {
           [{ list: "ordered" }, { list: "bullet" }],
           ["bold", "italic", "underline", "strike", "blockquote"],
           ["link", { align: [] }, { color: [] }, { background: [] }],
-          ["image"], // 툴바에 이미지 버튼 추가
+          ["image"],
           ["clean"],
         ],
         handlers: {
-          image: handleImageUpload, // 이미지 버튼 클릭 시 handleImageUpload 함수 실행
+          image: handleImageUpload,
         },
       },
     }),

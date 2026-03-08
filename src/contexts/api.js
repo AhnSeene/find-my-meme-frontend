@@ -4,13 +4,11 @@ import useAuthStore from "../store/useAuthStore";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-// 기본 axios 인스턴스 생성
 const api = axios.create({
   baseURL: `${apiUrl}/v1/`,
   withCredentials: true,
 });
 
-// 요청 인터셉터: 토큰 자동 헤더 추가
 api.interceptors.request.use(
   (config) => {
     const { token } = useAuthStore.getState();
@@ -24,7 +22,6 @@ api.interceptors.request.use(
   }
 );
 
-// Token Refresh Queue: 동시 다발 401 요청 처리
 let isRefreshing = false;
 let failedQueue = [];
 
@@ -39,7 +36,6 @@ const processQueue = (error) => {
   failedQueue = [];
 };
 
-// 응답 인터셉터: 401처리 + 재발급
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -60,7 +56,6 @@ api.interceptors.response.use(
 
       switch (errorCode) {
         case "AUTH_EXPIRED_ACCESS_TOKEN":
-          // 리프레시 진행 중이면 큐에 대기
           if (isRefreshing) {
             return new Promise((resolve, reject) => {
               failedQueue.push({ resolve, reject });
@@ -69,7 +64,6 @@ api.interceptors.response.use(
             });
           }
 
-          // 첫 번째 401 → 리프레시 시작
           isRefreshing = true;
           originalRequest._retry = true;
           try {

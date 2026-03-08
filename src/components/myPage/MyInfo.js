@@ -20,7 +20,7 @@ function MyInfo() {
           throw new Error("Failed to fetch user info");
         }
       } catch (error) {
-        console.log("MyInfo 데이터 불러오기 실패", error);
+        console.error("MyInfo 데이터 불러오기 실패", error);
         setError(error.message);
       } finally {
         setLoading(false);
@@ -31,13 +31,9 @@ function MyInfo() {
   }, []);
 
   const handleEditProfile = () => {
-    console.log("프로필 편집");
-    // 프로필 편집 모달이나 페이지로 이동
   };
 
   const handleChangePassword = () => {
-    console.log("비밀번호 변경");
-    // 비밀번호 변경 모달이나 페이지로 이동
   };
 
   if (loading) {
@@ -66,7 +62,6 @@ function MyInfo() {
         <p className="myinfo-subtitle">계정 정보를 확인하고 관리하세요</p>
       </div>
 
-      {/* 기본 정보 카드 */}
       <div className="info-card">
         <div className="info-card-header">
           <h3>기본 정보</h3>
@@ -97,7 +92,6 @@ function MyInfo() {
         </div>
       </div>
 
-      {/* 보안 카드 */}
       <div className="info-card">
         <div className="info-card-header">
           <h3>보안</h3>
@@ -120,7 +114,6 @@ function MyInfo() {
         </div>
       </div>
 
-      {/* 계정 관리 */}
       <div className="info-card danger">
         <div className="info-card-header">
           <h3>계정 관리</h3>

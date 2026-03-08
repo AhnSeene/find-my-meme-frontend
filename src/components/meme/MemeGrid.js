@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Masonry from "react-masonry-css";
 import { Link } from "react-router-dom";
 import { GoHeartFill, GoHeart } from "react-icons/go";
@@ -13,51 +13,6 @@ function MemeGrid({ memes, isProfile, username }) {
     isProfile,
     username,
   });
-
-  // const [useMp4Map, setUseMp4Map] = useState({}); // 각 밈의 MP4 사용 여부 관리
-  // useEffect(() => {
-  //   console.log("MP4 사용 여부 업데이트:", useMp4Map);
-  // }, [useMp4Map]);
-  // const handleVideoLoad = (memeId) => {
-  //   setUseMp4Map((prev) => ({ ...prev, [memeId]: true }));
-  // };
-
-  // const handleVideoError = (memeId) => {
-  //   setUseMp4Map((prev) => ({ ...prev, [memeId]: false }));
-  // };
-
-  // const getMediaElement = (meme, width) => {
-  //   const { imageUrl, id } = meme;
-
-  //   const mp4Url = imageUrl
-  //     .replace("images/", "resized/")
-  //     .replace(".gif", `_${width}w.mp4`);
-  //   console.log("mp4" + " " + mp4Url);
-
-  //   const resizedUrl = imageUrl
-  //     .replace("images/", "resized/")
-  //     .replace(/\.(jpg|jpeg|png)$/, `_${width}w.$1`);
-  //   console.log("images " + resizedUrl);
-
-  //   const gifUrl = imageUrl.replace("resized/", "images/");
-
-  //   if (useMp4Map[id] === true) {
-  //     return (
-  //       <video
-  //         autoPlay
-  //         loop
-  //         muted
-  //         playsInline
-  //         onLoadedData={() => handleVideoLoad(id)}
-  //         onError={() => handleVideoError(id)}
-  //       >
-  //         <source src={`${mp4Url}`} type="video/mp4" />
-  //       </video>
-  //     );
-  //   }
-
-  //   return <img src={`${gifUrl}`} alt="Meme" />;
-  // };
 
   const breakpointColumnsObj = {
     default: 4,

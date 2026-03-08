@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
 import useAuthStore from "../../store/useAuthStore";
 import Profile from "../../components/myPage/Profile";
 import MyInfo from "../../components/myPage/MyInfo";
 import MemeGrid from "../../components/meme/MemeGrid";
-import Button from "../../components/common/Button";
 import "./MyPage.css";
 import useProfileMemesQuery from "../../hooks/useProfileMemesQuery";
 
@@ -12,21 +11,11 @@ function MyPage() {
   const [activeTab, setActiveTab] = useState("myMeme");
   const { username } = useParams();
 
-  const navigate = useNavigate();
-
-  // 현재 페이지가 내 프로필인지 다른 사람의 프로필인지 확인
   const usernameFromStore = useAuthStore((state) => state.username);
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
   const isOwnProfile = usernameFromStore === username;
   const { memes, fetchNextPage, hasNextPage, isLoading } =
     useProfileMemesQuery(username);
-  // useEffect(() => {
-  //   if (!isLoggedIn) {
-  //     navigate("/login");
-  //   }
-  // }, [isLoggedIn, navigate]);
-
   const renderContent = () => {
     // 로그인된 사용자의 경우 탭에 따라 콘텐츠 렌더링
     if (isOwnProfile) {

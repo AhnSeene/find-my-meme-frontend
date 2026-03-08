@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import DOMPurify from "dompurify";
 import { FaSearch } from "react-icons/fa";
 import CommentList from "../../components/comment/CommentList";
 import CommentForm from "../../components/comment/CommentForm";
@@ -17,11 +18,6 @@ function FindMemeDetailPage() {
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [commentCount, setCommentCount] = useState(0);
   const navigate = useNavigate();
-
-  //comments 업데이트 될때 출력 확인하려고
-  useEffect(() => {
-    console.log("Updated comments:", comments);
-  }, [comments]);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -52,7 +48,7 @@ function FindMemeDetailPage() {
   const handleDelete = async () => {
     try {
       await api.delete(`/find-posts/${id}`);
-      setPost(null); // 게시글 상태를 null로 설정하여 화면에서 제거
+      setPost(null);
       navigate("/findmeme");
     } catch (error) {
       console.error("게시글 삭제 오류:", error);
@@ -87,17 +83,15 @@ function FindMemeDetailPage() {
       setComments((prevComments) => [...prevComments, newComment]);
     }
     setReplyingTo(null);
-    setCommentCount((prevCount) => prevCount + 1); // 댓글 수 증가
+    setCommentCount((prevCount) => prevCount + 1);
   };
 
   const handleDeleteComment = async (commentId) => {
     try {
-      // 서버에 댓글 삭제 요청
       const response = await api.delete(
         `/find-posts/${post.data.id}/comments/${commentId}`
       );
       const updatedComment = response.data.data;
-      // 로컬 상태에서 해당 댓글을 '삭제된 댓글입니다.'로 업데이트
       const updateDeletedComment = (comments) =>
         comments.map((comment) => {
           if (comment.id === commentId) {
@@ -117,9 +111,8 @@ function FindMemeDetailPage() {
           return comment;
         });
 
-      // 상태 업데이트
       setComments((prevComments) => updateDeletedComment(prevComments));
-      setCommentCount((prevCount) => prevCount - 1); // 댓글 수 감소
+      setCommentCount((prevCount) => prevCount - 1);
     } catch (error) {
       console.error("댓글 삭제 오류:", error);
     }
@@ -134,15 +127,13 @@ function FindMemeDetailPage() {
     setShowCommentForm(true);
   };
 
-  // 댓글 작성 창 닫기
   const handleCancelComment = () => {
     setShowCommentForm(false);
     setReplyingTo(null);
   };
 
-  // 답글 창 닫기 핸들러 추가
   const handleCancelReply = () => {
-    setReplyingTo(null); // 답글 창을 닫기 위해 replyingTo를 null로 설정
+    setReplyingTo(null);
   };
 
   return (
@@ -166,7 +157,7 @@ function FindMemeDetailPage() {
       </div>
       <div
         className="findMemeDetail-content"
-        dangerouslySetInnerHTML={{ __html: post.data.htmlContent }}
+        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.data.htmlContent) }}
       />
       <div className="findMemeDetail-tags">
         {post.data.tags.map((tag) => (
@@ -219,7 +210,7 @@ function FindMemeDetailPage() {
           replyingTo={replyingTo}
           onReplySubmit={handleCommentAdded}
           onCancelReply={handleCancelReply}
-          userUsername={usernameFromStore} // 로그인된 사용자 이름 전달
+          userUsername={usernameFromStore}
           postOwnerUsername={post.data.username}
         />
       </div>

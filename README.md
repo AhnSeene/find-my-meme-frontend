@@ -5,6 +5,24 @@
 🔗 웹 사이트 https://findmymeme.online/
 
 ## 미리보기
+<table>
+  <tr>
+    <td><img width="400" src="https://github.com/user-attachments/assets/3f0e4bb6-35e1-4152-8866-e30a2c4e451f" /></td>
+    <td><img width="400" src="https://github.com/user-attachments/assets/faf5f958-2d87-4c05-8aeb-c5c73c61e8e9" /></td>
+  </tr>
+  <tr>
+    <td><img width="400" src="https://github.com/user-attachments/assets/0653e87d-bb69-498c-8000-aa39463b1528" /></td>
+    <td><img width="400" src="https://github.com/user-attachments/assets/7dce4466-45dc-452c-9409-829aee1cb72f" /></td>
+  </tr>
+  <tr>
+    <td><img width="400" src="https://github.com/user-attachments/assets/ebb24e3f-dfbd-45f0-9f40-41872868e40b" /></td>
+    <td><img width="400" src="https://github.com/user-attachments/assets/935cf04e-aa7f-4a06-a3eb-768970af654f" /></td>
+  </tr>
+  <tr>
+    <td><img width="400" src="https://github.com/user-attachments/assets/65f3bf08-a2e9-4ac7-9509-5b92a0188539" /></td>
+    <td></td>
+  </tr>
+</table>
 
 ## 주요기능
 

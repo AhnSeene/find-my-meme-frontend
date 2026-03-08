@@ -189,11 +189,7 @@
   color: #219c90;
 }
 
-.navbar-sidemenu .mypage {
-  position: relative;
-}
-
-/* ⭐ 드롭다운 메뉴 */
+/* 드롭다운 메뉴 */
 .dropdown-menu {
   position: absolute;
   top: calc(100% + 5px); /* ⭐ 12px → 5px (간격 줄임) */

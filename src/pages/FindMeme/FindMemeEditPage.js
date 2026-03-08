@@ -18,8 +18,10 @@ function FindMemeEditPage() {
       setEditorValue(state.post.htmlContent || "");
       setTitle(state.post.title || "");
       setSelectedSubTags(state.post.tags.map((tag) => tag.id));
+    } else {
+      navigate("/findmeme", { replace: true });
     }
-  }, [state]);
+  }, [state, navigate]);
 
   const handleEditorChange = (value) => {
     setEditorValue(value);
@@ -61,7 +63,6 @@ function FindMemeEditPage() {
     e.preventDefault();
 
     const plainText = quillRef.current.getEditor().getText();
-    console.log("id : ", state.post.id);
     try {
       const response = await api.put(
         `/find-posts/${state.post.id}`,

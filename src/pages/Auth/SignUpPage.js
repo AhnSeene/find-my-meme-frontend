@@ -5,6 +5,7 @@ import { BiHide } from "react-icons/bi";
 import { IoMdCloseCircle } from "react-icons/io";
 import Button from "../../components/common/Button";
 import Modal from "react-modal";
+import { toast } from "react-toastify";
 import api from "../../contexts/api";
 import "./SignUpPage.css";
 
@@ -30,7 +31,7 @@ function SignUpPage() {
   const [isSignupModal, setIsSignupModal] = useState(false);
   const [isIdChecked, setIsIdChecked] = useState(false); //아이디 중복검사
   const [isEmailChecked, setIsEmailChecked] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // 비밀번호 보기 상태 관리
+  const [showPassword, setShowPassword] = useState(false);
   const [showPwConfirm, setShowPwConfirm] = useState(false);
 
   const togglePwShow = () => setShowPassword((prevState) => !prevState);
@@ -123,22 +124,22 @@ function SignUpPage() {
 
       if (response.data.success) {
         setModalMessage("사용 가능한 아이디입니다.");
-        setIsModalOpen(true); // 모달창 열기
-        setIsIdChecked(true); // 중복검사 통과
+        setIsModalOpen(true);
+        setIsIdChecked(true);
       } else {
         setModalMessage("이미 사용중인 아이디입니다.");
         setIsModalOpen(true);
-        setIsIdChecked(false); // 중복검사
+        setIsIdChecked(false);
       }
     } catch (error) {
       console.error("아이디 중복검사 실패", error);
       if (error.response && error.response.status === 409) {
-        setModalMessage("이미 존재하는 아이디입니다."); // 구체적인 메시지로 수정
+        setModalMessage("이미 존재하는 아이디입니다.");
       } else {
-        setModalMessage("중복 검사 중 오류가 발생했습니다."); // 일반 오류 메시지
+        setModalMessage("중복 검사 중 오류가 발생했습니다.");
       }
       setIsModalOpen(true);
-      setIsIdChecked(false); // 중복검사
+      setIsIdChecked(false);
     }
   };
 
@@ -161,7 +162,7 @@ function SignUpPage() {
       }
     } catch (error) {
       console.error("이메일 중복검사 실패", error);
-      if (error.response && error.response.status == 400) {
+      if (error.response && error.response.status === 400) {
         setModalMessage("이미 사용중인 이메일입니다.");
       } else {
         setModalMessage("중복 검사 중 오류가 발생했습니다.");
@@ -172,7 +173,7 @@ function SignUpPage() {
   };
 
   const closeModal = () => {
-    setIsModalOpen(false); // 모달창 닫기
+    setIsModalOpen(false);
   };
 
   const handleLogin = () => {
@@ -218,11 +219,15 @@ function SignUpPage() {
         password,
         email,
       });
-      console.log("회원가입 성공!", response.data);
       setModalMessage("회원가입을 완료하였습니다!");
       setIsSignupModal(true);
     } catch (error) {
       console.error("회원가입 실패", error);
+      if (error.response && error.response.status === 409) {
+        toast.error("이미 존재하는 계정입니다.");
+      } else {
+        toast.error("회원가입에 실패했습니다. 다시 시도해주세요.");
+      }
     }
   };
 

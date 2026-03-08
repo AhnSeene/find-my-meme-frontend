@@ -39,7 +39,7 @@ function MemeDetailPage() {
         const response = await api.get(`/meme-posts/${id}/recommendations`);
         setRecommendedMemes(response.data.data);
       } catch (error) {
-        console.error(`Filed to load recommended memes:`, error);
+        console.error(`Failed to load recommended memes:`, error);
       }
     };
     fetchMeme();
@@ -85,7 +85,7 @@ function MemeDetailPage() {
       setMeme((prevMeme) => ({
         ...prevMeme,
         isLiked: !newIsLiked,
-        likeCount: newLikeCount,
+        likeCount: newIsLiked ? prevMeme.likeCount - 1 : prevMeme.likeCount + 1,
       }));
     }
   };
@@ -123,7 +123,6 @@ function MemeDetailPage() {
       .catch((err) => console.error("Failed to copy link: ", err));
   }
 
-  // 숫자 포맷팅 함수 (1000 -> 1K)
   const formatNumber = (num) => {
     if (num >= 1000000) {
       return (num / 1000000).toFixed(1) + "M";
@@ -157,7 +156,6 @@ function MemeDetailPage() {
         </div>
 
         <div className="memedetail-right">
-          {/* 인기도 통계 */}
           <div className="stats-container">
             <div className="stat-item">
               <GrFormView className="stat-icon" />
@@ -223,7 +221,7 @@ function MemeDetailPage() {
             <summary>상세 정보</summary>
             <div className="tech-details">
               <div>
-                해상도: {meme.weight} × {meme.height}px
+                해상도: {meme.width} × {meme.height}px
               </div>
               <div>파일 크기: {meme.size}</div>
             </div>
