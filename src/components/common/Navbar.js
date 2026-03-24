@@ -7,7 +7,7 @@ import { HiOutlinePhotograph } from "react-icons/hi";
 import { FiUser, FiEdit3, FiLogOut } from "react-icons/fi";
 import useAuthStore from "../../store/useAuthStore";
 import { useQueryClient } from "@tanstack/react-query";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/logo.webp";
 import "./Navbar.css";
 import NotificationBell from "../notification/NotificationBell";
 
